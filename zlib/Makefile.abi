@@ -1,0 +1,66 @@
+#! gmake
+
+## AbiSource Program Utilities
+## Copyright (C) 1998 AbiSource, Inc.
+##
+## This program is free software; you can redistribute it and/or
+## modify it under the terms of the GNU General Public License
+## as published by the Free Software Foundation; either version 2
+## of the License, or (at your option) any later version.
+## 
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+## 
+## You should have received a copy of the GNU General Public License
+## along with this program; if not, write to the Free Software
+## Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  
+## 02111-1307, USA.
+
+ABI_ROOT:=$(shell pwd)/../abi
+ABI_PEER:=/zlib
+
+include $(ABI_ROOT)/src/config/abi_defs.mk
+
+CSRCS=		adler32.c compress.c crc32.c deflate.c		\
+		gzio.c infback.c inffast.c		\
+		inflate.c inftrees.c trees.c		\
+		uncompr.c zutil.c
+
+EXTRA_LIBS =
+CFLAGS += -DZLIB_DLL
+
+ifeq ($(OS_NAME), WIN32)
+RCSRCS =	win32/zlib1.rc
+DLLFLAGS +=	-DEF:win32/zlib.def
+endif
+
+LIBRARY_NAME=		/zlib1
+LIBRARY_VERSION=	$(ABI_VERSION)
+TARGETS=		$(SHARED_LIBRARY)
+
+PREBUILT_LIB = $(ABI_ROOT)/../libs/zlib
+
+include $(ABI_ROOT)/src/config/abi_rules.mk
+
+ifeq ($(OS_NAME), WIN32)
+BTARGETS = $(TARGETS) prebuiltlib
+else
+BTARGETS = $(TARGETS)
+endif
+
+build:: $(BTARGETS)
+
+prebuiltlib:
+	@echo Creating prebuild lib 
+	mkdir -p $(PREBUILT_LIB)
+	mkdir -p $(PREBUILT_LIB)/lib
+	mkdir -p $(PREBUILT_LIB)/include
+	$(ABICOPY) $(OBJDIR)/../zlib1.dll $(PREBUILT_LIB)/
+	$(ABICOPY) $(OBJDIR)/../zlib1.lib $(PREBUILT_LIB)/lib/zdll.lib
+	$(ABICOPY) $(OBJDIR)/../zlib1.exp $(PREBUILT_LIB)/lib/zdll.exp
+	$(ABICOPY) win32/zlib.def $(PREBUILT_LIB)/lib/
+	$(ABICOPY) zlib.h $(PREBUILT_LIB)/include/
+	$(ABICOPY) zconf.h $(PREBUILT_LIB)/include/
+	@echo "REMEMBER: THIS ZLIB DLL IS NOT FOR REDISTRIBUTION!"
