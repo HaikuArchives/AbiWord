@@ -1,0 +1,10 @@
+config.guess
+config.sub
+depcomp
+install-sh
+ltconfig
+ltmain.sh
+missing
+mkinstalldirs
+
+GNUmakefile
