@@ -1,0 +1,15 @@
+/* config.h.in.msvc - Rename/copy this one to "config.h".  */
+
+/* Define if you have the strdup function.  */
+#define HAVE_STRDUP
+
+#include <string.h>
+
+#define snprintf _snprintf
+#define vsnprintf _vsnprintf
+
+#pragma warning(disable: 4018)	/* signed/unsigned mismatch */
+#pragma warning(disable: 4028)	/* <sigh> */
+#pragma warning(disable: 4244)	/* 'double ' -> 'float */
+#pragma warning(disable: 4305)	/* 'double ' -> 'float */
+#pragma warning(disable: 4761)	/* integral size mismatch in argument */

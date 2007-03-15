@@ -1,0 +1,6 @@
+This is a version of psiconv that only contains the library libpsiconv.
+Except for that, and the build system, it is identical with complete
+versions of psiconv which can be found at the URL
+	http://huizen.dds.nl/~frodol/psiconv
+
+Psiconv is written by Frodo Looijaard. You can contact him at frodol@dds.nl
