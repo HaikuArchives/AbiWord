@@ -1,0 +1,2 @@
+#!/bin/sh
+echo -L/boot/home/config/lib -lwv -lz -L./../libiconv/lib/.libs -liconv -L/boot/home/config/lib -lglib-2.0 -liconv
