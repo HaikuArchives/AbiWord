@@ -1,0 +1,34 @@
+case $os in
+	-windowsnt*)
+		os=`echo $os | sed -e 's/windowsnt/winnt/'`
+		;;
+	-psos*)
+		os=-psos
+		;;
+	-mint | -mint[0-9]*)
+		basic_machine=m68k-atari
+		os=-mint
+		;;
+esac
+
+# Decode aliases for certain CPU-COMPANY combinations.
+case $basic_machine in
+	# Recognize the basic CPU types without company name.
+	# Some are omitted here because they have special meanings below.
+	tahoe | i860 | ia64 | m32r | m68k | m68000 | m88k | ns32k | arc \
+	        | arm | arme[lb] | arm[bl]e | armv[2345] | armv[345][lb] | strongarm | xscale \
+		| pyramid | mn10200 | mn10300 | tron | a29k \
+		| 580 | i960 | h8300 \
+		| x86 | ppcbe | mipsbe | mipsle | shbe | shle \
+		| hppa | hppa1.0 | hppa1.1 | hppa2.0 | hppa2.0w | hppa2.0n \
+		| hppa64 \
+		| alpha | alphaev[4-8] | alphaev56 | alphapca5[67] \
+		| alphaev6[78] \
+		| we32k | ns16k | clipper | i370 | sh | sh[34] \
+		| powerpc | powerpcle \
+		| 1750a | dsp16xx | pdp10 | pdp11 \
+		| mips16 | mips64 | mipsel | mips64el \
+		| mips64orion | mips64orionel | mipstx39 | mipstx39el \
+		| mips64vr4300 | mips64vr4300el | mips64vr4100 | mips64vr4100el \
+		| mips64vr5000 | miprs64vr5000el | mcore | s390 | s390x \
+		| sparc | sparcl
