@@ -1,0 +1,88 @@
+ev_Menu_Actions.o : \
+ ev_Menu_Actions.cpp \
+ /boot/develop/headers/posix/stdlib.h \
+ /boot/develop/headers/posix/be_setup.h \
+ /boot/develop/headers/be/BeBuild.h \
+ /boot/develop/headers/posix/div_t.h \
+ /boot/develop/headers/posix/size_t.h \
+ /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/stddef.h \
+ /boot/develop/headers/posix/null.h \
+ /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/wchar_t.h \
+ /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/limits.h \
+ /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/syslimits.h \
+ /boot/develop/headers/posix/limits.h \
+ /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/float.h \
+ /boot/develop/headers/posix/sys/wait.h \
+ /boot/develop/headers/posix/sys/types.h \
+ /boot/develop/headers/posix/time.h \
+ /boot/develop/headers/posix/sys/select.h \
+ /boot/develop/headers/posix/sys/time.h \
+ /boot/develop/headers/posix/alloca.h ev_Menu_Actions.h \
+ ../../../../src/af/util/xp/ut_types.h \
+ ../../../../src/af/xap/xp/xap_Types.h \
+ ../../../../src/af/util/xp/ut_vector.h \
+ ../../../../src/af/util/xp/ut_assert.h \
+ /boot/develop/headers/posix/assert.h \
+ /boot/develop/headers/posix/string.h \
+ ../../../../src/af/util/xp/ut_string_class.h \
+ /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/stdarg.h \
+ ../../../../src/af/util/xp/ut_string.h \
+ /boot/home/config/include/fribidi/fribidi.h \
+ /boot/home/config/include/fribidi/fribidi_config.h \
+ /boot/home/config/include/fribidi/fribidi_unicode.h \
+ /boot/home/config/include/fribidi/fribidi_types.h \
+ /boot/home/config/include/fribidi/fribidi_mem.h \
+ /boot/home/config/include/fribidi/fribidi_char_sets.h \
+ /boot/home/config/include/fribidi/fribidi_char_sets_cap_rtl.h \
+ /boot/home/config/include/fribidi/fribidi_char_sets_utf8.h \
+ /boot/home/config/include/fribidi/fribidi_char_sets_iso8859_6.h \
+ /boot/home/config/include/fribidi/fribidi_char_sets_iso8859_8.h \
+ /boot/home/config/include/fribidi/fribidi_char_sets_cp1255.h \
+ /boot/home/config/include/fribidi/fribidi_char_sets_cp1256.h \
+ /boot/home/config/include/fribidi/fribidi_char_sets_isiri_3342.h \
+ ../../../../src/af/util/xp/ut_stringbuf.h \
+ ../../../../src/af/util/xp/ut_debugmsg.h
+ev_Menu_Actions.cpp :
+/boot/develop/headers/posix/stdlib.h :
+/boot/develop/headers/posix/be_setup.h :
+/boot/develop/headers/be/BeBuild.h :
+/boot/develop/headers/posix/div_t.h :
+/boot/develop/headers/posix/size_t.h :
+/boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/stddef.h :
+/boot/develop/headers/posix/null.h :
+/boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/wchar_t.h :
+/boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/limits.h :
+/boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/syslimits.h :
+/boot/develop/headers/posix/limits.h :
+/boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/float.h :
+/boot/develop/headers/posix/sys/wait.h :
+/boot/develop/headers/posix/sys/types.h :
+/boot/develop/headers/posix/time.h :
+/boot/develop/headers/posix/sys/select.h :
+/boot/develop/headers/posix/sys/time.h :
+/boot/develop/headers/posix/alloca.h :
+ev_Menu_Actions.h :
+../../../../src/af/util/xp/ut_types.h :
+../../../../src/af/xap/xp/xap_Types.h :
+../../../../src/af/util/xp/ut_vector.h :
+../../../../src/af/util/xp/ut_assert.h :
+/boot/develop/headers/posix/assert.h :
+/boot/develop/headers/posix/string.h :
+../../../../src/af/util/xp/ut_string_class.h :
+/boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/stdarg.h :
+../../../../src/af/util/xp/ut_string.h :
+/boot/home/config/include/fribidi/fribidi.h :
+/boot/home/config/include/fribidi/fribidi_config.h :
+/boot/home/config/include/fribidi/fribidi_unicode.h :
+/boot/home/config/include/fribidi/fribidi_types.h :
+/boot/home/config/include/fribidi/fribidi_mem.h :
+/boot/home/config/include/fribidi/fribidi_char_sets.h :
+/boot/home/config/include/fribidi/fribidi_char_sets_cap_rtl.h :
+/boot/home/config/include/fribidi/fribidi_char_sets_utf8.h :
+/boot/home/config/include/fribidi/fribidi_char_sets_iso8859_6.h :
+/boot/home/config/include/fribidi/fribidi_char_sets_iso8859_8.h :
+/boot/home/config/include/fribidi/fribidi_char_sets_cp1255.h :
+/boot/home/config/include/fribidi/fribidi_char_sets_cp1256.h :
+/boot/home/config/include/fribidi/fribidi_char_sets_isiri_3342.h :
+../../../../src/af/util/xp/ut_stringbuf.h :
+../../../../src/af/util/xp/ut_debugmsg.h :
