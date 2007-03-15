@@ -1,0 +1,808 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 38;
+	objects = {
+		014CEA440018CDF011CA2923 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				OPTIMIZATION_CFLAGS = "-O0";
+			};
+			isa = PBXBuildStyle;
+			name = Development;
+		};
+		014CEA450018CDF011CA2923 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+			};
+			isa = PBXBuildStyle;
+			name = Deployment;
+		};
+//010
+//011
+//012
+//013
+//014
+//030
+//031
+//032
+//033
+//034
+		034768DFFF38A50411DB9C8B = {
+			children = (
+				034768E0FF38A50411DB9C8B,
+			);
+			isa = PBXGroup;
+			name = Products;
+			refType = 4;
+		};
+		034768E0FF38A50411DB9C8B = {
+			isa = PBXFrameworkReference;
+			path = fribidi.framework;
+			refType = 3;
+		};
+//030
+//031
+//032
+//033
+//034
+//080
+//081
+//082
+//083
+//084
+		0867D690FE84028FC02AAC07 = {
+			buildStyles = (
+				014CEA440018CDF011CA2923,
+				014CEA450018CDF011CA2923,
+			);
+			hasScannedForEncodings = 1;
+			isa = PBXProject;
+			mainGroup = 0867D691FE84028FC02AAC07;
+			productRefGroup = 034768DFFF38A50411DB9C8B;
+			projectDirPath = "";
+			targets = (
+				0867D69CFE84028FC02AAC07,
+			);
+		};
+		0867D691FE84028FC02AAC07 = {
+			children = (
+				08FB77AEFE84172EC02AAC07,
+				089C1665FE841158C02AAC07,
+				0867D69AFE84028FC02AAC07,
+				034768DFFF38A50411DB9C8B,
+			);
+			isa = PBXGroup;
+			name = fribidipbx;
+			refType = 4;
+		};
+		0867D69AFE84028FC02AAC07 = {
+			children = (
+				1058C7B0FEA5585E11CA2CBB,
+				1058C7B2FEA5585E11CA2CBB,
+			);
+			isa = PBXGroup;
+			name = "External Frameworks and Libraries";
+			refType = 4;
+		};
+		0867D69BFE84028FC02AAC07 = {
+			isa = PBXFrameworkReference;
+			name = Foundation.framework;
+			path = /System/Library/Frameworks/Foundation.framework;
+			refType = 0;
+		};
+		0867D69CFE84028FC02AAC07 = {
+			buildPhases = (
+				0867D69DFE84028FC02AAC07,
+				0867D69EFE84028FC02AAC07,
+				0867D69FFE84028FC02AAC07,
+				0867D6A0FE84028FC02AAC07,
+				0867D6A2FE84028FC02AAC07,
+			);
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_VERSION = A;
+				HEADER_SEARCH_PATHS = "";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "-DHAVE_CONFIG_H -Wall";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = fribidi;
+				SECTORDER_FLAGS = "";
+				SKIP_INSTALL = YES;
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = framework;
+			};
+			dependencies = (
+			);
+			isa = PBXFrameworkTarget;
+			name = fribidipbx;
+			productInstallPath = "";
+			productName = fribidipbx;
+			productReference = 034768E0FF38A50411DB9C8B;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>fribidi</string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>FMWK</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>0.0.1d1</string>
+	<key>NSPrincipalClass</key>
+	<string></string>
+</dict>
+</plist>
+";
+		};
+		0867D69DFE84028FC02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+				F5E7DD8D038A0DF2011200F0,
+				F5E7DD8E038A0DF2011200F0,
+				F5E7DD91038A0DF2011200F0,
+				F5E7DD93038A0DF2011200F0,
+				F5E7DD95038A0DF2011200F0,
+				F5E7DD97038A0DF2011200F0,
+				F5E7DD99038A0DF2011200F0,
+				F5E7DD9B038A0DF2011200F0,
+				F5E7DD9D038A0DF2011200F0,
+				F5E7DD9F038A0DF2011200F0,
+				F5E7DDA1038A0DF2011200F0,
+				F5E7DDB5038A0E22011200F0,
+				F5E7DDB8038A0E22011200F0,
+				F5E7DDB9038A0E22011200F0,
+				F5E7DDBD038A0E22011200F0,
+				F5E7DDBF038A0E22011200F0,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0867D69EFE84028FC02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0867D69FFE84028FC02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+				F5E7DD90038A0DF2011200F0,
+				F5E7DD92038A0DF2011200F0,
+				F5E7DD94038A0DF2011200F0,
+				F5E7DD96038A0DF2011200F0,
+				F5E7DD98038A0DF2011200F0,
+				F5E7DD9A038A0DF2011200F0,
+				F5E7DD9C038A0DF2011200F0,
+				F5E7DD9E038A0DF2011200F0,
+				F5E7DDA0038A0DF2011200F0,
+				F5E7DDB4038A0E22011200F0,
+				F5E7DDB6038A0E22011200F0,
+				F5E7DDB7038A0E22011200F0,
+				F5E7DDBA038A0E22011200F0,
+				F5E7DDBB038A0E22011200F0,
+				F5E7DDBC038A0E22011200F0,
+				F5E7DDBE038A0E22011200F0,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0867D6A0FE84028FC02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0867D6A2FE84028FC02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0867D6A5FE840307C02AAC07 = {
+			isa = PBXFrameworkReference;
+			name = AppKit.framework;
+			path = /System/Library/Frameworks/AppKit.framework;
+			refType = 0;
+		};
+		089C1665FE841158C02AAC07 = {
+			children = (
+			);
+			isa = PBXGroup;
+			name = Resources;
+			refType = 4;
+		};
+		08FB77AEFE84172EC02AAC07 = {
+			children = (
+				F5E7DD78038A0DF2011200F0,
+				F5E7DD79038A0DF2011200F0,
+				F5E7DD7A038A0DF2011200F0,
+				F5E7DD7B038A0DF2011200F0,
+				F5E7DD7C038A0DF2011200F0,
+				F5E7DD7D038A0DF2011200F0,
+				F5E7DD7E038A0DF2011200F0,
+				F5E7DD7F038A0DF2011200F0,
+				F5E7DD80038A0DF2011200F0,
+				F5E7DD81038A0DF2011200F0,
+				F5E7DD82038A0DF2011200F0,
+				F5E7DD83038A0DF2011200F0,
+				F5E7DD84038A0DF2011200F0,
+				F5E7DD85038A0DF2011200F0,
+				F5E7DD86038A0DF2011200F0,
+				F5E7DD87038A0DF2011200F0,
+				F5E7DD88038A0DF2011200F0,
+				F5E7DD89038A0DF2011200F0,
+				F5E7DD8A038A0DF2011200F0,
+				F5E7DD8B038A0DF2011200F0,
+				F5E7DD8C038A0DF2011200F0,
+				F5E7DDA2038A0E22011200F0,
+				F5E7DDA3038A0E22011200F0,
+				F5E7DDA4038A0E22011200F0,
+				F5E7DDA5038A0E22011200F0,
+				F5E7DDA6038A0E22011200F0,
+				F5E7DDA7038A0E22011200F0,
+				F5E7DDA8038A0E22011200F0,
+				F5E7DDA9038A0E22011200F0,
+				F5E7DDAA038A0E22011200F0,
+				F5E7DDAB038A0E22011200F0,
+				F5E7DDAC038A0E22011200F0,
+				F5E7DDAD038A0E22011200F0,
+				F5E7DDAE038A0E22011200F0,
+				F5E7DDAF038A0E22011200F0,
+				F5E7DDB0038A0E22011200F0,
+			);
+			isa = PBXGroup;
+			name = fribidi;
+			refType = 4;
+		};
+//080
+//081
+//082
+//083
+//084
+//100
+//101
+//102
+//103
+//104
+		1058C7B0FEA5585E11CA2CBB = {
+			children = (
+				1058C7B1FEA5585E11CA2CBB,
+			);
+			isa = PBXGroup;
+			name = "Linked Frameworks";
+			refType = 4;
+		};
+		1058C7B1FEA5585E11CA2CBB = {
+			isa = PBXFrameworkReference;
+			name = Cocoa.framework;
+			path = /System/Library/Frameworks/Cocoa.framework;
+			refType = 0;
+		};
+		1058C7B2FEA5585E11CA2CBB = {
+			children = (
+				0867D69BFE84028FC02AAC07,
+				0867D6A5FE840307C02AAC07,
+			);
+			isa = PBXGroup;
+			name = "Other Frameworks";
+			refType = 4;
+		};
+//100
+//101
+//102
+//103
+//104
+//F50
+//F51
+//F52
+//F53
+//F54
+		F5E7DD78038A0DF2011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = acconfig.h;
+			path = ../fribidi/acconfig.h;
+			refType = 2;
+		};
+		F5E7DD79038A0DF2011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = config.h;
+			path = ../fribidi/config.h;
+			refType = 2;
+		};
+		F5E7DD7A038A0DF2011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_benchmark.c;
+			path = ../fribidi/fribidi_benchmark.c;
+			refType = 2;
+		};
+		F5E7DD7B038A0DF2011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_char_sets_cap_rtl.c;
+			path = ../fribidi/fribidi_char_sets_cap_rtl.c;
+			refType = 2;
+		};
+		F5E7DD7C038A0DF2011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_char_sets_cap_rtl.h;
+			path = ../fribidi/fribidi_char_sets_cap_rtl.h;
+			refType = 2;
+		};
+		F5E7DD7D038A0DF2011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_char_sets_cp1255.c;
+			path = ../fribidi/fribidi_char_sets_cp1255.c;
+			refType = 2;
+		};
+		F5E7DD7E038A0DF2011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_char_sets_cp1255.h;
+			path = ../fribidi/fribidi_char_sets_cp1255.h;
+			refType = 2;
+		};
+		F5E7DD7F038A0DF2011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_char_sets_cp1256.c;
+			path = ../fribidi/fribidi_char_sets_cp1256.c;
+			refType = 2;
+		};
+		F5E7DD80038A0DF2011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_char_sets_cp1256.h;
+			path = ../fribidi/fribidi_char_sets_cp1256.h;
+			refType = 2;
+		};
+		F5E7DD81038A0DF2011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_char_sets_isiri_3342.c;
+			path = ../fribidi/fribidi_char_sets_isiri_3342.c;
+			refType = 2;
+		};
+		F5E7DD82038A0DF2011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_char_sets_isiri_3342.h;
+			path = ../fribidi/fribidi_char_sets_isiri_3342.h;
+			refType = 2;
+		};
+		F5E7DD83038A0DF2011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_char_sets_iso8859_6.c;
+			path = ../fribidi/fribidi_char_sets_iso8859_6.c;
+			refType = 2;
+		};
+		F5E7DD84038A0DF2011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_char_sets_iso8859_6.h;
+			path = ../fribidi/fribidi_char_sets_iso8859_6.h;
+			refType = 2;
+		};
+		F5E7DD85038A0DF2011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_char_sets_iso8859_8.c;
+			path = ../fribidi/fribidi_char_sets_iso8859_8.c;
+			refType = 2;
+		};
+		F5E7DD86038A0DF2011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_char_sets_iso8859_8.h;
+			path = ../fribidi/fribidi_char_sets_iso8859_8.h;
+			refType = 2;
+		};
+		F5E7DD87038A0DF2011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_char_sets_utf8.c;
+			path = ../fribidi/fribidi_char_sets_utf8.c;
+			refType = 2;
+		};
+		F5E7DD88038A0DF2011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_char_sets_utf8.h;
+			path = ../fribidi/fribidi_char_sets_utf8.h;
+			refType = 2;
+		};
+		F5E7DD89038A0DF2011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_char_sets.c;
+			path = ../fribidi/fribidi_char_sets.c;
+			refType = 2;
+		};
+		F5E7DD8A038A0DF2011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_char_sets.h;
+			path = ../fribidi/fribidi_char_sets.h;
+			refType = 2;
+		};
+		F5E7DD8B038A0DF2011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_char_type.c;
+			path = ../fribidi/fribidi_char_type.c;
+			refType = 2;
+		};
+		F5E7DD8C038A0DF2011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_config.h;
+			path = ../fribidi/fribidi_config.h;
+			refType = 2;
+		};
+		F5E7DD8D038A0DF2011200F0 = {
+			fileRef = F5E7DD78038A0DF2011200F0;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E7DD8E038A0DF2011200F0 = {
+			fileRef = F5E7DD79038A0DF2011200F0;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E7DD90038A0DF2011200F0 = {
+			fileRef = F5E7DD7B038A0DF2011200F0;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E7DD91038A0DF2011200F0 = {
+			fileRef = F5E7DD7C038A0DF2011200F0;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		F5E7DD92038A0DF2011200F0 = {
+			fileRef = F5E7DD7D038A0DF2011200F0;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E7DD93038A0DF2011200F0 = {
+			fileRef = F5E7DD7E038A0DF2011200F0;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		F5E7DD94038A0DF2011200F0 = {
+			fileRef = F5E7DD7F038A0DF2011200F0;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E7DD95038A0DF2011200F0 = {
+			fileRef = F5E7DD80038A0DF2011200F0;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		F5E7DD96038A0DF2011200F0 = {
+			fileRef = F5E7DD81038A0DF2011200F0;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E7DD97038A0DF2011200F0 = {
+			fileRef = F5E7DD82038A0DF2011200F0;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		F5E7DD98038A0DF2011200F0 = {
+			fileRef = F5E7DD83038A0DF2011200F0;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E7DD99038A0DF2011200F0 = {
+			fileRef = F5E7DD84038A0DF2011200F0;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		F5E7DD9A038A0DF2011200F0 = {
+			fileRef = F5E7DD85038A0DF2011200F0;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E7DD9B038A0DF2011200F0 = {
+			fileRef = F5E7DD86038A0DF2011200F0;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		F5E7DD9C038A0DF2011200F0 = {
+			fileRef = F5E7DD87038A0DF2011200F0;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E7DD9D038A0DF2011200F0 = {
+			fileRef = F5E7DD88038A0DF2011200F0;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		F5E7DD9E038A0DF2011200F0 = {
+			fileRef = F5E7DD89038A0DF2011200F0;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E7DD9F038A0DF2011200F0 = {
+			fileRef = F5E7DD8A038A0DF2011200F0;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		F5E7DDA0038A0DF2011200F0 = {
+			fileRef = F5E7DD8B038A0DF2011200F0;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E7DDA1038A0DF2011200F0 = {
+			fileRef = F5E7DD8C038A0DF2011200F0;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		F5E7DDA2038A0E22011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_create_char_types.c;
+			path = ../fribidi/fribidi_create_char_types.c;
+			refType = 2;
+		};
+		F5E7DDA3038A0E22011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_create_mirroring.c;
+			path = ../fribidi/fribidi_create_mirroring.c;
+			refType = 2;
+		};
+		F5E7DDA4038A0E22011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_main.c;
+			path = ../fribidi/fribidi_main.c;
+			refType = 2;
+		};
+		F5E7DDA5038A0E22011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_mem.c;
+			path = ../fribidi/fribidi_mem.c;
+			refType = 2;
+		};
+		F5E7DDA6038A0E22011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_mem.h;
+			path = ../fribidi/fribidi_mem.h;
+			refType = 2;
+		};
+		F5E7DDA7038A0E22011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_mirroring.c;
+			path = ../fribidi/fribidi_mirroring.c;
+			refType = 2;
+		};
+		F5E7DDA8038A0E22011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_types.c;
+			path = ../fribidi/fribidi_types.c;
+			refType = 2;
+		};
+		F5E7DDA9038A0E22011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_types.h;
+			path = ../fribidi/fribidi_types.h;
+			refType = 2;
+		};
+		F5E7DDAA038A0E22011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_unicode.h;
+			path = ../fribidi/fribidi_unicode.h;
+			refType = 2;
+		};
+		F5E7DDAB038A0E22011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_utils.c;
+			path = ../fribidi/fribidi_utils.c;
+			refType = 2;
+		};
+		F5E7DDAC038A0E22011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi_wcwidth.c;
+			path = ../fribidi/fribidi_wcwidth.c;
+			refType = 2;
+		};
+		F5E7DDAD038A0E22011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi.c;
+			path = ../fribidi/fribidi.c;
+			refType = 2;
+		};
+		F5E7DDAE038A0E22011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = fribidi.h;
+			path = ../fribidi/fribidi.h;
+			refType = 2;
+		};
+		F5E7DDAF038A0E22011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = packtab.c;
+			path = ../fribidi/packtab.c;
+			refType = 2;
+		};
+		F5E7DDB0038A0E22011200F0 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = packtab.h;
+			path = ../fribidi/packtab.h;
+			refType = 2;
+		};
+		F5E7DDB4038A0E22011200F0 = {
+			fileRef = F5E7DDA5038A0E22011200F0;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E7DDB5038A0E22011200F0 = {
+			fileRef = F5E7DDA6038A0E22011200F0;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		F5E7DDB6038A0E22011200F0 = {
+			fileRef = F5E7DDA7038A0E22011200F0;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E7DDB7038A0E22011200F0 = {
+			fileRef = F5E7DDA8038A0E22011200F0;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E7DDB8038A0E22011200F0 = {
+			fileRef = F5E7DDA9038A0E22011200F0;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		F5E7DDB9038A0E22011200F0 = {
+			fileRef = F5E7DDAA038A0E22011200F0;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		F5E7DDBA038A0E22011200F0 = {
+			fileRef = F5E7DDAB038A0E22011200F0;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E7DDBB038A0E22011200F0 = {
+			fileRef = F5E7DDAC038A0E22011200F0;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E7DDBC038A0E22011200F0 = {
+			fileRef = F5E7DDAD038A0E22011200F0;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E7DDBD038A0E22011200F0 = {
+			fileRef = F5E7DDAE038A0E22011200F0;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		F5E7DDBE038A0E22011200F0 = {
+			fileRef = F5E7DDAF038A0E22011200F0;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5E7DDBF038A0E22011200F0 = {
+			fileRef = F5E7DDB0038A0E22011200F0;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+	};
+	rootObject = 0867D690FE84028FC02AAC07;
+}

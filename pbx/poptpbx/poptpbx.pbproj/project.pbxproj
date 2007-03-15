@@ -1,0 +1,450 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 38;
+	objects = {
+		014CEA440018CDF011CA2923 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				OPTIMIZATION_CFLAGS = "-O0";
+			};
+			isa = PBXBuildStyle;
+			name = Development;
+		};
+		014CEA450018CDF011CA2923 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+			};
+			isa = PBXBuildStyle;
+			name = Deployment;
+		};
+//010
+//011
+//012
+//013
+//014
+//030
+//031
+//032
+//033
+//034
+		034768DFFF38A50411DB9C8B = {
+			children = (
+				034768E0FF38A50411DB9C8B,
+			);
+			isa = PBXGroup;
+			name = Products;
+			refType = 4;
+		};
+		034768E0FF38A50411DB9C8B = {
+			isa = PBXFrameworkReference;
+			path = popt.framework;
+			refType = 3;
+		};
+//030
+//031
+//032
+//033
+//034
+//080
+//081
+//082
+//083
+//084
+		0867D690FE84028FC02AAC07 = {
+			buildStyles = (
+				81E350620429FF56002A00AA,
+				81E350630429FF68002A00AA,
+				014CEA440018CDF011CA2923,
+				014CEA450018CDF011CA2923,
+			);
+			hasScannedForEncodings = 1;
+			isa = PBXProject;
+			mainGroup = 0867D691FE84028FC02AAC07;
+			productRefGroup = 034768DFFF38A50411DB9C8B;
+			projectDirPath = "";
+			targets = (
+				0867D69CFE84028FC02AAC07,
+			);
+		};
+		0867D691FE84028FC02AAC07 = {
+			children = (
+				81CA8B4A0427EF9E00442981,
+				32C88DFF0371C24200C91783,
+				0867D69AFE84028FC02AAC07,
+				034768DFFF38A50411DB9C8B,
+			);
+			isa = PBXGroup;
+			name = poptpbx;
+			refType = 4;
+		};
+		0867D69AFE84028FC02AAC07 = {
+			children = (
+				1058C7B0FEA5585E11CA2CBB,
+				1058C7B2FEA5585E11CA2CBB,
+			);
+			isa = PBXGroup;
+			name = "External Frameworks and Libraries";
+			refType = 4;
+		};
+		0867D69BFE84028FC02AAC07 = {
+			isa = PBXFrameworkReference;
+			name = Foundation.framework;
+			path = /System/Library/Frameworks/Foundation.framework;
+			refType = 0;
+		};
+		0867D69CFE84028FC02AAC07 = {
+			buildPhases = (
+				0867D69DFE84028FC02AAC07,
+				0867D69EFE84028FC02AAC07,
+				0867D69FFE84028FC02AAC07,
+				0867D6A0FE84028FC02AAC07,
+				0867D6A2FE84028FC02AAC07,
+			);
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_VERSION = 1.6;
+				HEADER_SEARCH_PATHS = "";
+				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_LDFLAGS = "";
+				PREFIX_HEADER = popt_config.h;
+				PRODUCT_NAME = popt;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = framework;
+			};
+			dependencies = (
+			);
+			isa = PBXFrameworkTarget;
+			name = poptpbx;
+			productInstallPath = "$(HOME)/Library/Frameworks";
+			productName = poptpbx;
+			productReference = 034768E0FF38A50411DB9C8B;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>popt</string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>FMWK</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>0.0.1d1</string>
+	<key>NSPrincipalClass</key>
+	<string></string>
+</dict>
+</plist>
+";
+		};
+		0867D69DFE84028FC02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+				81CA8B570427EFD000442981,
+				81CA8B5A0427EFD000442981,
+				81CA8B5C0427EFD000442981,
+				81CA8B5E0427F07000442981,
+				81E350490429FCB0002A00AA,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0867D69EFE84028FC02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0867D69FFE84028FC02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+				81CA8B560427EFD000442981,
+				81CA8B580427EFD000442981,
+				81CA8B590427EFD000442981,
+				81CA8B5B0427EFD000442981,
+				81E350480429FCB0002A00AA,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0867D6A0FE84028FC02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0867D6A2FE84028FC02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0867D6A5FE840307C02AAC07 = {
+			isa = PBXFrameworkReference;
+			name = AppKit.framework;
+			path = /System/Library/Frameworks/AppKit.framework;
+			refType = 0;
+		};
+//080
+//081
+//082
+//083
+//084
+//100
+//101
+//102
+//103
+//104
+		1058C7B0FEA5585E11CA2CBB = {
+			children = (
+			);
+			isa = PBXGroup;
+			name = "Linked Frameworks";
+			refType = 4;
+		};
+		1058C7B2FEA5585E11CA2CBB = {
+			children = (
+				0867D69BFE84028FC02AAC07,
+				0867D6A5FE840307C02AAC07,
+			);
+			isa = PBXGroup;
+			name = "Other Frameworks";
+			refType = 4;
+		};
+//100
+//101
+//102
+//103
+//104
+//320
+//321
+//322
+//323
+//324
+		32C88DFF0371C24200C91783 = {
+			children = (
+				81E3504A0429FD5D002A00AA,
+			);
+			isa = PBXGroup;
+			name = "Other Sources";
+			refType = 4;
+		};
+//320
+//321
+//322
+//323
+//324
+//810
+//811
+//812
+//813
+//814
+		81CA8B4A0427EF9E00442981 = {
+			children = (
+				81CA8B5D0427F07000442981,
+				81CA8B4B0427EFD000442981,
+				81CA8B4C0427EFD000442981,
+				81CA8B4D0427EFD000442981,
+				81CA8B4E0427EFD000442981,
+				81CA8B4F0427EFD000442981,
+				81CA8B500427EFD000442981,
+				81CA8B510427EFD000442981,
+				81CA8B520427EFD000442981,
+				81CA8B530427EFD000442981,
+			);
+			isa = PBXGroup;
+			name = popt;
+			path = "";
+			refType = 4;
+		};
+		81CA8B4B0427EFD000442981 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = findme.c;
+			path = ../popt/findme.c;
+			refType = 2;
+		};
+		81CA8B4C0427EFD000442981 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = findme.h;
+			path = ../popt/findme.h;
+			refType = 2;
+		};
+		81CA8B4D0427EFD000442981 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = popt.c;
+			path = ../popt/popt.c;
+			refType = 2;
+		};
+		81CA8B4E0427EFD000442981 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = popt.h;
+			path = ../popt/popt.h;
+			refType = 2;
+		};
+		81CA8B4F0427EFD000442981 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = poptconfig.c;
+			path = ../popt/poptconfig.c;
+			refType = 2;
+		};
+		81CA8B500427EFD000442981 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = popthelp.c;
+			path = ../popt/popthelp.c;
+			refType = 2;
+		};
+		81CA8B510427EFD000442981 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = poptint.h;
+			path = ../popt/poptint.h;
+			refType = 2;
+		};
+		81CA8B520427EFD000442981 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = poptparse.c;
+			path = ../popt/poptparse.c;
+			refType = 2;
+		};
+		81CA8B530427EFD000442981 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = system.h;
+			path = ../popt/system.h;
+			refType = 2;
+		};
+		81CA8B560427EFD000442981 = {
+			fileRef = 81CA8B4D0427EFD000442981;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		81CA8B570427EFD000442981 = {
+			fileRef = 81CA8B4E0427EFD000442981;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		81CA8B580427EFD000442981 = {
+			fileRef = 81CA8B4F0427EFD000442981;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		81CA8B590427EFD000442981 = {
+			fileRef = 81CA8B500427EFD000442981;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		81CA8B5A0427EFD000442981 = {
+			fileRef = 81CA8B510427EFD000442981;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+				);
+			};
+		};
+		81CA8B5B0427EFD000442981 = {
+			fileRef = 81CA8B520427EFD000442981;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		81CA8B5C0427EFD000442981 = {
+			fileRef = 81CA8B530427EFD000442981;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+				);
+			};
+		};
+		81CA8B5D0427F07000442981 = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			name = acconfig.h;
+			path = ../popt/acconfig.h;
+			refType = 2;
+		};
+		81CA8B5E0427F07000442981 = {
+			fileRef = 81CA8B5D0427F07000442981;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+				);
+			};
+		};
+		81E350480429FCB0002A00AA = {
+			fileRef = 81CA8B4B0427EFD000442981;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		81E350490429FCB0002A00AA = {
+			fileRef = 81CA8B4C0427EFD000442981;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+				);
+			};
+		};
+		81E3504A0429FD5D002A00AA = {
+			fileEncoding = 5;
+			isa = PBXFileReference;
+			path = popt_config.h;
+			refType = 4;
+		};
+		81E350620429FF56002A00AA = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OPTIMIZATION_CFLAGS = "-O0";
+			};
+			isa = PBXBuildStyle;
+			name = "Development - Embedded";
+		};
+		81E350630429FF68002A00AA = {
+			buildRules = (
+			);
+			buildSettings = {
+				INSTALL_PATH = "@executable_path/../Frameworks";
+			};
+			isa = PBXBuildStyle;
+			name = "Deployment - Embedded";
+		};
+	};
+	rootObject = 0867D690FE84028FC02AAC07;
+}

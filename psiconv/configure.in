@@ -1,0 +1,138 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(psiconv)
+AM_INIT_AUTOMAKE(psiconv,0.8.3)
+
+AM_CONFIG_HEADER(config.h)
+
+dnl Checks for programs.
+AM_PROG_LIBTOOL
+
+dnl This is stolen from gnome-libs-1.0.14
+AC_ARG_ENABLE(compile-warnings, 
+[  --enable-compile-warnings=[no/minimum/yes]       Turn on compiler warnings.],
+,enable_compile_warnings=minimum)
+
+AC_MSG_CHECKING(what warning flags to pass to the C compiler)
+warnCFLAGS=
+if test "x$GCC" != xyes; then
+  enable_compile_warnings=no
+fi
+if test "x$enable_compile_warnings" != "xno"; then
+  if test "x$GCC" = "xyes"; then
+    case " $CFLAGS " in
+    *[\ \	]-Wall[\ \	]*) ;;
+    *) warnCFLAGS="-Wall -Wunused" ;;
+    esac
+
+    ## -W is not all that useful.  And it cannot be controlled
+    ## with individual -Wno-xxx flags, unlike -Wall
+    if test "x$enable_compile_warnings" = "xyes"; then
+      warnCFLAGS="$warnCFLAGS -Wmissing-prototypes -Wmissing-declarations -Wpointer-arith"
+    fi
+  fi
+fi
+AC_MSG_RESULT($warnCFLAGS)
+
+AC_ARG_ENABLE(iso-c,
+  [  --enable-iso-c          Try to warn if code is not ISO C ],,
+  enable_iso_c=no)
+
+AC_MSG_CHECKING(what language compliance flags to pass to the C compiler)
+complCFLAGS=
+if test "x$enable_iso_c" != "xno"; then
+  if test "x$GCC" = "xyes"; then
+    case " $CFLAGS " in
+    *[\ \	]-ansi[\ \	]*) ;;
+    *) complCFLAGS="$complCFLAGS -ansi" ;;
+    esac
+
+    case " $CFLAGS " in
+    *[\ \	]-pedantic[\ \	]*) ;;
+    *) complCFLAGS="$complCFLAGS -pedantic" ;;
+    esac
+  fi
+fi
+AC_MSG_RESULT($complCFLAGS)
+if test "x$cflags_set" != "xyes"; then
+  CFLAGS="$CFLAGS $warnCFLAGS $complCFLAGS"
+  cflags_set=yes
+  AC_SUBST(cflags_set)
+fi
+
+
+dnl Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS(unistd.h)
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_TYPE_SIZE_T
+
+dnl Here we check for large enough integer types. This is not quite
+dnl good enough, but it should work almost always.
+
+AC_CHECK_SIZEOF(char,1)
+AC_CHECK_SIZEOF(short,1)
+AC_CHECK_SIZEOF(int,2)
+AC_CHECK_SIZEOF(long,4)
+
+AC_MSG_CHECKING(for an 8 bit integer type)
+if test $ac_cv_sizeof_char -ge 1 ; then
+  INT_8_BIT=char
+  AC_MSG_RESULT(char)
+elif test $ac_cv_sizeof_short -ge 1 ; then
+  INT_8_BIT=short
+  AC_MSG_RESULT(short)
+elif test $ac_cv_sizeof_int -ge 1 ; then
+  INT_8_BIT=int
+  AC_MSG_RESULT(int)
+elif test $ac_cv_sizeof_long -ge 1 ; then
+  INT_8_BIT=long
+  AC_MSG_RESULT(long)
+else
+  AC_MSG_ERROR(No integer type of at least 8 bits found)
+fi
+
+AC_MSG_CHECKING(for a 16 bit integer type)
+if test $ac_cv_sizeof_char -ge 2 ; then
+  INT_16_BIT=char
+  AC_MSG_RESULT(char)
+elif test $ac_cv_sizeof_short -ge 2 ; then
+  INT_16_BIT=short
+  AC_MSG_RESULT(short)
+elif test $ac_cv_sizeof_int -ge 2 ; then
+  INT_16_BIT=int
+  AC_MSG_RESULT(int)
+elif test $ac_cv_sizeof_long -ge 2 ; then
+  INT_16_BIT=long
+  AC_MSG_RESULT(long)
+else
+  AC_MSG_ERROR(No integer type of at least 16 bits found)
+fi
+
+AC_MSG_CHECKING(for a 32 bit integer type)
+if test $ac_cv_sizeof_char -ge 4 ; then
+  INT_32_BIT=char
+  AC_MSG_RESULT(char)
+elif test $ac_cv_sizeof_short -ge 4 ; then
+  INT_32_BIT=short
+  AC_MSG_RESULT(short)
+elif test $ac_cv_sizeof_int -ge 4 ; then
+  INT_32_BIT=int
+  AC_MSG_RESULT(int)
+elif test $ac_cv_sizeof_long -ge 4 ; then
+  INT_32_BIT=long
+  AC_MSG_RESULT(long)
+else
+  AC_MSG_ERROR(No integer type of at least 32 bits found)
+fi
+
+AC_SUBST(INT_8_BIT)
+AC_SUBST(INT_16_BIT)
+AC_SUBST(INT_32_BIT)
+
+dnl Checks for library functions.
+AC_FUNC_VPRINTF
+AC_REPLACE_FUNCS(strdup)
+
+AC_OUTPUT([Makefile compat/Makefile psiconv/Makefile psiconv/general.h])
