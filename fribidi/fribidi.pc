@@ -1,0 +1,10 @@
+prefix=/boot/home/fribidi
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: FriBidi
+Description: Unicode BiDirectional algorithm library
+Version: 0.10.7
+Libs: -L${libdir} -lfribidi
+Cflags: -I${includedir}/fribidi
