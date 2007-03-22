@@ -1,0 +1,12 @@
+prefix=/boot/home/config
+exec_prefix=NONE
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: cairo-xlib
+Description: Xlib backend for cairo graphics library
+Version: 1.2.6
+
+Requires: cairo 
+Libs:  -lSM -lICE  -L/usr/X11/lib -lX11 -lsocket  
+Cflags: -I${includedir}/cairo 
