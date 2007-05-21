@@ -62,7 +62,7 @@ OBJ_DIR_SFX	= OBJ
 endif
 
 # Includes
-OS_INCLUDES		= -I$(ABI_ROOT)/../libiconv/include
+OS_INCLUDES		= -I$(ABI_ROOT)/../libiconv/include -I/boot/home/config/include
 G++INCLUDES		= -I$(ABI_ROOT)/../libiconv/include
 
 # Compiler flags

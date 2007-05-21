@@ -98,7 +98,7 @@ INCLUDES = -I$(ABI_ROOT)/../libpng -I$(ABI_ROOT)/../zlib
 endif
 
 ifeq ($(ABI_NATIVE), beos)
-INCLUDES = -I$(ABI_ROOT)/../libiconv/include
+INCLUDES = -I$(ABI_ROOT)/../libiconv/include -I/boot/home/config/include
 endif
 
 #This can't really hurt anything

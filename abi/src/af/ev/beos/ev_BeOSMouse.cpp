@@ -254,7 +254,6 @@ void ev_BeOSMouse::mouseMotion(AV_View* pView, BMessage *msg)
 	msg->FindPoint("be:view_where", &pt);
 
 //	UT_DEBUGMSG(("mouseMotion: [x=%f y=%f]\n",pt.x, pt.y));
-	UT_DEBUGMSG(("mouseMotion: [x=%f y=%f]\n",pt.x, pt.y));
 	
 	if (buttons & B_PRIMARY_MOUSE_BUTTON)
 		emb = EV_EMB_BUTTON1;

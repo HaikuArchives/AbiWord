@@ -97,7 +97,8 @@ UT_BeOSTimer::~UT_BeOSTimer()
 	UT_DEBUGMSG(("ut_BeOSTimer.cpp:  timer destructor\n"));
 	if ((id = getIdentifier()) !=0 ) 
 	{
-		m_bStarted = false;
+		stop();
+		while(m_bStarted) snooze(m_iMilliseconds * 1000);
 		kill_thread(id);		
 	}
 }
@@ -127,7 +128,8 @@ void UT_BeOSTimer::stop(void)
 {
 	// stop the delivery of timer events.
 	// stop the OS timer from firing, but do not delete the class.
-	UT_DEBUGMSG(("ut_BeOSTimer.cpp: timer stopped\n"));
+	if(!m_bStarted) return;
+	UT_DEBUGMSG(("ut_BeOSTimer.cpp: timer #%d stopped\n", getIdentifier()));
 	m_bStarted = false;
 }
 

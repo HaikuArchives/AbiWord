@@ -40,7 +40,8 @@ TToolTip::TToolTip(tool_tip_settings *settings)
 	   			B_FLOATING_ALL_WINDOW_FEEL, B_AVOID_FRONT)
 {
 	// setup the tooltip view
-	AddChild(fView = new TToolTipView(settings));
+	fView = new TToolTipView(settings);
+	AddChild(fView);
 	// start the message loop thread
 	Run();
 }
@@ -131,8 +132,9 @@ void TToolTipView::AllAttached()
 	fTip.tool_tip_window = Window();
 
 	// start tool_tip thread
-	resume_thread(fThread = spawn_thread((status_t (*)(void *)) ToolTipThread,
-				"tip_thread", B_DISPLAY_PRIORITY, &fTip));
+//knorr!! no threads now	
+//	resume_thread(fThread = spawn_thread((status_t (*)(void *)) ToolTipThread,
+//				"tip_thread", B_DISPLAY_PRIORITY, &fTip));
 }
 
 //--------------------------------------------------------------------

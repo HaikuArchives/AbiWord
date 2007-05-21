@@ -43,7 +43,7 @@ XAP_BeOSApp::XAP_BeOSApp(XAP_Args * pArgs, const char * szAppName)
 {
 	m_pBeOSToolbarIcons = 0;
 	m_BApp.SetXAP_App(this);
-    _setAbiSuiteLibDir();
+    	_setAbiSuiteLibDir();
 
 	// create an instance of UT_UUIDGenerator or appropriate derrived class
 	_setUUIDGenerator(new UT_UUIDGenerator());
@@ -254,8 +254,11 @@ void ABI_BApp::RefsReceived(BMessage *msg) {
 	}
 }
 
-GR_Graphics * XAP_BeOSApp::	newDefaultScreenGraphics() const 
+GR_Graphics * XAP_BeOSApp::newDefaultScreenGraphics() const 
 {
-		return (GR_Graphics *)NULL;
+//knorr!! why just not return Grpahics??
+	GR_GraphicsFactory * pGF = getGraphicsFactory();
+	UT_ASSERT( pGF );	
+	GR_BeOSAllocInfo ai(NULL, (XAP_App*)this);
+	return pGF->newGraphics(GRID_BEOS, (GR_AllocInfo&)ai);
 }
-
