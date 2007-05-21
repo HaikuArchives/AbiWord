@@ -67,7 +67,7 @@ extern "C" {
 #if defined (WIN32) || defined(__QNXNTO__) || defined(__CYGWIN__) ||  \
 (defined (__MACH__) && defined (__APPLE__)) || \
 (defined(TARGET_OS_MAC) && TARGET_OS_MAC) || \
-defined (__AIX__) || defined(__OpenBSD__) || \
+defined (__AIX__) || defined(__OpenBSD__) || defined(__BEOS__) || \
 (defined(__linux__) && defined(__powerpc__) && (__GLIBC__ <= 2) && (__GLIBC_MINOR__ <= 1))
 
 #define ICONV_CONST const
@@ -339,7 +339,7 @@ size_t UT_iconv( UT_iconv_t cd, const char **inbuf,
 #ifdef UT_ICONV_USING_GLIB
   return g_iconv((GIConv)cd, (char **)inbuf, inbytesleft, outbuf, outbytesleft);
 #else
-  //return iconv( (iconv_t)cd, (ICONV_CONST char **)inbuf, inbytesleft, outbuf, outbytesleft );
+  return iconv( (iconv_t)cd, (ICONV_CONST char **)inbuf, inbytesleft, outbuf, outbytesleft );
 #endif
 }
 

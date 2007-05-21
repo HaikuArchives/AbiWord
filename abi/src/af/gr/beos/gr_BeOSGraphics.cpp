@@ -232,20 +232,20 @@ void GR_BeOSGraphics::drawChars(const UT_UCSChar* pChars, int iCharOffset,
 	char buffer[2*(iLength+1)];
 	UT_sint32 idy = _tduY(yoff+getFontHeight()*0.75);
 	UT_sint32 idx = _tduX(xoff);
-
 	
-    buffer[0] = '\0';
-    char* builder=buffer;
-	for (i=0; i<iLength; ++i)
-	{
-//		UT_DEBUGMSG(("Enocding character \"%c\"\n", pChars[i+iCharOffset]));
-		char* utf8buf = UT_encodeUTF8char(pChars[i+iCharOffset]);
-//		UT_DEBUGMSG(("Result is \"%c\"\n", *utf8buf));
-		int len = utf8_char_len(*utf8buf);
-		memcpy(builder, utf8buf, len);
-		builder+=len; 						
-	}
-	*builder = 0;
+	buffer[0] = '\0';
+	UT_UCS4_strcpy_to_char(buffer, pChars);
+//	char* builder=buffer;
+//	for (i=0; i<iLength; ++i)
+//	{
+////		UT_DEBUGMSG(("Enocding character \"%c\"\n", pChars[i+iCharOffset]));
+//		char* utf8buf = UT_encodeUTF8char(pChars[i+iCharOffset]);
+////		UT_DEBUGMSG(("Result is \"%c\"\n", *utf8buf));
+//		int len = utf8_char_len(*utf8buf);
+//		memcpy(builder, utf8buf, len);
+//		builder+=len; 						
+//	}
+//	*builder = 0;
 	
 	if (m_pShadowView->Window()->Lock()) 
 	{
@@ -253,8 +253,8 @@ void GR_BeOSGraphics::drawChars(const UT_UCSChar* pChars, int iCharOffset,
 	
 		// If we use B_OP_OVER, our text will anti-alias correctly against
 		// e.g. the ruler and the status bar.
-	    drawing_mode oldMode = m_pShadowView->DrawingMode();
-	    m_pShadowView->SetDrawingMode(B_OP_OVER);
+		drawing_mode oldMode = m_pShadowView->DrawingMode();
+		m_pShadowView->SetDrawingMode(B_OP_OVER);
 		/*DH:
 		 * I just had a brainstorm on how to fix the jitter problem.
 		 * Let's measure the string, and draw using the charwidths Abi thinks

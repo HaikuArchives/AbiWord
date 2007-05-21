@@ -44,7 +44,7 @@ available_tags=" CXX"
 
 # ### BEGIN LIBTOOL CONFIG
 
-# Libtool was configured on host samsung:
+# Libtool was configured on host amigo-note:
 
 # Shell to use when invoking shell scripts.
 SHELL="/bin/sh"
@@ -94,13 +94,13 @@ with_gcc=yes
 EGREP="grep -E"
 
 # The linker used to build libraries.
-LD="/boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/i586-pc-beos5/bin/ld"
+LD="/boot/develop/tools/gnupro/i586-pc-beos/bin/ld"
 
 # Whether we need hard or soft links.
 LN_S="ln -s"
 
 # A BSD-compatible nm program.
-NM="/boot/develop/bin/nm -B"
+NM="/boot/develop/tools/gnupro/bin/nm -B"
 
 # A symbol stripping program
 STRIP="strip"
@@ -319,7 +319,7 @@ variables_saved_for_relink="PATH  LD_RUN_PATH GCC_EXEC_PREFIX COMPILER_PATH LIBR
 link_all_deplibs=unknown
 
 # Compile-time system search path for libraries
-sys_lib_search_path_spec=" /boot/develop/bin/../lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/ /boot/develop/bin/../lib/gcc-lib/ /boot/develop/lib/x86/i586-pc-beos5/2.9-beos-000224/ /boot/develop/lib/x86/ /boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/ /usr/lib/gcc/i586-pc-beos5/2.9-beos-000224/ /boot/develop/bin/../lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../../i586-pc-beos5/lib/i586-pc-beos5/2.9-beos-000224/ /boot/develop/bin/../lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../../i586-pc-beos5/lib/ /boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../../i586-pc-beos5/lib/i586-pc-beos5/2.9-beos-000224/ /boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../../i586-pc-beos5/lib/ /usr/ccs/bin/i586-pc-beos5/2.9-beos-000224/ /usr/ccs/bin/ /usr/ccs/lib/i586-pc-beos5/2.9-beos-000224/ /usr/ccs/lib/ /boot/develop/bin/../lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../i586-pc-beos5/2.9-beos-000224/ /boot/develop/bin/../lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../ /boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../i586-pc-beos5/2.9-beos-000224/ /boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../ /lib/i586-pc-beos5/2.9-beos-000224/ /lib/ /usr/lib/i586-pc-beos5/2.9-beos-000224/ /usr/lib/"
+sys_lib_search_path_spec=" /boot/develop/lib/x86/i586-pc-beos/2.95.3-beos-060710/ /boot/develop/lib/x86/ /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-060710/ /boot/develop/tools/gnupro/i586-pc-beos/lib/i586-pc-beos/2.95.3-beos-060710/ /boot/develop/tools/gnupro/i586-pc-beos/lib/ /boot/develop/tools/gnupro/lib/i586-pc-beos/2.95.3-beos-060710/ /boot/develop/tools/gnupro/lib/"
 
 # Run-time system search path for libraries
 sys_lib_dlsearch_path_spec="/lib /usr/lib"
@@ -6842,7 +6842,7 @@ build_old_libs=`case $build_libtool_libs in yes) $echo no;; *) $echo yes;; esac`
 # End:
 # ### BEGIN LIBTOOL TAG CONFIG: CXX
 
-# Libtool was configured on host samsung:
+# Libtool was configured on host amigo-note:
 
 # Shell to use when invoking shell scripts.
 SHELL="/bin/sh"
@@ -6892,13 +6892,13 @@ with_gcc=yes
 EGREP="grep -E"
 
 # The linker used to build libraries.
-LD="/boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/i586-pc-beos5/bin/ld"
+LD="/boot/develop/tools/gnupro/i586-pc-beos/bin/ld"
 
 # Whether we need hard or soft links.
 LN_S="ln -s"
 
 # A BSD-compatible nm program.
-NM="/boot/develop/bin/nm -B"
+NM="/boot/develop/tools/gnupro/bin/nm -B"
 
 # A symbol stripping program
 STRIP="strip"
@@ -7021,11 +7021,11 @@ striplib="strip --strip-unneeded"
 
 # Dependencies to place before the objects being linked to create a
 # shared library.
-predep_objects="/boot/develop/lib/x86/crti.o /boot/develop/lib/x86/crtbegin.o /boot/develop/lib/x86/start_dyn.o /boot/develop/lib/x86/init_term_dyn.o"
+predep_objects="/boot/develop/lib/x86/crti.o /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-060710/crtbegin.o /boot/develop/lib/x86/init_term_dyn.o /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-060710/fix_bdirectwin_typeinfo.o"
 
 # Dependencies to place after the objects being linked to create a
 # shared library.
-postdep_objects="/boot/develop/lib/x86/crtend.o /boot/develop/lib/x86/crtn.o"
+postdep_objects="/boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-060710/crtend.o /boot/develop/lib/x86/crtn.o"
 
 # Dependencies to place before the objects being linked to create a
 # shared library.
@@ -7037,7 +7037,7 @@ postdeps="-lstdc++.r4 -lroot"
 
 # The library search path used internally by the compiler when linking
 # a shared library.
-compiler_lib_search_path="-L/boot/develop/lib/x86 -L/boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224 -L/boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../../i586-pc-beos5/lib -L/boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../.."
+compiler_lib_search_path="-L/boot/develop/lib/x86 -L/boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-060710 -L/boot/develop/tools/gnupro/i586-pc-beos/lib -L/boot/develop/tools/gnupro/lib"
 
 # Method to check whether dependent libraries are shared objects.
 deplibs_check_method="pass_all"
@@ -7117,7 +7117,7 @@ variables_saved_for_relink="PATH LIBRARY_PATH LD_RUN_PATH GCC_EXEC_PREFIX COMPIL
 link_all_deplibs=unknown
 
 # Compile-time system search path for libraries
-sys_lib_search_path_spec=" /boot/develop/bin/../lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/ /boot/develop/bin/../lib/gcc-lib/ /boot/develop/lib/x86/i586-pc-beos5/2.9-beos-000224/ /boot/develop/lib/x86/ /boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/ /usr/lib/gcc/i586-pc-beos5/2.9-beos-000224/ /boot/develop/bin/../lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../../i586-pc-beos5/lib/i586-pc-beos5/2.9-beos-000224/ /boot/develop/bin/../lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../../i586-pc-beos5/lib/ /boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../../i586-pc-beos5/lib/i586-pc-beos5/2.9-beos-000224/ /boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../../i586-pc-beos5/lib/ /usr/ccs/bin/i586-pc-beos5/2.9-beos-000224/ /usr/ccs/bin/ /usr/ccs/lib/i586-pc-beos5/2.9-beos-000224/ /usr/ccs/lib/ /boot/develop/bin/../lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../i586-pc-beos5/2.9-beos-000224/ /boot/develop/bin/../lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../ /boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../i586-pc-beos5/2.9-beos-000224/ /boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../ /lib/i586-pc-beos5/2.9-beos-000224/ /lib/ /usr/lib/i586-pc-beos5/2.9-beos-000224/ /usr/lib/"
+sys_lib_search_path_spec=" /boot/develop/lib/x86/i586-pc-beos/2.95.3-beos-060710/ /boot/develop/lib/x86/ /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-060710/ /boot/develop/tools/gnupro/i586-pc-beos/lib/i586-pc-beos/2.95.3-beos-060710/ /boot/develop/tools/gnupro/i586-pc-beos/lib/ /boot/develop/tools/gnupro/lib/i586-pc-beos/2.95.3-beos-060710/ /boot/develop/tools/gnupro/lib/"
 
 # Run-time system search path for libraries
 sys_lib_dlsearch_path_spec="/lib /usr/lib"

@@ -255,7 +255,6 @@ ABI_EXPORT UT_UCS4Char       UT_UCS4_toupper(UT_UCS4Char c);
 */
 ABI_EXPORT const char*  std_size_string(float f);
 
-
 #include <fribidi/fribidi.h>
 
 typedef FriBidiCharType UT_BidiCharType;
@@ -302,7 +301,6 @@ ABI_EXPORT bool            UT_bidiReorderString(const UT_UCS4Char * pStrIn, UT_u
 
 
 ABI_EXPORT bool            UT_bidiGetMirrorChar(UT_UCS4Char c, UT_UCS4Char &mc);
-
 UT_END_EXTERN_C
 
 #endif /* UT_STRING_H */
