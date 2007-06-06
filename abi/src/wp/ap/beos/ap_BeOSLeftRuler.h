@@ -29,7 +29,7 @@
 #include "ap_LeftRuler.h"
 #include "gr_BeOSGraphics.h"
 
-#include "be_GRDrawView.h"
+#include "be_BackView.h"
 
 class XAP_Frame;
 
@@ -48,7 +48,7 @@ public:
 	virtual void	setView(AV_View * pView);
 	virtual void 	getCoverage(UT_NumberVector& coverage){UT_ASSERT(UT_NOT_IMPLEMENTED);};
 protected:
-	be_GRDrawView *		m_wLeftRuler;
+	BBackView *		m_wLeftRuler;
 
 };
 

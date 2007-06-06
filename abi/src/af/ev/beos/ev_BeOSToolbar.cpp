@@ -54,15 +54,17 @@ EV_BeOSToolbar::EV_BeOSToolbar(XAP_BeOSApp * pBeOSApp,
 	m_pViewListener(NULL),
 	m_bHidden(false)
 {
-		printf("Ev beostoolbar\n");
+	UT_DEBUGMSG(("Ev beostoolbar\n"));
 }
 
-EV_BeOSToolbar::~EV_BeOSToolbar(void) {
+EV_BeOSToolbar::~EV_BeOSToolbar(void) 
+{
 	_releaseListener();
 }
 
 // This is used to do the initial toolbar creation
-bool EV_BeOSToolbar::synthesize(void) {
+bool EV_BeOSToolbar::synthesize(void) 
+{
 	//Add the toolbar(s) beneath the menus ...
 	be_Window 	*pBWin = NULL;
 

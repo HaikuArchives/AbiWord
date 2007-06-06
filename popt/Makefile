@@ -17,10 +17,10 @@
 # Makefile for popt library.
 SHELL = /bin/sh
 
-srcdir = ../popt
-top_srcdir = ../popt
-VPATH = ../popt
-prefix = /usr/local
+srcdir = .
+top_srcdir = .
+
+prefix = /boot/home/config
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -40,10 +40,10 @@ pkglibdir = $(libdir)/popt
 pkgincludedir = $(includedir)/popt
 top_builddir = .
 
-ACLOCAL = ${SHELL} /files/abiword-2.2.8/popt/missing --run aclocal-1.6
-AUTOCONF = ${SHELL} /files/abiword-2.2.8/popt/missing --run autoconf
-AUTOMAKE = ${SHELL} /files/abiword-2.2.8/popt/missing --run automake-1.6
-AUTOHEADER = ${SHELL} /files/abiword-2.2.8/popt/missing --run autoheader
+ACLOCAL = ${SHELL} /files/projects/abiword/popt/missing --run aclocal-1.6
+AUTOCONF = ${SHELL} /files/projects/abiword/popt/missing --run autoconf
+AUTOMAKE = ${SHELL} /files/projects/abiword/popt/missing --run automake-1.6
+AUTOHEADER = ${SHELL} /files/projects/abiword/popt/missing --run autoheader
 
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = /bin/install -c
@@ -71,7 +71,7 @@ target_triplet = i586-pc-beos
 EXEEXT = 
 OBJEXT = o
 PATH_SEPARATOR = :
-AMTAR = ${SHELL} /files/abiword-2.2.8/popt/missing --run tar
+AMTAR = ${SHELL} /files/projects/abiword/popt/missing --run tar
 AS = @AS@
 AWK = gawk
 BUILD_INCLUDED_LIBINTL = yes
@@ -100,10 +100,10 @@ LN_S = ln -s
 LTLIB = @LTLIB@
 LTLIBICONV = 
 LTLIBINTL = ${top_builddir}/intl/libintl.a 
-MKINSTALLDIRS = ../popt/mkinstalldirs
+MKINSTALLDIRS = ./mkinstalldirs
 OBJDUMP = @OBJDUMP@
 PACKAGE = popt
-POPT_SOURCE_PATH = /files/abiword-2.2.8/popt
+POPT_SOURCE_PATH = /files/projects/abiword/popt
 POSUB = po
 RANLIB = ranlib
 STRIP = strip
@@ -114,7 +114,7 @@ USE_NLS = yes
 VERSION = 1.7
 am__include = include
 am__quote = 
-install_sh = /files/abiword-2.2.8/popt/install-sh
+install_sh = /files/projects/abiword/popt/install-sh
 
 AUTOMAKE_OPTIONS = 1.4 foreign
 

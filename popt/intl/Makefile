@@ -21,12 +21,12 @@ VERSION = 1.7
 
 SHELL = /bin/sh
 
-srcdir = ../../popt/intl
-top_srcdir = ../../popt
+srcdir = .
+top_srcdir = ..
 top_builddir = ..
-VPATH = ../../popt/intl
 
-prefix = /usr/local
+
+prefix = /boot/home/config
 exec_prefix = ${prefix}
 transform = s,x,x,
 libdir = ${exec_prefix}/lib
@@ -39,7 +39,7 @@ subdir = intl
 
 INSTALL = /bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
-MKINSTALLDIRS = ../popt/mkinstalldirs
+MKINSTALLDIRS = ./mkinstalldirs
 mkinstalldirs = $(SHELL) `case "$(MKINSTALLDIRS)" in /*) echo "$(MKINSTALLDIRS)" ;; *) echo "$(top_builddir)/$(MKINSTALLDIRS)" ;; esac`
 
 l = 

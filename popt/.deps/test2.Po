@@ -4,22 +4,22 @@ test2.o : \
  /boot/develop/headers/be/BeBuild.h \
  /boot/develop/headers/posix/errno.h \
  /boot/develop/headers/be/support/Errors.h \
- /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/limits.h \
- /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/syslimits.h \
+ /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-060710/include/limits.h \
+ /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-060710/include/syslimits.h \
  /boot/develop/headers/posix/limits.h \
- /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/float.h \
+ /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-060710/include/float.h \
  /boot/develop/headers/posix/fcntl.h \
  /boot/develop/headers/posix/sys/types.h \
  /boot/develop/headers/posix/time.h /boot/develop/headers/posix/null.h \
  /boot/develop/headers/posix/size_t.h \
- /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/stddef.h \
+ /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-060710/include/stddef.h \
  /boot/develop/headers/posix/sys/select.h \
  /boot/develop/headers/posix/sys/time.h \
  /boot/develop/headers/posix/sys/stat.h \
- /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/stdio.h \
- /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/stdarg.h \
+ /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-060710/include/stdio.h \
+ /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-060710/include/stdarg.h \
  /boot/develop/headers/posix/va_list.h \
- /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/wchar_t.h \
+ /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-060710/include/wchar_t.h \
  /boot/develop/headers/posix/gnu_stdio.h \
  /boot/develop/headers/posix/_G_config.h \
  /boot/develop/headers/posix/libio.h \
@@ -37,23 +37,23 @@ config.h :
 /boot/develop/headers/be/BeBuild.h :
 /boot/develop/headers/posix/errno.h :
 /boot/develop/headers/be/support/Errors.h :
-/boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/limits.h :
-/boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/syslimits.h :
+/boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-060710/include/limits.h :
+/boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-060710/include/syslimits.h :
 /boot/develop/headers/posix/limits.h :
-/boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/float.h :
+/boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-060710/include/float.h :
 /boot/develop/headers/posix/fcntl.h :
 /boot/develop/headers/posix/sys/types.h :
 /boot/develop/headers/posix/time.h :
 /boot/develop/headers/posix/null.h :
 /boot/develop/headers/posix/size_t.h :
-/boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/stddef.h :
+/boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-060710/include/stddef.h :
 /boot/develop/headers/posix/sys/select.h :
 /boot/develop/headers/posix/sys/time.h :
 /boot/develop/headers/posix/sys/stat.h :
-/boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/stdio.h :
-/boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/stdarg.h :
+/boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-060710/include/stdio.h :
+/boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-060710/include/stdarg.h :
 /boot/develop/headers/posix/va_list.h :
-/boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-041202/include/wchar_t.h :
+/boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-beos/2.95.3-beos-060710/include/wchar_t.h :
 /boot/develop/headers/posix/gnu_stdio.h :
 /boot/develop/headers/posix/_G_config.h :
 /boot/develop/headers/posix/libio.h :

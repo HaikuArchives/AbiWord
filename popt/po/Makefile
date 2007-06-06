@@ -16,11 +16,11 @@ top_builddir = ..
 SHELL = /bin/sh
 
 
-srcdir = ../../popt/po
-top_srcdir = ../../popt
-VPATH = ../../popt/po
+srcdir = .
+top_srcdir = ..
 
-prefix = /usr/local
+
+prefix = /boot/home/config
 exec_prefix = ${prefix}
 datadir = ${prefix}/share
 localedir = $(datadir)/locale
@@ -28,7 +28,7 @@ gettextsrcdir = $(datadir)/gettext/po
 
 INSTALL = /bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
-MKINSTALLDIRS = ../popt/mkinstalldirs
+MKINSTALLDIRS = ./mkinstalldirs
 mkinstalldirs = $(SHELL) `case "$(MKINSTALLDIRS)" in /*) echo "$(MKINSTALLDIRS)" ;; *) echo "$(top_builddir)/$(MKINSTALLDIRS)" ;; esac`
 
 CC = gcc
@@ -45,18 +45,18 @@ INCLUDES = -I.. -I$(top_srcdir)/intl
 
 COMPILE = $(CC) -c $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) $(XCFLAGS)
 
-POFILES =  $(srcdir)/cs.po $(srcdir)/da.po $(srcdir)/de.po $(srcdir)/es.po $(srcdir)/eu_ES.po $(srcdir)/fi.po $(srcdir)/fr.po $(srcdir)/gl.po $(srcdir)/hu.po $(srcdir)/id.po $(srcdir)/is.po $(srcdir)/it.po $(srcdir)/ja.po $(srcdir)/ko.po $(srcdir)/no.po $(srcdir)/pl.po $(srcdir)/pt.po $(srcdir)/pt_BR.po $(srcdir)/ro.po $(srcdir)/ru.po $(srcdir)/sk.po $(srcdir)/sl.po $(srcdir)/sr.po $(srcdir)/sv.po $(srcdir)/tr.po $(srcdir)/uk.po $(srcdir)/wa.po $(srcdir)/zh.po $(srcdir)/zh_CN.GB2312.po
-GMOFILES =  $(srcdir)/cs.gmo $(srcdir)/da.gmo $(srcdir)/de.gmo $(srcdir)/es.gmo $(srcdir)/eu_ES.gmo $(srcdir)/fi.gmo $(srcdir)/fr.gmo $(srcdir)/gl.gmo $(srcdir)/hu.gmo $(srcdir)/id.gmo $(srcdir)/is.gmo $(srcdir)/it.gmo $(srcdir)/ja.gmo $(srcdir)/ko.gmo $(srcdir)/no.gmo $(srcdir)/pl.gmo $(srcdir)/pt.gmo $(srcdir)/pt_BR.gmo $(srcdir)/ro.gmo $(srcdir)/ru.gmo $(srcdir)/sk.gmo $(srcdir)/sl.gmo $(srcdir)/sr.gmo $(srcdir)/sv.gmo $(srcdir)/tr.gmo $(srcdir)/uk.gmo $(srcdir)/wa.gmo $(srcdir)/zh.gmo $(srcdir)/zh_CN.GB2312.gmo
+POFILES =  cs.po da.po de.po es.po eu_ES.po fi.po fr.po gl.po hu.po id.po is.po it.po ja.po ko.po no.po pl.po pt.po pt_BR.po ro.po ru.po sk.po sl.po sr.po sv.po tr.po uk.po wa.po zh.po zh_CN.GB2312.po
+GMOFILES =  cs.gmo da.gmo de.gmo es.gmo eu_ES.gmo fi.gmo fr.gmo gl.gmo hu.gmo id.gmo is.gmo it.gmo ja.gmo ko.gmo no.gmo pl.gmo pt.gmo pt_BR.gmo ro.gmo ru.gmo sk.gmo sl.gmo sr.gmo sv.gmo tr.gmo uk.gmo wa.gmo zh.gmo zh_CN.GB2312.gmo
 DISTFILES = ChangeLog Makefile.in.in POTFILES.in $(PACKAGE).pot \
 $(POFILES) $(GMOFILES)
 
 POTFILES = \
-     ../../popt/findme.c \
-     ../../popt/popt.c \
-     ../../popt/poptconfig.c \
-     ../../popt/popthelp.c \
-     ../../popt/poptparse.c \
-     ../../popt/test1.c
+     ../findme.c \
+     ../popt.c \
+     ../poptconfig.c \
+     ../popthelp.c \
+     ../poptparse.c \
+     ../test1.c
 
 CATALOGS =  cs.gmo da.gmo de.gmo es.gmo eu_ES.gmo fi.gmo fr.gmo gl.gmo hu.gmo id.gmo is.gmo it.gmo ja.gmo ko.gmo no.gmo pl.gmo pt.gmo pt_BR.gmo ro.gmo ru.gmo sk.gmo sl.gmo sr.gmo sv.gmo tr.gmo uk.gmo wa.gmo zh.gmo zh_CN.GB2312.gmo
 

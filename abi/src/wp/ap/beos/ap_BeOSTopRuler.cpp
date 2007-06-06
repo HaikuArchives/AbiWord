@@ -38,14 +38,14 @@
 */
 
 /*****************************************************************/
-class TopRulerDrawView: public be_GRDrawView {
+class TopRulerDrawView: public BBackView 
+{
 public:
  	TopRulerDrawView(AP_BeOSTopRuler *pRuler, AV_View *pView, 
-			 BRect frame, const char *name,
-                         uint32 resizeMask, uint32 flags);
+		BRect frame, const char *name,
+		uint32 resizeMask, uint32 flags);
 	virtual void FrameResized(float new_width, float new_height);
-	virtual void Draw(BRect invalid);
-
+//	virtual void Draw(BRect invalid);
 	AP_BeOSTopRuler *m_pAPRuler;
 };
 
@@ -123,33 +123,23 @@ filter_result RulerFilter::Filter(BMessage *msg, BHandler **target) {
 }                                             
 
 TopRulerDrawView::TopRulerDrawView(AP_BeOSTopRuler *pRuler, AV_View *pView, 
-				                   BRect frame, const char *name,
-                                   uint32 resizeMask, uint32 flags) 
-		: be_GRDrawView(pView, frame, name, resizeMask, flags) {
+	BRect frame, const char *name, uint32 resizeMask, uint32 flags) 
+		: BBackView(pView, frame, name, resizeMask, flags) 
+{
 	m_pAPRuler = pRuler;
-    AddFilter(new RulerFilter(this));
+	AddFilter(new RulerFilter(this));
 }
 
-void TopRulerDrawView::FrameResized(float new_width, float new_height) {
-	m_pAPRuler->setHeight((int)new_height+1);
-    m_pAPRuler->setWidth((int)new_width+1);
-	m_pAPRuler->draw(NULL);
-}
-
-void TopRulerDrawView::Draw(BRect invalid) {
+void TopRulerDrawView::FrameResized(float new_width, float new_height) 
+{
+//	First call inherited version
+	BBackView::FrameResized(new_width, new_height);
 	GR_Graphics * pG = m_pAPRuler->getGraphics();
-
 	if(!pG) { return; }
-
-	UT_Rect rect(invalid.left,
-				 invalid.top, 
-	  	         invalid.right-invalid.left+1,
-	  	         invalid.bottom-invalid.top+1);
-
-	Window()->DisableUpdates();
-	m_pAPRuler->draw(&rect);
-	Window()->EnableUpdates();
-	Window()->Sync();
+	m_pAPRuler->setHeight((int)new_height+1);
+	m_pAPRuler->setWidth((int)new_width+1);
+	m_pAPRuler->draw(NULL);
+	pG->flush();
 }
 
 /*****************************************************************/
@@ -167,28 +157,28 @@ AP_BeOSTopRuler::~AP_BeOSTopRuler(void)
 void AP_BeOSTopRuler::createWidget(BRect r)
 {
 	m_wTopRuler = new TopRulerDrawView(this, NULL, r, "TopRuler", 
-					B_FOLLOW_TOP | B_FOLLOW_LEFT_RIGHT,
-					B_WILL_DRAW | B_FRAME_EVENTS );
-
+		B_FOLLOW_TOP | B_FOLLOW_LEFT_RIGHT, B_WILL_DRAW | B_FRAME_EVENTS );
+	
 	//Attach the widget to the window ...
 	BWindow *pBWin = (BWindow *)((XAP_BeOSFrameImpl *)m_pFrame->getFrameImpl())->getTopLevelWindow();
 	pBWin->AddChild(m_wTopRuler);
  	setHeight(r.Height()+1);
-    setWidth(r.Width()+1);
-    
+	setWidth(r.Width()+1);
 }
 
-void AP_BeOSTopRuler::setView(AV_View * pView) {
+void AP_BeOSTopRuler::setView(AV_View * pView) 
+{
 	AP_TopRuler::setView(pView);
 
-	if (m_wTopRuler && pView) {
+	if (m_wTopRuler && pView) 
+	{
 		m_wTopRuler->SetView(pView);
 		// We really should allocate m_pG in createWidget(), but
 		// unfortunately, the actual window (m_wTopRuler->window)
 		// is not created until the frame's top-level window is
 		// shown. 
 		DELETEP(m_pG);
-		BView* preview = m_wTopRuler;
+		BBackView* preview = m_wTopRuler;
 		GR_BeOSAllocInfo ai(preview, m_pFrame->getApp());		
 		m_pG = m_pFrame->getApp()->newGraphics(ai);
 		UT_ASSERT(m_pG);

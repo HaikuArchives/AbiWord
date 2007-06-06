@@ -29,7 +29,7 @@
 #include "ap_TopRuler.h"
 #include "gr_BeOSGraphics.h"
 
-#include "be_GRDrawView.h"
+#include "be_BackView.h"
 
 class XAP_Frame;
 
@@ -46,7 +46,7 @@ public:
 	virtual void	createWidget(BRect r);
 	
 protected:
-	be_GRDrawView *		m_wTopRuler;
+	BBackView *		m_wTopRuler;
 
 };
 

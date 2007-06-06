@@ -33,6 +33,7 @@
 
 #include "ut_Rehydrate.h"
 #include "gr_BeOSGraphics.h"
+#include "be_BackView.h"
 
 /*****************************************************************/
 
@@ -124,7 +125,7 @@ void PageNumberWindow::SetDlg(AP_BeOSDialog_PageNumbers *pDlg)
 
 	if( Lock() )
 	{
-		BView *preview = (BView*)FindView("preview");	
+		BBackView *preview = (BBackView*)FindView("preview");	
 	
 		//m_BeOSGraphics  = new GR_BeOSGraphics(preview, m_DlgPage->m_pApp);
 		GR_BeOSAllocInfo ai(preview, m_DlgPage->m_pApp);

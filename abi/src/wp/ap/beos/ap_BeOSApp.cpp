@@ -559,9 +559,9 @@ int AP_BeOSApp::main(const char * szAppName, int argc, const char ** argv) {
 	AP_BeOSApp * pMyBeOSApp = new AP_BeOSApp(&XArgs, szAppName);	
 	AP_Args Args = AP_Args(&XArgs, szAppName, pMyBeOSApp);
 
-	printf("// Setup signal handlers, primarily for segfault\n");
-	// If we segfaulted before here, we *really* blew it
-
+#ifndef DEBUG
+	UT_DEBUGMSG(("// Setup signal handlers, primarily for segfault\n"));
+	// If we segfaulted before here, we *really* blew it\
 	struct sigaction sa;
 
 	sa.sa_handler = signalWrapper;
@@ -576,26 +576,27 @@ int AP_BeOSApp::main(const char * szAppName, int argc, const char ** argv) {
 	sigaction(SIGILL, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
 	sigaction(SIGFPE, &sa, NULL);
-	printf("// TODO: handle SIGABRT\n");
+	UT_DEBUGMSG(("// TODO: handle SIGABRT\n"));
+#endif	
 	Args.parsePoptOpts();
-	printf("// if the initialize fails, we don't have icons, fonts, etc.\n");
+	UT_DEBUGMSG(("// if the initialize fails, we don't have icons, fonts, etc.\n"));
 	if (!pMyBeOSApp->initialize())
 	{
 		delete pMyBeOSApp;
 		return -1;	// make this something standard?
 	}
 
-	printf("//Show the splash screen perhaps\n");
+	UT_DEBUGMSG(("//Show the splash screen perhaps\n"));
 //knorr!! to save time :?)
   	_showSplash(&XArgs, szAppName);        
-printf("//knorr!!\n");
+	UT_DEBUGMSG(("//knorr!!\n"));
 	if (pMyBeOSApp->openCmdLineFiles(&Args))
 	{
-		printf("// Turn control over to the runtime (don't return until done)\n");
+		UT_DEBUGMSG(("// Turn control over to the runtime (don't return until done)\n"));
 		pMyBeOSApp->m_BApp.Run();	
 	}
 
-	printf("// destroy the App.  It should take care of deleting all frames.\n");
+	UT_DEBUGMSG(("// destroy the App.  It should take care of deleting all frames.\n"));
 	pMyBeOSApp->shutdown();
 	sleep(1);
 
@@ -607,7 +608,9 @@ printf("//knorr!!\n");
 void signalWrapper(int sig_num)
 {
 	AP_BeOSApp *pApp = (AP_BeOSApp *) XAP_App::getApp();
+#ifndef DEBUG
 	pApp->catchSignals(sig_num);
+#endif
 }
 
 

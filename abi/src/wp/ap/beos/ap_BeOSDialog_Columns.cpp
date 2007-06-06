@@ -15,6 +15,7 @@
 #include "ut_Rehydrate.h"
 #include "xap_BeOSToolbar_Icons.h"
 #include "gr_BeOSGraphics.h"
+#include "be_BackView.h"
 
 /*****************************************************************/
 
@@ -178,11 +179,11 @@ void ColumnWin::SetDlg(AP_BeOSDialog_Columns *brk)
 
 	_setPictureButtons();
 	
-	BView* preview = FindView("preview");
+	BBackView* preview = (BBackView*)FindView("preview");
 	
 	//Create our preview window graphics
 	//m_BeOSGraphics  = new GR_BeOSGraphics(preview, m_DlgColumn->m_pApp);
-    GR_BeOSAllocInfo ai(preview, m_DlgColumn->m_pApp);
+	GR_BeOSAllocInfo ai(preview, m_DlgColumn->m_pApp);
 	m_BeOSGraphics = (GR_BeOSGraphics*)XAP_App::getApp()->newGraphics(ai);
 
 	if (preview->Window()->Lock())
