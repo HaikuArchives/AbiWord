@@ -36,6 +36,7 @@
 #include "ap_Strings.h"
 
 #include "gr_BeOSGraphics.h"
+#include "be_BackView.h"
 #include "ap_Preview_Paragraph.h"
 #include "ap_BeOSDialog_Paragraph.h"
 
@@ -96,7 +97,7 @@ void RedrawTabView::Select(int32 tab)
 //	Window()->PostMessage('redr');
 }
 
-class UpdatingPreview : public BView
+class UpdatingPreview : public BBackView
 {
 public:
 	UpdatingPreview(BRect frameRect);
@@ -105,7 +106,8 @@ public:
 	virtual void Draw(BRect udr);
 };
 
-UpdatingPreview::UpdatingPreview(BRect frameRect) : BView(frameRect , "previewview" , B_FOLLOW_ALL_SIDES , B_WILL_DRAW | B_FULL_UPDATE_ON_RESIZE)
+UpdatingPreview::UpdatingPreview(BRect frameRect) :
+	BBackView(NULL, frameRect , "previewview" , B_FOLLOW_ALL_SIDES , B_WILL_DRAW | B_FULL_UPDATE_ON_RESIZE)
 {
 }
 
@@ -115,7 +117,7 @@ UpdatingPreview::~UpdatingPreview()
 
 void UpdatingPreview::Draw(BRect udr)
 {
-	BView::Draw(udr);
+	BBackView::Draw(udr);
 	Window()->PostMessage('redr');
 }
 
@@ -128,7 +130,7 @@ class ParagraphWin:public BWindow {
 		
 	private:
 		AP_BeOSDialog_Paragraph 	*m_DlgParagraph;
-		GR_BeOSGraphics				*m_BeOSGraphics;
+		GR_BeOSGraphics			*m_BeOSGraphics;
 				
 		sem_id modalSem;
 		status_t WaitForDelete(sem_id blocker);
@@ -262,8 +264,8 @@ void ParagraphWin::SetDlg(AP_BeOSDialog_Paragraph *brk)
 	AddChild(pNewTabView);
 
 	// Now we need to bring the preview window to the top
-	BView *preview=(BView*)FindView("previewview");	
-	BView* previewnew = new UpdatingPreview(preview->Frame());
+	BBackView *preview=(BBackView*)FindView("previewview");	
+	BBackView *previewnew = new UpdatingPreview(preview->Frame());
 
 	// Clean up the place holder.
 	preview->RemoveSelf();
@@ -279,7 +281,7 @@ void ParagraphWin::SetDlg(AP_BeOSDialog_Paragraph *brk)
 
 	//Create our preview window graphics
 	//m_BeOSGraphics  = new GR_BeOSGraphics(preview, m_DlgParagraph->m_pApp);
-    GR_BeOSAllocInfo ai(preview, m_DlgParagraph->m_pApp);
+	GR_BeOSAllocInfo ai(preview, m_DlgParagraph->m_pApp);
 	m_BeOSGraphics = (GR_BeOSGraphics*)XAP_App::getApp()->newGraphics(ai);
 
 	if (preview->Window()->Lock())

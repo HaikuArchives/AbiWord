@@ -23,7 +23,8 @@ ABI_ROOT:=$(shell pwd)/../../../..
 include $(ABI_ROOT)/src/config/abi_defs.mk
 
 CPPSRCS=	gr_$(ABI_FE)Graphics.cpp	\
-			gr_$(ABI_FE)Image.cpp
+			gr_$(ABI_FE)Image.cpp		\
+		be_BackView.cpp
 
 #TF Change to
 #CPPSRCS= $(wildcard *.cpp)

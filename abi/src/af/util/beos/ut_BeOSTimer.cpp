@@ -139,4 +139,3 @@ void UT_BeOSTimer::start(void)
 	UT_ASSERT(m_iMilliseconds > 0);
 	set(m_iMilliseconds);
 }
-

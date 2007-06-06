@@ -42,7 +42,7 @@ XAP_FrameImpl * AP_BeOSFrameImpl::createInstance(XAP_Frame *pFrame, XAP_App *pAp
 void AP_BeOSFrameImpl::_refillToolbarsInFrameData()
 {
 	UT_uint32 cnt = m_vecToolbarLayoutNames.getItemCount();
-    printf("Refill tool bar\n");
+	UT_DEBUGMSG(("Refill tool bar\n"));
 	for (UT_uint32 i = 0; i < cnt; i++)
 	{
 		EV_BeOSToolbar * pBeOSToolbar = static_cast<EV_BeOSToolbar *> (m_vecToolbars.getNthItem(i));
@@ -58,26 +58,24 @@ void AP_BeOSFrameImpl::_refillToolbarsInFrameData()
 be_DocView *be_Window::_createDocumentWindow() 
 {
 	BRect r;
-    const BCursor *tc=B_CURSOR_I_BEAM;	
-	printf("create Window fn\n");
-    //Set up the scroll bars on the outer edges of the document area
-    r = m_winRectAvailable;
-    r.bottom -= (B_H_SCROLL_BAR_HEIGHT + 1 + STATUS_BAR_HEIGHT);
-    r.left = r.right - B_V_SCROLL_BAR_WIDTH;
-    m_vScroll = new TFScrollBar(m_pBeOSFrame, r,
-                                "VertScroll", NULL, 0, 100, B_VERTICAL);
-    AddChild(m_vScroll);
+	const BCursor *tc=B_CURSOR_I_BEAM;	
+	UT_DEBUGMSG(("create Window fn\n"));
+	//Set up the scroll bars on the outer edges of the document area
+	r = m_winRectAvailable;
+	r.bottom -= (B_H_SCROLL_BAR_HEIGHT + 1 + STATUS_BAR_HEIGHT);
+	r.left = r.right - B_V_SCROLL_BAR_WIDTH;
+	m_vScroll = new TFScrollBar(m_pBeOSFrame, r, "VertScroll", NULL, 0, 100, B_VERTICAL);
+          AddChild(m_vScroll);
 
-    r = m_winRectAvailable;
-    r.top = r.bottom - (B_H_SCROLL_BAR_HEIGHT + 1 + STATUS_BAR_HEIGHT);
-    r.bottom-=(1 + STATUS_BAR_HEIGHT);
-    r.right -= B_V_SCROLL_BAR_WIDTH;
-    m_hScroll = new TFScrollBar(m_pBeOSFrame, r,
-                                "HortScroll", NULL, 0, 100, B_HORIZONTAL);
-    AddChild(m_hScroll);
-    m_pBeOSFrame->setScrollBars(m_hScroll, m_vScroll);
-    m_winRectAvailable.bottom -= (B_H_SCROLL_BAR_HEIGHT + 2 + STATUS_BAR_HEIGHT);
-    m_winRectAvailable.right -= B_V_SCROLL_BAR_WIDTH +1;
+	r = m_winRectAvailable;
+	r.top = r.bottom - (B_H_SCROLL_BAR_HEIGHT + 1 + STATUS_BAR_HEIGHT);
+	r.bottom-=(1 + STATUS_BAR_HEIGHT);
+	r.right -= B_V_SCROLL_BAR_WIDTH;
+	m_hScroll = new TFScrollBar(m_pBeOSFrame, r,	"HortScroll", NULL, 0, 100, B_HORIZONTAL);
+	AddChild(m_hScroll);
+	m_pBeOSFrame->setScrollBars(m_hScroll, m_vScroll);
+	m_winRectAvailable.bottom -= (B_H_SCROLL_BAR_HEIGHT + 2 + STATUS_BAR_HEIGHT);
+	m_winRectAvailable.right -= B_V_SCROLL_BAR_WIDTH +1;
 
 	//Create the Top and Left Rulers (need a width here)
 #define TOP_HEIGHT 32
@@ -104,22 +102,21 @@ be_DocView *be_Window::_createDocumentWindow()
 	// get the width from the left ruler and stuff it into the top ruler.
 	pBeOSTopRuler->setOffsetLeftRuler(pBeOSLeftRuler->getWidth());
 
-    //Add the document view in the remaining space
-    m_pbe_DocView = new be_DocView(m_winRectAvailable, "MainDocView",
-                                   B_FOLLOW_ALL, B_WILL_DRAW);
-    m_pbe_DocView->SetViewColor(0,120, 255);
-    m_pbe_DocView->SetViewColor(B_TRANSPARENT_32_BIT);
-    //Add the view to both frameworks (Be and Abi)
-    AddChild(m_pbe_DocView);
-    m_pBeOSFrame->setBeDocView(m_pbe_DocView);
-
-    //Without this we never get any key inputs
-    printf("before Window activation\n");
+	//Add the document view in the remaining space
+	m_pbe_DocView = new be_DocView(m_pBeOSFrame->getFrame()->getCurrentView(), m_winRectAvailable, "MainDocView", B_FOLLOW_ALL, B_WILL_DRAW);
+	m_pbe_DocView->SetViewColor(0,120, 255);
+	m_pbe_DocView->SetViewColor(B_TRANSPARENT_32_BIT);
+	//Add the view to both frameworks (Be and Abi)
+	AddChild(m_pbe_DocView);
+	m_pBeOSFrame->setBeDocView(m_pbe_DocView);
+	
+	//Without this we never get any key inputs
+	UT_DEBUGMSG(("before Window activation\n"));
 	m_pbe_DocView->WindowActivated(true); // So the cursor shows up.
-   printf("b4 make focus\n"); 
-    m_pbe_DocView->MakeFocus(true);
-   printf("after make focus\n"); 
-    return(m_pbe_DocView);                                    
+	UT_DEBUGMSG(("b4 make focus\n")); 
+	m_pbe_DocView->MakeFocus(true);
+	UT_DEBUGMSG(("after make focus\n")); 
+	return(m_pbe_DocView);                                    
 }
 
 BView * be_Window::_createStatusBarWindow() 
@@ -129,8 +126,8 @@ BView * be_Window::_createStatusBarWindow()
 	UT_ASSERT(pStatusBar);
 	static_cast<AP_FrameData*>(m_pBeOSFrame->getFrame()->getFrameData())->m_pStatusBar = pStatusBar;
 	BRect r;
-    r = Bounds();
-    r.top = r.bottom - STATUS_BAR_HEIGHT;
+	r = Bounds();
+	r.top = r.bottom - STATUS_BAR_HEIGHT;
 	pStatusBarView = pStatusBar->createWidget(r);
 	AddChild(pStatusBarView);	
 	return pStatusBarView;	
@@ -139,24 +136,24 @@ BView * be_Window::_createStatusBarWindow()
 
 void AP_BeOSFrameImpl::_createWindow()
 {
-	printf("create top levelwindow\n");	
+	UT_DEBUGMSG(("create top levelwindow\n"));
 	createTopLevelWindow();
 	getTopLevelWindow()->Show();	
 	_showOrHideToolbars();	
-	printf("show toolbars\n");
-	//_showOrHideStatusbar();
+	UT_DEBUGMSG(("show toolbars\n"));
+	// _showOrHideStatusbar();
 	// we let our caller decide when to show m_wTopLevelWindow.
 	return;
 }
 
 UT_RGBColor AP_BeOSFrameImpl::getColorSelBackground () const
 {
-  return UT_RGBColor (0, 0, 0);
+	return UT_RGBColor (0, 0, 0);
 }
 
 UT_RGBColor AP_BeOSFrameImpl::getColorSelForeground () const
 {
-  return UT_RGBColor (255, 255, 255);
+	return UT_RGBColor (255, 255, 255);
 }
 //
 void AP_BeOSFrameImpl::_setWindowIcon()
@@ -186,7 +183,7 @@ void AP_BeOSFrameImpl::_showOrHideToolbars()
 	XAP_Frame* pFrame = getFrame();
 	bool *bShowBar = static_cast<AP_FrameData*>(pFrame->getFrameData())->m_bShowBar;
 	UT_uint32 cnt = m_vecToolbarLayoutNames.getItemCount();
-    printf("show or hide toolbars\n");
+    	UT_DEBUGMSG(("show or hide toolbars\n"));
 	for (UT_uint32 i = 0; i < cnt; i++)
 	{
 		// TODO: The two next lines are here to bind the EV_Toolbar to the

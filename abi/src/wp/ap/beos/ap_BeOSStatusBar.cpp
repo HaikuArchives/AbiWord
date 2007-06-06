@@ -26,6 +26,7 @@
 #include <String.h>
 
 #include "xap_Frame.h"
+#include "xap_BeOSFrameImpl.h"
 #include "gr_BeOSGraphics.h"
 #include "ap_BeOSStatusBar.h"
 
@@ -72,7 +73,6 @@ void StatusBarField::Draw(BRect invalid)
 
 	SetHighColor(black);	
 	DrawString(m_text->String(), BPoint(4, Bounds().bottom-3));
-//	BView::Draw(invalid);	
 }
 
 void StatusBarField::SetText(const char * text)
@@ -100,13 +100,13 @@ void ap_bsb_TextListener::notify()
 	}
 }
 
-class StatusBarDrawView: public be_GRDrawView {
+class StatusBarDrawView: public BBackView
+{
 public:
  	StatusBarDrawView(AP_BeOSStatusBar *pBar, AV_View *pView, 
-			 BRect frame, const char *name,
-                         uint32 resizeMask, uint32 flags);
+			BRect frame, const char *name,
+			uint32 resizeMask, uint32 flags);
 	virtual void FrameResized(float new_width, float new_height);
-	virtual void Draw(BRect invalid);
 	
 private:
 	float				m_fOldWidth;
@@ -115,17 +115,18 @@ private:
 
 };
 
-
 StatusBarDrawView::StatusBarDrawView(AP_BeOSStatusBar *pBar, AV_View *pView, 
-				   BRect frame, const char *name,
-                                   uint32 resizeMask, uint32 flags) 
-		: be_GRDrawView(pView, frame, name, resizeMask, flags) {
-
+	BRect frame, const char *name,
+	uint32 resizeMask, uint32 flags) 
+		: BBackView(pView, frame, name, resizeMask, flags) 
+{
 	m_pAPStatusBar = pBar;
 	SetViewColor(back);	
 }
 
-void StatusBarDrawView::FrameResized(float new_width, float new_height) {
+void StatusBarDrawView::FrameResized(float new_width, float new_height) 
+{
+	BBackView::FrameResized(new_width, new_height);
 //TODO does this goes well?? umm.. we'll see later
 //	BRect r;
 //	if (new_width > m_fOldWidth)
@@ -138,10 +139,6 @@ void StatusBarDrawView::FrameResized(float new_width, float new_height) {
 //		Invalidate(r);
 //	}
 //	m_fOldWidth=new_width;
-}
-
-void StatusBarDrawView::Draw(BRect invalid) 
-{
 }
 
 //////////////////////////////////////////////////////////////////
@@ -159,10 +156,10 @@ AP_BeOSStatusBar::~AP_BeOSStatusBar(void)
 	DELETEP(m_pG);
 }
 
-be_GRDrawView * AP_BeOSStatusBar::createWidget(BRect r)
+BBackView * AP_BeOSStatusBar::createWidget(BRect r)
 {
 	UT_DEBUGMSG(("StatusBar CreateWidget\n"));
-    BWindow *pBWin = (BWindow*)((XAP_BeOSFrameImpl *)(m_pFrame->getFrameImpl()))->getTopLevelWindow();
+	BWindow *pBWin = (BWindow*)((XAP_BeOSFrameImpl *)(m_pFrame->getFrameImpl()))->getTopLevelWindow();
 	UT_ASSERT(!m_pG && !m_wStatusBar);
 	m_wStatusBar = NULL;
 	m_wStatusBar = new StatusBarDrawView(this,m_pView,r,"StatusBar",B_FOLLOW_LEFT_RIGHT | B_FOLLOW_BOTTOM, B_WILL_DRAW | B_FRAME_EVENTS);
@@ -197,11 +194,12 @@ void AP_BeOSStatusBar::setView(AV_View * pView)
 	// is not created until the frame's top-level window is
 	// shown.
 
+	UT_DEBUGMSG(("StatusBar setView"));
 	DELETEP(m_pG);	
 	UT_ASSERT(m_wStatusBar);
 
 	//GR_BeOSGraphics *pG = new GR_BeOSGraphics(m_wStatusBar , m_pFrame->getApp());
-    GR_BeOSAllocInfo ai(m_wStatusBar, m_pFrame->getApp());
+	GR_BeOSAllocInfo ai(m_wStatusBar, m_pFrame->getApp());
 	m_pG = (GR_BeOSGraphics*)XAP_App::getApp()->newGraphics(ai);
 	UT_ASSERT(m_pG);
 

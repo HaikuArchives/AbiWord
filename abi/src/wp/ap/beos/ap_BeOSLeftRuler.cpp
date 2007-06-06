@@ -34,18 +34,18 @@
 
 /*****************************************************************/
 
-class LeftRulerDrawView: public be_GRDrawView {
+class LeftRulerDrawView: public BBackView 
+{
 public:
- 	LeftRulerDrawView(AP_BeOSLeftRuler *pRuler, AV_View *pView, 
-			 BRect frame, const char *name,
-                         uint32 resizeMask, uint32 flags);
+	LeftRulerDrawView(AP_BeOSLeftRuler *pRuler, AV_View *pView, 
+		BRect frame, const char *name, uint32 resizeMask, uint32 flags);
+		
 	virtual void FrameResized(float new_width, float new_height);
-	virtual void Draw(BRect invalid);
-
 	AP_BeOSLeftRuler *m_pAPRuler;
 };
 
-class LeftRulerFilter: public BMessageFilter {
+class LeftRulerFilter: public BMessageFilter 
+{
         public:
                 LeftRulerFilter(LeftRulerDrawView *pRuler);
                 filter_result Filter(BMessage *message, BHandler **target);
@@ -54,11 +54,13 @@ class LeftRulerFilter: public BMessageFilter {
 };
 
 LeftRulerFilter::LeftRulerFilter(LeftRulerDrawView *pRuler)
-          : BMessageFilter(B_PROGRAMMED_DELIVERY, B_LOCAL_SOURCE) {
+          : BMessageFilter(B_PROGRAMMED_DELIVERY, B_LOCAL_SOURCE) 
+{
         m_pRuler = pRuler;
 }
 
-filter_result LeftRulerFilter::Filter(BMessage *msg, BHandler **target) {
+filter_result LeftRulerFilter::Filter(BMessage *msg, BHandler **target) 
+{
 /*
   There currently aren't any events 
   defined for the Left Ruler yet.
@@ -127,37 +129,24 @@ filter_result LeftRulerFilter::Filter(BMessage *msg, BHandler **target) {
 }                                             
 
 LeftRulerDrawView::LeftRulerDrawView(AP_BeOSLeftRuler *pRuler, AV_View *pView, 
-				   					 BRect frame, const char *name,
-                                     uint32 resizeMask, uint32 flags) 
-		: be_GRDrawView(pView, frame, name, resizeMask, flags) {
+	BRect frame, const char *name,
+	uint32 resizeMask, uint32 flags) :
+		BBackView(pView, frame, name, resizeMask, flags) 
+{
 	m_pAPRuler = pRuler;
-    AddFilter(new LeftRulerFilter(this));
+	AddFilter(new LeftRulerFilter(this));
 }
 
-void LeftRulerDrawView::FrameResized(float new_width, float new_height) {
+void LeftRulerDrawView::FrameResized(float new_width, float new_height) 
+{
+	//First call the inherited version
+	BBackView::FrameResized(new_width, new_height);
 	GR_Graphics * pG = m_pAPRuler->getGraphics();
 	if(!pG) { return; }
 	m_pAPRuler->setHeight(new_height+1);
-    m_pAPRuler->setWidth(new_width+1);
-	//Then call the inherited version
-	//be_GRDrawView::FrameResized(new_width, new_height);
+	m_pAPRuler->setWidth(new_width+1);
 	m_pAPRuler->draw(NULL);
-}
-
-void LeftRulerDrawView::Draw(BRect invalid) {
-	GR_Graphics * pG = m_pAPRuler->getGraphics();
-
-	if(!pG) { return; }
-
-	UT_Rect rect(invalid.left,
-				 invalid.top, 
-	  	         invalid.right-invalid.left+1,
-	  	         invalid.bottom-invalid.top+1);
-	  	         
-	Window()->DisableUpdates();
-	m_pAPRuler->draw(&rect);
-	Window()->EnableUpdates();
-	Window()->Sync();
+	pG->flush();
 }
 
 /*****************************************************************/
@@ -174,29 +163,29 @@ AP_BeOSLeftRuler::~AP_BeOSLeftRuler(void)
 
 void  AP_BeOSLeftRuler::createWidget(BRect r)
 {
-        m_wLeftRuler = new LeftRulerDrawView(this, NULL, r, "LeftRuler",
-                                        B_FOLLOW_TOP_BOTTOM | B_FOLLOW_LEFT,
-                                        B_WILL_DRAW);
-        //Attach the widget to the window ...
-        BWindow *pBWin = (BWindow*)((XAP_BeOSFrameImpl *)(m_pFrame->getFrameImpl()))->getTopLevelWindow();
-        pBWin->AddChild(m_wLeftRuler);
-        setHeight(r.Height()+1);
-        setWidth(r.Width()+1);        
+	m_wLeftRuler = new LeftRulerDrawView(this, NULL, r, "LeftRuler",
+		B_FOLLOW_TOP_BOTTOM | B_FOLLOW_LEFT, B_WILL_DRAW);
+	//Attach the widget to the window ...
+	BWindow *pBWin = (BWindow*)((XAP_BeOSFrameImpl *)(m_pFrame->getFrameImpl()))->getTopLevelWindow();
+	pBWin->AddChild(m_wLeftRuler);
+	setHeight(r.Height()+1);
+	setWidth(r.Width()+1);
 }
 
-void AP_BeOSLeftRuler::setView(AV_View * pView) {
+void AP_BeOSLeftRuler::setView(AV_View * pView) 
+{
 	AP_LeftRuler::setView(pView);
 
-	if (m_wLeftRuler && pView) {
+	if (m_wLeftRuler && pView) 
+	{
 		m_wLeftRuler->SetView(pView);
-
-	// We really should allocate m_pG in createWidget(), but
-	// unfortunately, the actual window (m_wLeftRuler->window)
-	// is not created until the frame's top-level window is
-	// shown.
+		// We really should allocate m_pG in createWidget(), but
+		// unfortunately, the actual window (m_wLeftRuler->window)
+		// is not created until the frame's top-level window is
+		// shown.
 		DELETEP(m_pG);
-		BView* preview = m_wLeftRuler;
-		GR_BeOSAllocInfo ai(preview, m_pFrame->getApp());		
+		BBackView * preview = m_wLeftRuler;
+		GR_BeOSAllocInfo ai(preview, m_pFrame->getApp());
 		m_pG = m_pFrame->getApp()->newGraphics(ai);
 		UT_ASSERT(m_pG);
 	}
@@ -207,7 +196,7 @@ void AP_BeOSLeftRuler::show(void)
 	m_wLeftRuler->Show();
 }
 
-void AP_BeOSLeftRuler::hide(void) {
+void AP_BeOSLeftRuler::hide(void) 
+{
 	m_wLeftRuler->Hide();
 }
-

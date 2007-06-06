@@ -27,11 +27,15 @@ LIBRARY_VERSION=	$(ABI_VERSION)
 TARGETS=		$(LIBRARY)
 
 PLATFORM_OBJS=	$(OBJDIR)/gr_$(ABI_FE)Graphics.$(OBJ_SUFFIX)	\
-		$(OBJDIR)/gr_$(ABI_FE)Image.$(OBJ_SUFFIX)
+		$(OBJDIR)/gr_$(ABI_FE)Image.$(OBJ_SUFFIX) 		
 
 ifeq ($(ABI_FE), Win32)
 PLATFORM_OBJS += $(OBJDIR)/gr_$(ABI_FE)CharWidths.$(OBJ_SUFFIX) \
 		$(OBJDIR)/gr_$(ABI_FE)USPGraphics.$(OBJ_SUFFIX)
+endif
+
+ifeq ($(ABI_FE), BeOS)
+PLATFORM_OBJS += $(OBJDIR)/be_BackView.$(OBJ_SUFFIX)
 endif
 
 OBJS=		$(PLATFORM_OBJS)					\

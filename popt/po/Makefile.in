@@ -16,11 +16,11 @@ top_builddir = ..
 SHELL = /bin/sh
 
 
-srcdir = ../../popt/po
-top_srcdir = ../../popt
-VPATH = ../../popt/po
+srcdir = .
+top_srcdir = ..
 
-prefix = /usr/local
+
+prefix = /boot/home/config
 exec_prefix = ${prefix}
 datadir = ${prefix}/share
 localedir = $(datadir)/locale
@@ -28,7 +28,7 @@ gettextsrcdir = $(datadir)/gettext/po
 
 INSTALL = /bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
-MKINSTALLDIRS = ../popt/mkinstalldirs
+MKINSTALLDIRS = ./mkinstalldirs
 mkinstalldirs = $(SHELL) `case "$(MKINSTALLDIRS)" in /*) echo "$(MKINSTALLDIRS)" ;; *) echo "$(top_builddir)/$(MKINSTALLDIRS)" ;; esac`
 
 CC = gcc

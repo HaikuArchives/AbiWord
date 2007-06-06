@@ -187,13 +187,13 @@ void ZoomWin::MessageReceived(BMessage *msg)
 void ZoomWin::SetDlg(XAP_BeOSDialog_Zoom *dlg) {
 
 	m_DlgZoom=dlg;
-	BView *preview=(BView*)FindView("previewview");
+	BBackView * preview=(BBackView*)FindView("previewview");
 	m_CustomText=(BTextControl *)FindView("custxt");
 	Show();
 	//Create our preview window graphics
 	//m_BeOSGraphics=new GR_BeOSGraphics(preview, dlg->m_pApp);
-    XAP_BeOSApp * app = static_cast<XAP_BeOSApp *> (dlg->m_pApp);
-    GR_BeOSAllocInfo ai(preview, app);
+	XAP_BeOSApp * app = static_cast<XAP_BeOSApp *> (dlg->m_pApp);
+    	GR_BeOSAllocInfo ai(preview, app);
 	m_BeOSGraphics = (GR_BeOSGraphics*)XAP_App::getApp()->newGraphics(ai);
 	
 	if (preview->Window()->Lock())

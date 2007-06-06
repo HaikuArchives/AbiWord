@@ -171,7 +171,9 @@ new_exp_3 (op, bexp, tbranch, fbranch)
 
 #ifndef __cplusplus
 #ifndef __STDC__
+#ifndef const
 #define const
+#endif
 #endif
 #endif
 
@@ -299,7 +301,7 @@ static const short yycheck[] = {     1,
 #define YYPURE 1
 
 /* -*-C-*-  Note some compilers choke on comments on `#line' lines.  */
-#line 3 "/usr/local/share/bison.simple"
+#line 3 "/etc/bison.simple"
 /* This file comes from bison-1.28.  */
 
 /* Skeleton output parser for bison,
@@ -338,7 +340,7 @@ static const short yycheck[] = {     1,
 #define YYSTACK_USE_ALLOCA
 #define alloca __builtin_alloca
 #else /* not GNU C.  */
-#if (!defined (__STDC__) && defined (sparc)) || defined (__sparc__) || defined (__sparc) || defined (__sgi) || (defined (__sun) && defined (__i386))
+#if (!defined (__STDC__) && defined (sparc)) || defined (__sparc__) || defined (__sparc) || defined (__sgi) || (defined (__sun) && defined (__i386)) || (defined (__BEOS__) && defined (__MWERKS__))
 #define YYSTACK_USE_ALLOCA
 #include <alloca.h>
 #else /* not sparc */
@@ -513,7 +515,7 @@ __yy_memcpy (char *to, char *from, unsigned int count)
 #endif
 #endif
 
-#line 217 "/usr/local/share/bison.simple"
+#line 217 "/etc/bison.simple"
 
 /* The user can define YYPARSE_PARAM as the name of an argument to be passed
    into yyparse.  The argument should have type void *.
@@ -658,10 +660,12 @@ yynewstate:
 	  yyerror("parser stack overflow");
 	  if (yyfree_stacks)
 	    {
+#ifndef YYSTACK_USE_ALLOCA
 	      free (yyss);
 	      free (yyvs);
 #ifdef YYLSP_NEEDED
 	      free (yyls);
+#endif
 #endif
 	    }
 	  return 2;
@@ -918,7 +922,7 @@ case 12:
     break;}
 }
    /* the action file gets copied in in place of this dollarsign */
-#line 543 "/usr/local/share/bison.simple"
+#line 543 "/etc/bison.simple"
 
   yyvsp -= yylen;
   yyssp -= yylen;
@@ -1118,10 +1122,12 @@ yyerrhandle:
   /* YYACCEPT comes here.  */
   if (yyfree_stacks)
     {
+#ifndef YYSTACK_USE_ALLOCA
       free (yyss);
       free (yyvs);
 #ifdef YYLSP_NEEDED
       free (yyls);
+#endif
 #endif
     }
   return 0;
@@ -1130,10 +1136,12 @@ yyerrhandle:
   /* YYABORT comes here.  */
   if (yyfree_stacks)
     {
+#ifndef YYSTACK_USE_ALLOCA
       free (yyss);
       free (yyvs);
 #ifdef YYLSP_NEEDED
       free (yyls);
+#endif
 #endif
     }
   return 1;

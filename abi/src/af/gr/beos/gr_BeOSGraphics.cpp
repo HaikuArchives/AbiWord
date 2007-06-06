@@ -20,12 +20,14 @@
 #include <Debug.h>
 #include <Application.h>
 #include <Cursor.h>
+#include <String.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
 #include "gr_BeOSGraphics.h"
 #include "gr_BeOSImage.h"
+#include "be_BackView.h"
 
 #include "xap_BeOSFrameImpl.h"	//For be_DocView 
 #include <limits.h>
@@ -44,25 +46,8 @@
   -Get rid of all the sync calls 
 */
 
-#define DPRINTF(x) x
-#if defined(USE_BACKING_BITMAP)
-#define UPDATE_VIEW
-#define UPDATE_VIEW_hack			if (m_pFrontView->Window()->Lock()){	\
-					m_pFrontView->DrawBitmapAsync(m_pShadowBitmap);	\
-					m_pFrontView->Flush();		 \
-					m_pFrontView->Window()->Unlock();	\
-					}
-//					m_pFrontView->DrawBitmapAsync(m_pShadowBitmap);	\
-//					m_pFrontView->Sync();\
-
-#else
-//Do a flush instead of a sync
-#define UPDATE_VIEW			if (!m_pShadowView->IsPrinting()) { \
-					/* if (m_pShadowView->Window()->Lock()){ */ \
-					 m_pShadowView->Flush();		 \
-					/* m_pShadowView->Window()->Unlock();} */ \
-					}
-#endif
+//#define DPRINTF(x) x
+#define DPRINTF(x) 
 
 inline uint32 
 utf8_char_len(uchar byte) 
@@ -80,10 +65,10 @@ utf8_char_len(uchar byte)
 	return pszFontFamily;
 }*/
 
-GR_BeOSGraphics::GR_BeOSGraphics(BView *docview, XAP_App * app) {
+GR_BeOSGraphics::GR_BeOSGraphics(BBackView *docview, XAP_App * app) 
+{
+	dontflush = false;
 	m_pApp = app;
-	m_pShadowView = NULL;
-	m_pShadowBitmap = NULL;
 	m_pBeOSFont = NULL;
 	m_pFontGUI = NULL;
 	m_pPrintSettings = NULL;
@@ -95,34 +80,6 @@ GR_BeOSGraphics::GR_BeOSGraphics(BView *docview, XAP_App * app) {
 
 	m_cs = GR_Graphics::GR_COLORSPACE_COLOR;
 	
-#if defined(USE_BACKING_BITMAP)
-	BRect r;
-	if (m_pFrontView->Window()->Lock())
-	{
-		r = m_pFrontView->Bounds();
-		m_pFrontView->Window()->Unlock();
-	}
-	if (!(m_pShadowBitmap = new BBitmap(r, B_RGB32, true, false))) {
-		UT_ASSERT(0);
-		return;
-	}
-	if (!(m_pShadowView = new BView(r, "ShadowView", NULL, NULL))) {
-		UT_ASSERT(0);
-		return; 
-	}
-	if (m_pShadowBitmap->Lock()) {
-		m_pShadowBitmap->AddChild(m_pShadowView);
-		m_pShadowBitmap->Unlock();
-	}
-#else
-	m_pShadowView = m_pFrontView;
- 	m_pShadowView->Window()->Lock();
-	m_pShadowView->SetFlags(m_pShadowView->Flags() /*| B_SUBPIXEL_PRECISE*/);
-	m_pShadowView->Window()->Unlock();
-	m_pFrontView->Window()->Lock();
-	m_pFrontView->SetFlags(m_pFrontView->Flags() /*| B_SUBPIXEL_PRECISE*/);
-	m_pFrontView->Window()->Unlock();
-#endif
 	/*
 	  white for _highlight & _bevelup
 	  black for foreground
@@ -130,13 +87,12 @@ GR_BeOSGraphics::GR_BeOSGraphics(BView *docview, XAP_App * app) {
 	  dark gray(128*) for beveldown          
 	*/
 	
-	
 	/* 21-02-2007*/
 	
-	if (m_pShadowView->Window()->Lock())
+	if (m_pFrontView->LockLooper())
 	{
-		m_pShadowView->SetViewCursor(B_CURSOR_SYSTEM_DEFAULT,TRUE);
-		m_pShadowView->Window()->Unlock();
+		m_pFrontView->SetViewCursor(B_CURSOR_SYSTEM_DEFAULT,TRUE);
+		m_pFrontView->UnlockLooper();
 	}
 	
 	rgb_color c;
@@ -153,7 +109,8 @@ GR_BeOSGraphics::GR_BeOSGraphics(BView *docview, XAP_App * app) {
 	m_3dColors[CLR3D_BevelUp] = c;
 }		
 
-GR_BeOSGraphics::~GR_BeOSGraphics() {
+GR_BeOSGraphics::~GR_BeOSGraphics() 
+{
 #if defined(USE_BACKING_BITMAP)
 	if (!m_pShadowBitmap)
 		return;
@@ -165,7 +122,7 @@ GR_BeOSGraphics::~GR_BeOSGraphics() {
 	delete m_pShadowBitmap;
 	delete m_pShadowView;
 #endif
-	printf("Called GR_BeOSGraphics::~GR_BeOSGraphics()\n");
+	UT_DEBUGMSG(("Called GR_BeOSGraphics::~GR_BeOSGraphics()\n"));
 	DELETEP(m_pFontGUI);
 }
 
@@ -235,22 +192,11 @@ void GR_BeOSGraphics::drawChars(const UT_UCSChar* pChars, int iCharOffset,
 	
 	buffer[0] = '\0';
 	UT_UCS4_strcpy_to_char(buffer, pChars);
-//	char* builder=buffer;
-//	for (i=0; i<iLength; ++i)
-//	{
-////		UT_DEBUGMSG(("Enocding character \"%c\"\n", pChars[i+iCharOffset]));
-//		char* utf8buf = UT_encodeUTF8char(pChars[i+iCharOffset]);
-////		UT_DEBUGMSG(("Result is \"%c\"\n", *utf8buf));
-//		int len = utf8_char_len(*utf8buf);
-//		memcpy(builder, utf8buf, len);
-//		builder+=len; 						
-//	}
-//	*builder = 0;
+	BView * m_pShadowView = m_pFrontView->BackView();
 	
-	if (m_pShadowView->Window()->Lock()) 
-	{
-
-	
+	UT_DEBUGMSG(("drawing string %s\n", buffer));
+	if (m_pShadowView->LockLooper()) 
+	{	
 		// If we use B_OP_OVER, our text will anti-alias correctly against
 		// e.g. the ruler and the status bar.
 		drawing_mode oldMode = m_pShadowView->DrawingMode();
@@ -283,10 +229,9 @@ void GR_BeOSGraphics::drawChars(const UT_UCSChar* pChars, int iCharOffset,
 			//DPRINTF(printf("\n"));
 		}						  
 		// Restore the old drawing mode.
-    	m_pShadowView->SetDrawingMode(oldMode);
-		m_pShadowView->Window()->Unlock();
+	    	m_pShadowView->SetDrawingMode(oldMode);
+		m_pShadowView->UnlockLooper();
 	}
-	UPDATE_VIEW
 }
 
 BFont *findClosestFont(const char* pszFontFamily, 
@@ -426,14 +371,16 @@ void GR_BeOSGraphics::setFont(GR_Font* pFont)
 	
 	m_pBeOSFont = tmpFont;
 	m_pBeOSFont->get_font()->SetSpacing(B_BITMAP_SPACING);
-	if (m_pShadowView->Window()->Lock())
-	{
-	if (m_pBeOSFont)
-		m_pShadowView->SetFont(m_pBeOSFont->get_font());
-	else
-		UT_DEBUGMSG(("HEY! NO FONT INFORMATION AVAILABLE!\n"));
 
-	m_pShadowView->Window()->Unlock();
+	BView * m_pShadowView = m_pFrontView->BackView();
+	if (m_pShadowView->LockLooper())
+	{
+		if (m_pBeOSFont)
+			m_pShadowView->SetFont(m_pBeOSFont->get_font());
+		else
+			UT_DEBUGMSG(("HEY! NO FONT INFORMATION AVAILABLE!\n"));
+
+		m_pShadowView->UnlockLooper();
 	}
 }
 
@@ -447,10 +394,11 @@ UT_uint32 GR_BeOSGraphics::getFontAscent()
 {
 	font_height fh;
 
-	if (m_pShadowView->Window()->Lock())
+	BView * m_pShadowView = m_pFrontView->BackView();
+	if (m_pShadowView->LockLooper())
 	{
 		m_pShadowView->GetFontHeight(&fh);
-		m_pShadowView->Window()->Unlock();
+		m_pShadowView->UnlockLooper();
 	}
 	//Gives ascent, descent, leading
 	//printf("GR: Font Ascent %d\n",(int)(fh.ascent + 0.5));
@@ -460,10 +408,11 @@ UT_uint32 GR_BeOSGraphics::getFontAscent()
 UT_uint32 GR_BeOSGraphics::getFontDescent()
 {
 	font_height fh;
-	if(m_pShadowView->Window()->Lock())
+	BView * m_pShadowView = m_pFrontView->BackView();	
+	if (m_pShadowView->LockLooper())
 	{
 		m_pShadowView->GetFontHeight(&fh);
-		m_pShadowView->Window()->Unlock();
+		m_pShadowView->UnlockLooper();
 	}
 	//Gives ascent, descent, leading
 	//printf("GR: Font Descent %d\n",(int)(fh.descent + 0.5));
@@ -514,8 +463,9 @@ UT_sint32 GR_BeOSGraphics::measureUnRemappedChar(const UT_UCSChar c)
 	tempdelta.nonspace=0.0;
 	float fontsize=0.0f;
 
-	if (m_pShadowView->Window()->Lock()) {
-		
+	BView * m_pShadowView = m_pFrontView->BackView();
+	if (m_pShadowView->LockLooper())
+	{	
 		m_pShadowView->GetFont(&viewFont);
 		viewFont.SetSpacing(B_BITMAP_SPACING);
 //		viewFont.SetSpacing(B_CHAR_SPACING);		
@@ -526,7 +476,7 @@ UT_sint32 GR_BeOSGraphics::measureUnRemappedChar(const UT_UCSChar c)
 		viewFont.GetEscapements(buffer,1,&tempdelta,escapementArray);
 		fontsize=viewFont.Size();
 
-		m_pShadowView->Window()->Unlock();
+		m_pShadowView->UnlockLooper();
 
 		return static_cast<UT_sint32>(escapementArray[0] * fontsize * getResolution() / s_getDeviceResolution());
 	}
@@ -541,21 +491,23 @@ void GR_BeOSGraphics::getColor(UT_RGBColor& clr)
 
 void GR_BeOSGraphics::setColor(const UT_RGBColor& clr)
 {
-//	DPRINTF(printf("GR: setColor\n"));
+	DPRINTF(printf("GR: setColor\n"));
 	m_curColor = clr;
-	if (m_pShadowView->Window()->Lock())
+	BView * m_pShadowView = m_pFrontView->BackView();
+	if (m_pShadowView->LockLooper())
 	{
 		m_pShadowView->SetHighColor(clr.m_red, clr.m_grn, clr.m_blu);
 		if(m_pShadowView->Window()->IsLocked())
-			m_pShadowView->Window()->Unlock();
+			m_pShadowView->UnlockLooper();
 	}
 }
 
 void GR_BeOSGraphics::drawLine(UT_sint32 x1, UT_sint32 y1, UT_sint32 x2,
 							UT_sint32 y2)
 {
-	//DPRINTF(printf("GR: Draw Line\n"));
-	if (m_pShadowView->Window()->Lock())
+	DPRINTF(printf("GR: Draw Line\n"));
+	BView * m_pShadowView = m_pFrontView->BackView();
+	if (m_pShadowView->LockLooper())
 	{		
 		UT_sint32 idx1 = _tduX(x1);
 		UT_sint32 idx2 = _tduX(x2);
@@ -564,43 +516,42 @@ void GR_BeOSGraphics::drawLine(UT_sint32 x1, UT_sint32 y1, UT_sint32 x2,
 		UT_sint32 idy2 = _tduY(y2);
 		m_pShadowView->StrokeLine(BPoint(idx1, idy1),// BPoint(idx2, idy2));
 		beosiseLineEnding(idx1, idy1, idx2, idy2));
-		m_pShadowView->Window()->Unlock();
+		m_pShadowView->UnlockLooper();
 	}
-	UPDATE_VIEW
 }
 
 void GR_BeOSGraphics::setLineWidth(UT_sint32 iLineWidth)
 {
-//	DPRINTF(printf("GR: Set Line Width %d \n", iLineWidth));
-	
-	if(m_pShadowView->Window()->Lock())
+	DPRINTF(printf("GR: Set Line Width %d \n", iLineWidth));
+	BView * m_pShadowView = m_pFrontView->BackView();
+	if (m_pShadowView->LockLooper())
 	{
 		m_pShadowView->SetPenSize(iLineWidth);
-		m_pShadowView->Window()->Unlock();
+		m_pShadowView->UnlockLooper();
 	}
 }
 
 /*Poly line is only used during drawing squiggles*/
 void GR_BeOSGraphics::polyLine(UT_Point * pts, UT_uint32 nPoints)
 {
-//	DPRINTF(printf("GR: Poly Line \n"));
-	if (m_pShadowView->Window()->Lock())
-    {
+	DPRINTF(printf("GR: Poly Line \n"));
+	BView * m_pShadowView = m_pFrontView->BackView();
+	if (m_pShadowView->LockLooper())
+	{
 		for (UT_uint32 k=1; k<nPoints; k++)
 			drawLine(_tduX(pts[k-1].x),_tduY(pts[k-1].y), _tduX(pts[k].x),_tduY(pts[k].y)); 
-		m_pShadowView->Window()->Unlock();
+		m_pShadowView->UnlockLooper();
 	}
-	
-	UPDATE_VIEW
 }
 
 
 void GR_BeOSGraphics::xorLine(UT_sint32 x1, UT_sint32 y1, UT_sint32 x2,
 			    UT_sint32 y2)
 {
-//	DPRINTF(printf("GR: XOR Line\n"));
-	if (m_pShadowView->Window()->Lock())
-	{	
+	DPRINTF(printf("GR: XOR Line\n"));
+	BView * m_pShadowView = m_pFrontView->BackView();
+	if (m_pShadowView->LockLooper())
+	{
 		drawing_mode oldmode = m_pShadowView->DrawingMode();
 		m_pShadowView->SetDrawingMode(B_OP_INVERT);//or B_OP_BLEND
 		UT_sint32 idx1 = _tduX(x1);
@@ -609,16 +560,15 @@ void GR_BeOSGraphics::xorLine(UT_sint32 x1, UT_sint32 y1, UT_sint32 x2,
 		UT_sint32 idy2 = _tduY(y2);
 		m_pShadowView->StrokeLine(BPoint(idx1, idy1), BPoint(idx2, idy2));
 		m_pShadowView->SetDrawingMode(oldmode);
-		m_pShadowView->Window()->Unlock();
+		m_pShadowView->UnlockLooper();
 	}
-
-	UPDATE_VIEW
 }
 
 void GR_BeOSGraphics::invertRect(const UT_Rect* pRect)
 {
-	//DPRINTF(printf("GR: Invert Rect\n"));
-	if (m_pShadowView->Window()->Lock())
+	DPRINTF(printf("GR: Invert Rect\n"));
+	BView * m_pShadowView = m_pFrontView->BackView();
+	if (m_pShadowView->LockLooper())
 	{
 	/*Dan thinks StrokeRect is only getting the outer edges, when we don't really want that. we'll see in a sec*/
 		drawing_mode oldmode = m_pShadowView->DrawingMode();
@@ -632,32 +582,30 @@ void GR_BeOSGraphics::invertRect(const UT_Rect* pRect)
 									idx + idw -1,
 									idy + idh -1));
 		m_pShadowView->SetDrawingMode(oldmode);
-		m_pShadowView->Window()->Unlock();
+		m_pShadowView->UnlockLooper();
 	}
-	UPDATE_VIEW
 }
 
 
 void GR_BeOSGraphics::fillRect(const UT_RGBColor& c, UT_sint32 x, UT_sint32 y,
 						UT_sint32 w, UT_sint32 h)
 {
-//	UT_ASSERT(UT_TODO);
-	if (m_pShadowView->Window()->Lock())
-	{	
+	BView * m_pShadowView = m_pFrontView->BackView();
+	if (m_pShadowView->LockLooper())
+	{
 		rgb_color old_colour = m_pShadowView->HighColor();
 		m_pShadowView->SetHighColor(c.m_red, c.m_grn, c.m_blu);
 		UT_sint32 idx = _tduX(x);
 		UT_sint32 idy = _tduY(y);
 		UT_sint32 idw = _tduX(w);
 		UT_sint32 idh = _tduY(h);
-//		DPRINTF(printf("GR: Flll Rect!! color (r:%i,g:%i,b:%i)\n", c.m_red, c.m_grn, c.m_blu));
-//		DPRINTF(printf("GR: Flll Rect!! rect (%i,%i,%i,%i,%i)\n", idx, idy, idx+idw-1, idy+idh-1));	
+		DPRINTF(printf("GR: Flll Rect!! color (r:%i,g:%i,b:%i)\n", c.m_red, c.m_grn, c.m_blu));
+		DPRINTF(printf("GR: Flll Rect!! rect (%i,%i,%i,%i,%i)\n", idx, idy, idx+idw-1, idy+idh-1));	
 		BRect r(idx, idy, idx+idw-1, idy+idh-1);
 		m_pShadowView->FillRect(r);
 		m_pShadowView->SetHighColor(old_colour);
-		m_pShadowView->Window()->Unlock();
+		m_pShadowView->UnlockLooper();
 	}
-	UPDATE_VIEW
 }
 
 void GR_BeOSGraphics::setClipRect(const UT_Rect* pRect)
@@ -681,10 +629,11 @@ void GR_BeOSGraphics::setClipRect(const UT_Rect* pRect)
 //knorr
 		r = &region;
 	}
-	if (m_pShadowView->Window()->Lock())
+	BView * m_pShadowView = m_pFrontView->BackView();
+	if (m_pShadowView->LockLooper())
 	{
 		m_pShadowView->ConstrainClippingRegion(r);
-		m_pShadowView->Window()->Unlock();
+		m_pShadowView->UnlockLooper();
 	}
 }
 //дабы не мешалось
@@ -692,7 +641,7 @@ void GR_BeOSGraphics::setClipRect(const UT_Rect* pRect)
 //	//This is slow and crappy method, but it works
 //	//when you don't have a CopyBits function
 //	BRegion region;
-//	if (m_pShadowView->Window()->Lock())
+//	if (m_pShadowView->LockLooper())
 //	{
 //
 //	//If we are moving down, right offset positive
@@ -705,16 +654,17 @@ void GR_BeOSGraphics::setClipRect(const UT_Rect* pRect)
 //				pRect->top+pRect->height));
 //		m_pShadowView->ConstrainClippingRegion(&region);
 //		m_pShadowView->Invalidate(r);
-//		m_pShadowView->Window()->Unlock();
+//		m_pShadowView->UnlockLooper();
 //	}
 //#endif
 
 void GR_BeOSGraphics::scroll(UT_sint32 dx, UT_sint32 dy)
 {
 
-	//DPRINTF(printf("GR: Scroll dx %d dy %d\n", dx, dy));
+	DPRINTF(printf("GR: Scroll dx %d dy %d\n", dx, dy));
 	//This method lets the app server draw for us
-	if(m_pShadowView->Window()->Lock())
+	BView * m_pShadowView = m_pFrontView->BackView();
+	if (m_pShadowView->LockLooper())
 	{
 		BRect src, dest;
 		dest = src = m_pShadowView->Bounds();
@@ -724,7 +674,7 @@ void GR_BeOSGraphics::scroll(UT_sint32 dx, UT_sint32 dy)
 		//printf("Scroll SRC "); src.PrintToStream();
 		//printf("Scroll DST "); dest.PrintToStream();
 		m_pShadowView->CopyBits(src, dest);
-		m_pShadowView->Window()->Unlock();
+		m_pShadowView->UnlockLooper();
 	}
 }
 
@@ -745,7 +695,8 @@ void GR_BeOSGraphics::clearArea(UT_sint32 x, UT_sint32 y,
 {
 	UT_DEBUGMSG(("GR: Clear Area %d-%d -> %d-%d\n", 
 					x, y, x+w, y+h));
-	if(m_pShadowView->Window()->Lock())
+	BView * m_pShadowView = m_pFrontView->BackView();
+	if (m_pShadowView->LockLooper())
 	{
 		rgb_color old_colour = m_pShadowView->HighColor();
 		m_pShadowView->SetHighColor(m_pShadowView->ViewColor());
@@ -755,9 +706,8 @@ void GR_BeOSGraphics::clearArea(UT_sint32 x, UT_sint32 y,
 		UT_sint32 idh = _tduY(h);
 		m_pShadowView->FillRect(BRect(idx, idy, idx+idw-1, idy+idh-1));
 		m_pShadowView->SetHighColor(old_colour);
-		m_pShadowView->Window()->Unlock();
+		m_pShadowView->UnlockLooper();
 	}
-	UPDATE_VIEW
 }
 
 bool GR_BeOSGraphics::startPrint(void)
@@ -799,7 +749,9 @@ bool GR_BeOSGraphics::startPage(const char * /*szPageLabel*/,
 				   UT_uint32 /*pageNumber*/,
 				   bool /*bPortrait*/, 
 				   UT_uint32 /*iWidth*/, 
-				   UT_uint32 /*iHeight*/) {
+				   UT_uint32 /*iHeight*/) 
+{
+	BView * m_pShadowView = m_pFrontView->BackView();
 
 	if (!m_pPrintJob || !m_pPrintJob->CanContinue() || !m_pShadowView) {
 		printf("GR: Start page something amiss \n");
@@ -810,11 +762,11 @@ bool GR_BeOSGraphics::startPage(const char * /*szPageLabel*/,
 		BPicture *tmppic;
 		BRect     r;
 
-		if(m_pShadowView->Window()->Lock())
+		if(m_pShadowView->LockLooper())
 		{	
 			r = m_pShadowView->Bounds();
 			tmppic = m_pShadowView->EndPicture();
-			m_pShadowView->Window()->Unlock();
+			m_pShadowView->UnlockLooper();
 		}
 		((be_DocView *)m_pShadowView)->SetPrintPicture(tmppic);
 		m_pPrintJob->DrawView(m_pShadowView, 
@@ -833,7 +785,9 @@ bool GR_BeOSGraphics::startPage(const char * /*szPageLabel*/,
 	return(true);
 }
 
-bool GR_BeOSGraphics::endPrint(void) {
+bool GR_BeOSGraphics::endPrint(void) 
+{
+	BView * m_pShadowView = m_pFrontView->BackView();
 	if (!m_pPrintJob || !m_pPrintJob->CanContinue()) {
 		return(false);
 	}
@@ -841,10 +795,10 @@ bool GR_BeOSGraphics::endPrint(void) {
 	if (m_bPrint) {
 		BPicture *tmppic;
 
-		if (m_pShadowView->Window()->Lock())
+		if (m_pShadowView->LockLooper())
 		{
 			tmppic = m_pShadowView->EndPicture();
-			m_pShadowView->Window()->Unlock();
+			m_pShadowView->UnlockLooper();
 		}
 		else return(false);
 		((be_DocView *)m_pShadowView)->SetPrintPicture(tmppic);
@@ -871,7 +825,9 @@ GR_Image* GR_BeOSGraphics::createNewImage(const char* pszName,
 					  UT_sint32 iDisplayHeight,
 					  GR_Image::GRType iType)
 {
-	//DPRINTF(printf("GR: Create new image %s \n", pszName));
+	DPRINTF(printf("GR: Create new image %s \n", pszName));
+	BView * m_pShadowView = m_pFrontView->BackView();
+		
 	GR_Image* pImg = NULL;
    	if (iType == GR_Image::GRT_Raster)
 	   	pImg = new GR_BeOSImage(pszName);
@@ -898,23 +854,38 @@ void GR_BeOSGraphics::drawImage(GR_Image* pImg, UT_sint32 xDest, UT_sint32 yDest
 	//UT_sint32 iImageWidth = pUnixImage->getDisplayWidth();
 	//UT_sint32 iImageHeight = pUnixImage->getDisplayHeight();
 
-	if(m_pShadowView->Window()->Lock())
+	BView * m_pShadowView = m_pFrontView->BackView();
+	if(m_pShadowView->LockLooper())
 	{
 		m_pShadowView->DrawBitmapAsync(image, BPoint(xDest, yDest)); 
-		m_pShadowView->Window()->Unlock();
+		m_pShadowView->UnlockLooper();
 	}
-	UPDATE_VIEW
 }
 
 void GR_BeOSGraphics::flush(void)
-{
-	UPDATE_VIEW
+{	
+	UT_DEBUGMSG(("flushing BackView to front\n"));
+	BBitmap  * bmp = m_pFrontView->BackBmp();
+	if(!bmp)
+	{
+		UT_DEBUGMSG(("no back bitmap!!\n"));
+		m_pFrontView->Flush();
+		return;
+	}
+		
+	if(m_pFrontView->LockLooper())
+	{
+		m_pFrontView->BackView()->Flush();
+		m_pFrontView->SetViewBitmap(bmp, B_FOLLOW_NONE, 0);
+		m_pFrontView->Invalidate();
+		m_pFrontView->UnlockLooper();
+	}
 }
 
 void GR_BeOSGraphics::setColorSpace(GR_Graphics::ColorSpace c)
 {
 	// TODO:  maybe? 
-	//UT_ASSERT(UT_SHOULD_NOT_HAPPEN);
+	m_cs = c;
 }
 
 GR_Graphics::ColorSpace GR_BeOSGraphics::getColorSpace(void) const
@@ -929,7 +900,7 @@ void GR_BeOSGraphics::setCursor(GR_Graphics::Cursor c)
 		return;
 	
 	m_cursor = c;
-    printf("In set cursor\n");
+	UT_DEBUGMSG(("In set cursor\n"));
 	const BCursor * tc = B_CURSOR_SYSTEM_DEFAULT;
 	
 	switch (c)
@@ -941,7 +912,7 @@ void GR_BeOSGraphics::setCursor(GR_Graphics::Cursor c)
 		tc = B_CURSOR_I_BEAM;
 		break;
 	}
-    printf("Cursor drawing\n");	
+	UT_DEBUGMSG(("Cursor drawing\n"));
 	be_app->SetCursor(tc);
 	be_app->ShowCursor();
 }
@@ -953,19 +924,23 @@ GR_Graphics::Cursor GR_BeOSGraphics::getCursor(void) const
 
 void GR_BeOSGraphics::setColor3D(GR_Color3D c)
 {
-//	DPRINTF(printf("Set color 3D %d \n", c));
-	if (m_pShadowView->Window()->Lock())
+	DPRINTF(printf("Set color 3D %d \n", c));
+	BView * m_pShadowView = m_pFrontView->BackView();
+		
+	if (m_pShadowView->LockLooper())
 	{
 		m_pShadowView->SetHighColor(m_3dColors[c]);
-		m_pShadowView->Window()->Unlock();
+		m_pShadowView->UnlockLooper();
 	}
 }
 
 void GR_BeOSGraphics::fillRect(GR_Color3D c, UT_sint32 x, UT_sint32 y, UT_sint32
  w, UT_sint32 h)
 {
-//	DPRINTF(printf("GR:FillRect 3D %d!\n", c));
-	if(m_pShadowView->Window()->Lock())
+	DPRINTF(printf("GR:FillRect 3D %d!\n", c));
+	BView * m_pShadowView = m_pFrontView->BackView();
+		
+	if(m_pShadowView->LockLooper())
 	{	
 		rgb_color old_colour = m_pShadowView->HighColor();
 		drawing_mode oldmode=m_pShadowView->DrawingMode();
@@ -978,16 +953,15 @@ void GR_BeOSGraphics::fillRect(GR_Color3D c, UT_sint32 x, UT_sint32 y, UT_sint32
 		m_pShadowView->FillRect(BRect(idx, idy, idx+idw-1, idy+idh-1));
 		m_pShadowView->SetHighColor(old_colour);
 		m_pShadowView->SetDrawingMode(oldmode);
-		m_pShadowView->Window()->Unlock();
+		m_pShadowView->UnlockLooper();
 	}
-	UPDATE_VIEW
 }
 
 void GR_BeOSGraphics::fillRect(GR_Color3D c, UT_Rect &r)
 {
-		printf("Fill rectangle\n");
-        UT_ASSERT(c < COUNT_3D_COLORS);
-        fillRect(c,r.left,r.top,r.width,r.height);
+	DPRINTF(printf("Fill rectangle\n"));
+	UT_ASSERT(c < COUNT_3D_COLORS);
+	fillRect(c,r.left,r.top,r.width,r.height);
 }                               
 
 //////////////////////////////////////////////////////////////////
@@ -1029,12 +1003,13 @@ void GR_BeOSGraphics::setLineProperties ( double inWidth,
 										  GR_Graphics::CapStyle inCapStyle,
 										  GR_Graphics::LineStyle inLineStyle )
 {
-//	DPRINTF(printf("Set line properties %d \n", c));
-	if (m_pShadowView->Window()->Lock())
+	DPRINTF(printf("Set line properties\n"));
+	BView * m_pShadowView = m_pFrontView->BackView();	
+	if (m_pShadowView->LockLooper())
 	{
 		m_pShadowView->SetPenSize(tduD(inWidth));
 		//TODO: add styles here
-		m_pShadowView->Window()->Unlock();
+		m_pShadowView->UnlockLooper();
 	}
 	
 }
@@ -1051,9 +1026,7 @@ void GR_BeOSGraphics::saveRectangle(UT_Rect & r, UT_uint32 iIndx)
 	UT_Rect* oldR = NULL;	
 
 	m_vSaveRect.setNthItem(iIndx, new UT_Rect(r),&oldR);
-	if(oldR) {
-		delete oldR;
-	}
+	if(oldR) delete oldR;
 
 	BBitmap * oldC = NULL;
 	UT_sint32 idx = _tduX(r.left);
@@ -1062,38 +1035,43 @@ void GR_BeOSGraphics::saveRectangle(UT_Rect & r, UT_uint32 iIndx)
 	UT_sint32 idh = _tduY(r.height);
 	
 	BRect rect(idx, idy, idx+idw-1, idy+idh-1);
-	BBitmap bmp(rect, m_pShadowBitmap->ColorSpace(), true);
+	BBitmap * m_pShadowBitmap = ShadowBitmap();
+	BBitmap * bmp = new BBitmap(rect, m_pShadowBitmap->ColorSpace(), true);
 	BView * view = new BView(rect,"copyrect", 0, B_WILL_DRAW);
-	bmp.AddChild(view);
-	if(view->Window()->Lock())
+	bmp->AddChild(view);
+	if(view->LockLooper())
 	{
 		view->DrawBitmap(m_pShadowBitmap, rect, rect);
-		view->Window()->Unlock();
+		view->UnlockLooper();
 	}
-	m_vSaveRectBuf.setNthItem(iIndx, &bmp, &oldC);
-	delete oldC;
-	bmp.RemoveChild(view);
-	delete view;
+	m_vSaveRectBuf.setNthItem(iIndx, bmp, &oldC);
+
+	DELETEP(oldC);	
+	bmp->RemoveChild(view);
+	DELETEP(view);
 }
 //
 void GR_BeOSGraphics::restoreRectangle(UT_uint32 iIndx)
 {
 	UT_Rect *r = m_vSaveRect.getNthItem(iIndx);
 	BBitmap *p = m_vSaveRectBuf.getNthItem(iIndx);
-    printf("restore rectangle\n");
+	UT_DEBUGMSG(("restore rectangle\n"));
 	if (p && r)
 	{
-		printf("restore rectangle b4 lock\n");
-		if(m_pFrontView->Window()->Lock())
+		UT_DEBUGMSG(("restore rectangle b4 lock\n"));
+		if(m_pFrontView->LockLooper())
 		{
-			printf("restore rectangle after lock\n");
+			UT_DEBUGMSG(("restore rectangle after lock\n"));
 			UT_sint32 idx = _tduX(r->left);
 			UT_sint32 idy = _tduY(r->top);
 			UT_sint32 idw = _tduX(r->width);
 			UT_sint32 idh = _tduY(r->height);
 			BRect rect(idx, idy, idx+idw-1, idy+idh-1);			
 			m_pFrontView->DrawBitmap(p, rect);
-			m_pFrontView->Window()->Unlock();
+			m_pFrontView->UnlockLooper();
+			//little hack
+			//no need to redraw full view
+			dontflush = true;
 		}
 	}
 }
@@ -1131,13 +1109,14 @@ GR_Image * GR_BeOSGraphics::genImageFromRectangle(const UT_Rect &rec)
 	UT_sint32 idh = _tduY(rec.height);
 
 	BRect rect(idx, idy, idx+idw-1, idy+idh-1);
+	BBitmap * m_pShadowBitmap = ShadowBitmap();
 	BBitmap * bmp = new BBitmap(rect, m_pShadowBitmap->ColorSpace(), true);
 	BView * view = new BView(rect,"ScreenShotView", 0, B_WILL_DRAW);
 	bmp->AddChild(view);
-	if(view->Window()->Lock())
+	if(view->LockLooper())
 	{
 		view->DrawBitmap(m_pShadowBitmap, rect, rect);
-		view->Window()->Unlock();
+		view->UnlockLooper();
 	}
 	GR_BeOSImage * pImg = new GR_BeOSImage("ScreenShot");
 	pImg->setData(bmp);
@@ -1150,12 +1129,21 @@ void GR_BeOSGraphics::_beginPaint ()
 {
 }
 //
-void GR_BeOSGraphics::_endPaint ()
-{
-	UPDATE_VIEW_hack
+void GR_BeOSGraphics::_endPaint()
+{	
+	if(!dontflush)
+		flush();
+	else
+		dontflush=false;
 }
 //
 void GR_BeOSGraphics::polygon(UT_RGBColor& c,UT_Point *pts,UT_uint32 nPoints)
 {
 //TODO: draw polygon
 }
+//
+BBitmap * GR_BeOSGraphics::ShadowBitmap()
+{
+	return(m_pFrontView->BackBmp()); 
+}
+//

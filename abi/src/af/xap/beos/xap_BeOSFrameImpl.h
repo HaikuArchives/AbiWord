@@ -27,6 +27,7 @@
 #include "xap_FrameImpl.h"
 #include "ut_vector.h"
 #include "xap_BeOSDialogFactory.h"
+#include "be_BackView.h"
 
 class XAP_BeOSApp;
 class ev_BeOSKeyboard;
@@ -56,11 +57,11 @@ class TFScrollBar: public BScrollBar {
 		XAP_BeOSFrameImpl *m_pBeOSFrame;				
 };
 
-class be_DocView: public BView {
+class be_DocView: public BBackView {
 	public: 
-		be_DocView(BRect frame, const char *name, 
+		be_DocView(AV_View * pView, BRect frame, const char *name, 
 			   uint32 resizeMask, uint32 flags);
-		virtual	void Draw(BRect updateRect);
+//		virtual	void Draw(BRect updateRect);
 		virtual void SetPrintPicture(BPicture *pic) { m_pBPicture = pic; };
 		virtual	void FrameResized(float new_width, float new_height);
 		virtual void WindowActivated(bool activated);
@@ -93,13 +94,13 @@ class be_Window: public BWindow {
 		virtual bool QuitRequested(void);
 		virtual void MessageReceived(BMessage *pMsg);
 		
-		be_DocView		*m_pbe_DocView;
+		be_DocView			*m_pbe_DocView;
 		EV_BeOSMenu 		*m_pBeOSMenu;
 		XAP_BeOSApp 		*m_pBeOSApp;
 		XAP_BeOSFrameImpl 	*m_pBeOSFrame;
 		TFScrollBar		*m_hScroll, *m_vScroll;
 		BRect			m_winRectAvailable;
-		BView 			*m_pBeOSStatusBarView; //TODO: I don't like this!!!!!!!!!!!!!
+		BView			*m_pBeOSStatusBarView; //TODO: I don't like this!!!!!!!!!!!!!
 };
 
 class be_Status;

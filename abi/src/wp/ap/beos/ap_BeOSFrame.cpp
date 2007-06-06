@@ -65,8 +65,8 @@ void AP_BeOSFrame::setXScrollRange(void)
 		return;
 	}
 
-    int windowWidth = (int)pBWin->m_pbe_DocView->Bounds().Width();
-    pBWin->Unlock();
+	int windowWidth = (int)pBWin->m_pbe_DocView->Bounds().Width();
+	pBWin->Unlock();
 
 	int newvalue = (m_pView) ? m_pView->getXScrollOffset() : 0;
 	/* This is a real dilemma ... should the maximum of the
@@ -85,7 +85,7 @@ void AP_BeOSFrame::setXScrollRange(void)
 		newvalue = newmax;
 	}
 
-    BScrollBar *hscroll = pBWin->m_hScroll;
+	BScrollBar *hscroll = pBWin->m_hScroll;
 	if (hscroll->Window()->Lock()) {
     	hscroll->SetSteps(20.0, windowWidth);
     	hscroll->SetRange(0, newmax);

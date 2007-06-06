@@ -27,9 +27,10 @@
 #include "gr_Graphics.h"
 #include "ut_assert.h"
 
-#define USE_BACKING_BITMAP 1
+class BBackView;
 
-class BeOSFont : public GR_Font {
+class BeOSFont : public GR_Font 
+{
 public:
 	BeOSFont(BFont *aFont) 	{ m_pBFont = aFont; };
 	BFont *get_font(void) 	{ return(m_pBFont); };
@@ -44,11 +45,11 @@ private:
 class GR_BeOSAllocInfo : public GR_AllocInfo
 {
 public:
-	GR_BeOSAllocInfo(BView * win, XAP_App * app) {m_win = win; m_app = app;};
+	GR_BeOSAllocInfo(BBackView * win, XAP_App * app) {m_win = win; m_app = app;};
 
 	virtual GR_GraphicsId getType() const {return GRID_BEOS;};
 	virtual bool isPrinterGraphics() const {return false; };
-	BView* m_win;	
+	BBackView* m_win;	
 	XAP_App * m_app;
 };
 
@@ -119,8 +120,8 @@ public:
 	virtual UT_uint32 getFontAscent(GR_Font *);
 	virtual UT_uint32 getFontDescent(GR_Font *);
 	virtual UT_uint32 getFontHeight(GR_Font *);
-    virtual GR_Image * genImageFromRectangle(const UT_Rect & r);
-    virtual void	  saveRectangle(UT_Rect & r, UT_uint32 iIndx);
+	virtual GR_Image * genImageFromRectangle(const UT_Rect & r);
+	virtual void	  saveRectangle(UT_Rect & r, UT_uint32 iIndx);
 	virtual void	  restoreRectangle(UT_uint32 iIndx);
 
 	static UT_uint32  s_getDeviceResolution(void);
@@ -129,8 +130,7 @@ public:
 
 	//Added for local updating of the View
 	void			ResizeBitmap(BRect r);
-	BBitmap 		*ShadowBitmap()	
-					{ return(m_pShadowBitmap); };
+	BBitmap 		*ShadowBitmap();
 	BMessage		*GetPrintSettings() 	
 					{ return(m_pPrintSettings); };
 	void 			SetPrintSettings(BMessage *s) 
@@ -146,7 +146,7 @@ public:
  
 protected:
 	// all instances have to be created via GR_GraphicsFactory; see gr_Graphics.h
-	GR_BeOSGraphics(BView *front, XAP_App *app);
+	GR_BeOSGraphics(BBackView *front, XAP_App *app);
 
 	virtual void _beginPaint ();
 	virtual void _endPaint ();
@@ -178,8 +178,8 @@ protected:
 								  const char* pszFontStretch, 
 								  const char* pszFontSize);
 		
-	BView					*m_pShadowView, *m_pFrontView;
-	BBitmap					*m_pShadowBitmap;
+	BBackView				*m_pFrontView;
+//	BBitmap				*m_pShadowBitmap;
 	BMessage				*m_pPrintSettings;	
 	BPrintJob				*m_pPrintJob;
 	BeOSFont				*m_pBeOSFont, *m_pFontGUI;
@@ -196,7 +196,8 @@ protected:
 private:
 	UT_RGBColor				m_curColor;
 	UT_GenericVector<UT_Rect*>     m_vSaveRect;
-	UT_GenericVector<BBitmap *>  m_vSaveRectBuf;	
+	UT_GenericVector<BBitmap *>  m_vSaveRectBuf;
+	bool dontflush;
 };
 
 BPoint GR_BeOSGraphics::beosiseLineEnding(UT_sint32 x1, UT_sint32 y1, 

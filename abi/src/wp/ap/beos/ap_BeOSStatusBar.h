@@ -26,7 +26,7 @@
 #include "ut_types.h"
 #include "ap_StatusBar.h"
 #include "gr_BeOSGraphics.h"
-#include "be_GRDrawView.h"
+#include "be_BackView.h"
 
 class XAP_Frame;
 
@@ -46,10 +46,10 @@ public:
 	virtual void		show(void);
 	virtual void		hide(void);
 	virtual void		setView(AV_View * pView);
-	be_GRDrawView *	createWidget(BRect r);
+	BBackView *		createWidget(BRect r);
 
 protected:
-	be_GRDrawView *				m_wStatusBar;
+	BBackView *				m_wStatusBar;
 	GR_BeOSGraphics *			m_pG;	
 };
 

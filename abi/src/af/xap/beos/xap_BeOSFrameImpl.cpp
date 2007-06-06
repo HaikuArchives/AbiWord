@@ -150,6 +150,7 @@ void XAP_BeOSFrameImpl::setBeDocView(be_DocView *view)
 {
 	m_pBeDocView = view;
 }
+
 UT_sint32 XAP_BeOSFrameImpl::_setInputMode(const char * szName)
 {
 	UT_sint32 result = XAP_App::getApp()->setInputMode(szName);
@@ -277,14 +278,16 @@ be_Window::be_Window(XAP_BeOSApp *theApp, XAP_BeOSFrameImpl *theFrame,
  	  	BRect r, char *name, 
 		window_look look, window_feel feel, 
  		uint32 flags, uint32 workspace) 
-       : BWindow(r, name, look, feel, flags, workspace) {
+       : BWindow(r, name, look, feel, flags, workspace) 
+{
 	
 	m_pBeOSFrame = theFrame;
 	m_pBeOSApp = theApp;
 }
 
 #if 0
-void be_Window::MessageReceived(BMessage *msg) {
+void be_Window::MessageReceived(BMessage *msg) 
+{
 	switch(msg->what) {
 	case 'tmer':
 		printf("Received a timer message \n");
@@ -296,7 +299,8 @@ void be_Window::MessageReceived(BMessage *msg) {
 
 #endif
 
-bool be_Window::QuitRequested(void) {
+bool be_Window::QuitRequested(void) 
+{
 	//I need to tell the framework here ...
 	XAP_App *pApp = m_pBeOSApp;
 //    AV_View *pView = m_pBeOSFrame->getCurrentView();
@@ -323,7 +327,6 @@ void be_Window::MessageReceived(BMessage *pMsg)
 {
 	float smallStep, bigStep;
 	float deltaX, deltaY;
-printf("Be window msg received\n");	
 	switch(pMsg->what)
 	{
 		case 'inme': // Inme is a "Create Menu" message sent when the view is established.
@@ -354,58 +357,55 @@ printf("Be window msg received\n");
 }
 
 bool be_Window::_createWindow(const char *szMenuLayoutName,
-			   const char *szMenuLabelSetName) {
+			   const char *szMenuLabelSetName) 
+{
 	//BRect r;
 
 	m_winRectAvailable = Bounds();
-	m_winRectAvailable.PrintToStream();
 	
 	m_pBeOSMenu = new EV_BeOSMenu(m_pBeOSApp, m_pBeOSFrame->getFrame(),
 				      szMenuLayoutName, szMenuLabelSetName);
 	
 	m_pBeOSMenu->synthesizeMenuBar();
 	m_pBeOSMenu->synthesize();		
-	printf("After Adding Menu Available Rect: ");
-	m_winRectAvailable.PrintToStream();
 	
 	//Add the toolbars
 	UT_ASSERT(m_pBeOSFrame);
 	m_pBeOSFrame->_createToolbars();
 
-	m_winRectAvailable.PrintToStream();
-
-
 	// Let the app-specific frame code create the contents of
-    // the child area of the window (between the toolbars and
-    // the status bar).
+	// the child area of the window (between the toolbars and
+	// the status bar).
 	_createDocumentWindow();
 
-    // Let the app-specific frame code create the status bar
-    // if it wants to.  we will put it below the document
-    // window (a peer with toolbars and the overall sunkenbox)
-    // so that it will appear outside of the scrollbars.
-    m_pBeOSStatusBarView =  _createStatusBarWindow();
+	// Let the app-specific frame code create the status bar
+	// if it wants to.  we will put it below the document
+	// window (a peer with toolbars and the overall sunkenbox)
+	// so that it will appear outside of the scrollbars.
+	m_pBeOSStatusBarView =  _createStatusBarWindow();
 	
-    if (!m_pBeOSStatusBarView)
-	 return (false);
+	if (!m_pBeOSStatusBarView)
+		return (false);
 
 	return(true);	
 }
 
 
-be_DocView::be_DocView(BRect frame, const char *name, uint32 resizeMask, uint32 flags)
-	:BView(frame, name, resizeMask, flags | B_FRAME_EVENTS) 
+be_DocView::be_DocView(AV_View * pView, BRect frame, const char *name, uint32 resizeMask, uint32 flags)
+	:BBackView(pView, frame, name, resizeMask, flags | B_FRAME_EVENTS) 
 {
 	m_pBPicture = NULL;
 }
 
-void be_DocView::FrameResized(float new_width, float new_height) {
+void be_DocView::FrameResized(float new_width, float new_height) 
+{
+	BBackView::FrameResized(new_width, new_height);
 	be_Window	*pBWin;
 	GR_BeOSGraphics *pG;
 	pBWin = (be_Window *)Window();
 	if (!pBWin || !pBWin->m_pBeOSFrame)
 		return; 
- 	pBWin->DisableUpdates(); 
+ 	pBWin->DisableUpdates();
 	pG = (GR_BeOSGraphics *)pBWin->m_pBeOSFrame->Graphics();
 	if (!pG)
 	{
@@ -426,66 +426,67 @@ void be_DocView::FrameResized(float new_width, float new_height) {
 		rClip.width = pG->tlu(rect.Width())+1;
 		rClip.height = pG->tlu(rect.Height())+1;
 		pView->draw(&rClip); //TODO do we need this???
+		pG->flush();				
  		/* Methinks it can handle itself*/
 	}
 	pBWin->EnableUpdates();
-	pBWin->Sync(); //Maybe Sync? We'll see
+//	pBWin->Sync(); //Maybe Sync? We'll see
 // Dynamic Zoom Implimentation
 	pBWin->m_pBeOSFrame->getFrame()->updateZoom();
 }
 
-void be_DocView::Draw(BRect updateRect) {
-	be_Window 		*pBWin;
-
-	pBWin = (be_Window*)Window();
-	if (!pBWin || !pBWin->m_pBeOSFrame)
-		return;
-	
-#if defined(USE_BACKING_BITMAP)
-	GR_BeOSGraphics 	*pG;
-	BBitmap 		*pBitmap;	
- 	pBWin->DisableUpdates();
-	pG = (GR_BeOSGraphics *)pBWin->m_pBeOSFrame->Graphics();
-	if (!pG || !(pBitmap = pG->ShadowBitmap()))
-	{
-		pBWin->EnableUpdates();
-		return;
-	}
-	printf("doc View::Draw\n");
-	pG->setCursor(GR_Graphics::GR_CURSOR_WAIT);
-	DrawBitmap(pBitmap);
-	pBWin->EnableUpdates();
-	pBWin->Flush();
-#else
-/* 
-Things to do to speed this up, make it less flashy:
- - Only invalidate/draw in the update rect 
- - Draw everything to an offscreen buffer/picture
- - Don't erase the background by default 
-*/
-	pBWin->DisableUpdates();
-	//This code path is used for printing
-	if (m_pBPicture) {
-		printf("In printer path code\n");
-		DrawPicture(m_pBPicture, BPoint(0,0));
-		pBWin->EnableUpdates();
-		return;
-	}
-
-	AV_View *pView = pBWin->m_pBeOSFrame->getFrame()->getCurrentView();
-	if (pView) {		
-		//The tell AbiWord to draw us ...
-		UT_Rect r;
-		r.top = (UT_sint32)updateRect.top;
-		r.left = (UT_sint32)updateRect.left;
-		r.width = (UT_sint32)updateRect.Width()+1;
-		r.height = (UT_sint32)updateRect.Height()+1;
-		pView->draw(&r);
-	}
-	pBWin->EnableUpdates();
-	pBWin->Sync();
-#endif
-}
+//void be_DocView::Draw(BRect updateRect) {
+//	be_Window 		*pBWin;
+//
+//	pBWin = (be_Window*)Window();
+//	if (!pBWin || !pBWin->m_pBeOSFrame)
+//		return;
+//	
+//#if defined(USE_BACKING_BITMAP)
+//	GR_BeOSGraphics 	*pG;
+//	BBitmap 		*pBitmap;	
+// 	pBWin->DisableUpdates();
+//	pG = (GR_BeOSGraphics *)pBWin->m_pBeOSFrame->Graphics();
+//	if (!pG || !(pBitmap = pG->ShadowBitmap()))
+//	{
+//		pBWin->EnableUpdates();
+//		return;
+//	}
+//	printf("doc View::Draw\n");
+//	pG->setCursor(GR_Graphics::GR_CURSOR_WAIT);
+//	DrawBitmap(pBitmap);
+//	pBWin->EnableUpdates();
+//	pBWin->Flush();
+//#else
+///* 
+//Things to do to speed this up, make it less flashy:
+// - Only invalidate/draw in the update rect 
+// - Draw everything to an offscreen buffer/picture
+// - Don't erase the background by default 
+//*/
+//	pBWin->DisableUpdates();
+//	//This code path is used for printing
+//	if (m_pBPicture) {
+//		printf("In printer path code\n");
+//		DrawPicture(m_pBPicture, BPoint(0,0));
+//		pBWin->EnableUpdates();
+//		return;
+//	}
+//
+//	AV_View *pView = pBWin->m_pBeOSFrame->getFrame()->getCurrentView();
+//	if (pView) {		
+//		//The tell AbiWord to draw us ...
+//		UT_Rect r;
+//		r.top = (UT_sint32)updateRect.top;
+//		r.left = (UT_sint32)updateRect.left;
+//		r.width = (UT_sint32)updateRect.Width()+1;
+//		r.height = (UT_sint32)updateRect.Height()+1;
+//		pView->draw(&r);
+//	}
+//	pBWin->EnableUpdates();
+//	pBWin->Sync();
+//#endif
+//}
 
 void be_DocView::WindowActivated(bool activated)
 {
@@ -549,10 +550,10 @@ EV_Toolbar * XAP_BeOSFrameImpl::_newToolbar(XAP_App *app, XAP_Frame *frame,
 					const char *szLanguage)
 {
 
-	printf("_new toolbar\n");	
+	UT_DEBUGMSG(("_new toolbar\n"));
 	return (new EV_BeOSToolbar(static_cast<XAP_BeOSApp *>(app),static_cast<XAP_BeOSFrameImpl *>(frame->getFrameImpl()), 
 							   szLayout, szLanguage));
-	printf("after creaing new toolbar\n");
+	UT_DEBUGMSG(("after creaing new toolbar\n"));
 }
 
 EV_Menu* XAP_BeOSFrameImpl::_getMainMenu()

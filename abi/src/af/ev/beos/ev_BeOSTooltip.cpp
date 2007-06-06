@@ -132,9 +132,8 @@ void TToolTipView::AllAttached()
 	fTip.tool_tip_window = Window();
 
 	// start tool_tip thread
-//knorr!! no threads now	
-//	resume_thread(fThread = spawn_thread((status_t (*)(void *)) ToolTipThread,
-//				"tip_thread", B_DISPLAY_PRIORITY, &fTip));
+	resume_thread(fThread = spawn_thread((status_t (*)(void *)) ToolTipThread,
+		"tip_thread", B_DISPLAY_PRIORITY, &fTip));
 }
 
 //--------------------------------------------------------------------
