@@ -554,14 +554,15 @@ int AP_BeOSApp::main(const char * szAppName, int argc, const char ** argv) {
 	UT_DEBUGMSG(("Compile Date:\t%s\n", XAP_App::s_szBuild_CompileDate));
 	UT_DEBUGMSG(("Compile Time:\t%s\n", XAP_App::s_szBuild_CompileTime));
 	
-	printf("// initialize our application.\n");
+	UT_DEBUGMSG((" initialize our application.\n"));
 	XAP_Args XArgs = XAP_Args(argc,argv);
 	AP_BeOSApp * pMyBeOSApp = new AP_BeOSApp(&XArgs, szAppName);	
 	AP_Args Args = AP_Args(&XArgs, szAppName, pMyBeOSApp);
 
-#ifndef DEBUG
-	UT_DEBUGMSG(("// Setup signal handlers, primarily for segfault\n"));
-	// If we segfaulted before here, we *really* blew it\
+#if 0 //even more, no need for this in alpha-release
+//#ifndef DEBUG
+	UT_DEBUGMSG((" Setup signal handlers, primarily for segfault\n"));
+	// If we segfaulted before here, we *really* blew it
 	struct sigaction sa;
 
 	sa.sa_handler = signalWrapper;
@@ -576,27 +577,27 @@ int AP_BeOSApp::main(const char * szAppName, int argc, const char ** argv) {
 	sigaction(SIGILL, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
 	sigaction(SIGFPE, &sa, NULL);
-	UT_DEBUGMSG(("// TODO: handle SIGABRT\n"));
+	UT_DEBUGMSG((" TODO: handle SIGABRT\n"));
 #endif	
 	Args.parsePoptOpts();
-	UT_DEBUGMSG(("// if the initialize fails, we don't have icons, fonts, etc.\n"));
+	UT_DEBUGMSG((" if the initialize fails, we don't have icons, fonts, etc.\n"));
 	if (!pMyBeOSApp->initialize())
 	{
 		delete pMyBeOSApp;
 		return -1;	// make this something standard?
 	}
 
-	UT_DEBUGMSG(("//Show the splash screen perhaps\n"));
+	UT_DEBUGMSG((" Show the splash screen perhaps\n"));
 //knorr!! to save time :?)
   	_showSplash(&XArgs, szAppName);        
-	UT_DEBUGMSG(("//knorr!!\n"));
+	UT_DEBUGMSG((" knorr!!\n"));
 	if (pMyBeOSApp->openCmdLineFiles(&Args))
 	{
-		UT_DEBUGMSG(("// Turn control over to the runtime (don't return until done)\n"));
+		UT_DEBUGMSG((" Turn control over to the runtime (don't return until done)\n"));
 		pMyBeOSApp->m_BApp.Run();	
 	}
 
-	UT_DEBUGMSG(("// destroy the App.  It should take care of deleting all frames.\n"));
+	UT_DEBUGMSG((" destroy the App.  It should take care of deleting all frames.\n"));
 	pMyBeOSApp->shutdown();
 	sleep(1);
 
@@ -608,7 +609,8 @@ int AP_BeOSApp::main(const char * szAppName, int argc, const char ** argv) {
 void signalWrapper(int sig_num)
 {
 	AP_BeOSApp *pApp = (AP_BeOSApp *) XAP_App::getApp();
-#ifndef DEBUG
+#if 0 //see above
+//#ifndef DEBUG
 	pApp->catchSignals(sig_num);
 #endif
 }
@@ -623,16 +625,17 @@ void AP_BeOSApp::catchSignals(int sig_num)
 	// Reset the signal handler (not that it matters - this is mostly for race conditions)
 	signal(SIGSEGV, signalWrapper);
 
-        s_signal_count = s_signal_count + 1;
-        if(s_signal_count > 1)
-        {
-                UT_DEBUGMSG(("Segfault during filesave - no file saved  \n"));
-                fflush(stdout);
-                abort();
-        }
+	s_signal_count = s_signal_count + 1;
+	if(s_signal_count > 1)
+	{
+		UT_DEBUGMSG(("Segfault during filesave - no file saved  \n"));
+		fflush(stdout);
+		abort();
+	}
 
 
-	UT_DEBUGMSG(("Oh no - we just segfaulted!\n"));
+	printf("Oh no - we just segfaulted!\n");
+//	UT_DEBUGMSG(("Oh no - we just segfaulted!\n"));
 
 	UT_uint32 i = 0;
 	for(;i<m_vecFrames.getItemCount();i++)
@@ -641,9 +644,9 @@ void AP_BeOSApp::catchSignals(int sig_num)
 		UT_ASSERT(curFrame);
 		curFrame->backup();
 	}
-
+	
 	fflush(stdout);
-
+	
 	// Abort and dump core
 	abort();
 }

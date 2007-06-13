@@ -195,8 +195,8 @@ protected:
  									UT_sint32 x2, UT_sint32 y2);
 private:
 	UT_RGBColor				m_curColor;
-	UT_GenericVector<UT_Rect*>     m_vSaveRect;
-	UT_GenericVector<BBitmap *>  m_vSaveRectBuf;
+	UT_GenericVector<UT_Rect*>	m_vSaveRect;
+	UT_GenericVector<BBitmap *>	m_vSaveRectBuf;
 	bool dontflush;
 };
 

@@ -52,7 +52,7 @@ CPPSRCS=		xap_BeOSApp.cpp			\
 			xap_BeOSDlg_DocComparison.cpp
 
 
-CPPSRCS+=		be_GRDrawView.cpp
+#CPPSRCS+=		be_GRDrawView.cpp
 
 TARGETS=		$(OBJS)
 
