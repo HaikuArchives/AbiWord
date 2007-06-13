@@ -13,17 +13,18 @@
 
 #include <Message.h>
 #include <Application.h>
+#include <String.h>
 
 #include "ev_BeOSTooltip.h"
 
-#define kHOR_MARGIN					  4		// hor. gap between frame and tip
-#define kVER_MARGIN					  3		// ver. gap between frame and tip
-#define kTIP_HOR_OFFSET				 10		// tip position right of cursor
-#define kTIP_VER_OFFSET				 16		// tip position below cursor
-#define kSLOP						  4		// mouse slop before tip hides
+#define kHOR_MARGIN				4		// hor. gap between frame and tip
+#define kVER_MARGIN				3		// ver. gap between frame and tip
+#define kTIP_HOR_OFFSET				10		// tip position right of cursor
+#define kTIP_VER_OFFSET				16		// tip position below cursor
+#define kSLOP					4		// mouse slop before tip hides
 
-#define kTOOL_TIP_DELAY_TIME	 500000		// default delay time before tip shows (.5 secs.)
-#define kTOOL_TIP_HOLD_TIME		3000000		// default hold time of time (3 secs.)
+#define kTOOL_TIP_DELAY_TIME	500000		// default delay time before tip shows (.5 secs.)
+#define kTOOL_TIP_HOLD_TIME	3000000		// default hold time of time (3 secs.)
 
 #define kDRAW_WINDOW_FRAME
 
@@ -51,7 +52,8 @@ TToolTip::TToolTip(tool_tip_settings *settings)
 
 void TToolTip::MessageReceived(BMessage *msg)
 {
-	switch (msg->what) {
+	switch (msg->what) 
+	{
 		// forward interesting messages to the view
 		case B_APP_ACTIVATED:
 		case eToolTipStart:
@@ -80,14 +82,15 @@ void TToolTip::SetSettings(tool_tip_settings *settings)
 
 //====================================================================
 
-TToolTipView::TToolTipView(tool_tip_settings *settings)
-			 :BView(BRect(0, 0, 10, 10), "tool_tip", B_FOLLOW_ALL, B_WILL_DRAW)
+TToolTipView::TToolTipView(tool_tip_settings *settings) :
+	BView(BRect(0, 0, 10, 10), "tool_tip_view", B_FOLLOW_ALL, B_WILL_DRAW)
 {
 	// initialize tooltip settings
 	if (settings)
 		// we should probably sanity-check user defined settings (but we won't)
 		fTip.settings = *settings;
-	else {
+	else 
+	{
 		// use defaults if no settings are passed
 		fTip.settings.enabled = true;
 		fTip.settings.one_time_only = false;
@@ -97,8 +100,7 @@ TToolTipView::TToolTipView(tool_tip_settings *settings)
 	}
 
 	// initialize the tip
-	fString = (char *)malloc(1);
-	fString[0] = 0;
+	fString = BString("");
 
 	// initialize the view
 	SetFont(&fTip.settings.font);
@@ -115,8 +117,6 @@ TToolTipView::~TToolTipView()
 	fTip.quit = true;
 	wait_for_thread(fThread, &status);
 
-	// free tip
-	free(fString);
 }
 
 //--------------------------------------------------------------------
@@ -166,8 +166,9 @@ void TToolTipView::Draw(BRect /* where */)
 	MovePenTo(kHOR_MARGIN + 1, kVER_MARGIN + finfo.ascent);
 
 	// truncate string if needed
-	src_strings[0] = fString;
-	tmp_string = (char *)malloc(strlen(fString) + 16);
+	src_strings[0] = (char *)malloc(fString.Length()+1);
+	strcpy(src_strings[0], fString.String());
+	tmp_string = (char *)malloc(fString.Length() + 16);
 	truncated_strings[0] = tmp_string;
 	font.GetTruncatedStrings((const char **)src_strings, 1, B_TRUNCATE_END,
 		Bounds().Width() - (2 * kHOR_MARGIN) + 1, truncated_strings);
@@ -197,9 +198,7 @@ void TToolTipView::MessageReceived(BMessage *msg)
 				msg->FindPoint("start", &fTip.start);
 				msg->FindRect("bounds", &fTip.bounds);
 				msg->FindString("string", &str);
-				free(fString);
-				fString = (char *)malloc(strlen(str) + 1);
-				strcpy(fString, str);
+				fString = BString(str);
 
 				// force window to fit new parameters
 				AdjustWindow();
@@ -238,7 +237,8 @@ void TToolTipView::SetSettings(tool_tip_settings *settings)
 	fTip.settings = *settings;
 
 	// if the font changed, adjust window to fit
-	if (invalidate) {
+	if (invalidate) 
+	{
 		Window()->Lock();
 		SetFont(&fTip.settings.font);
 		AdjustWindow();
@@ -261,7 +261,7 @@ void TToolTipView::AdjustWindow()
 
 	screen.InsetBy(2, 2);	// we want a 2-pixel clearance
 	fTip.settings.font.GetHeight(&finfo);
-	width = fTip.settings.font.StringWidth(fString) + (kHOR_MARGIN * 2);  // string width
+	width = fTip.settings.font.StringWidth(fString.String()) + (kHOR_MARGIN * 2);  // string width
 	height = (finfo.ascent + finfo.descent + finfo.leading) + (kVER_MARGIN * 2);  // string height
 
 	// calculate new position and size of window

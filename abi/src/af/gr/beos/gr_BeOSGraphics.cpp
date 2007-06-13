@@ -27,6 +27,8 @@
 #include <math.h>
 #include "gr_BeOSGraphics.h"
 #include "gr_BeOSImage.h"
+#include "gr_CharWidthsCache.h"
+#include "gr_CharWidths.h"
 #include "be_BackView.h"
 
 #include "xap_BeOSFrameImpl.h"	//For be_DocView 
@@ -67,6 +69,7 @@ utf8_char_len(uchar byte)
 
 GR_BeOSGraphics::GR_BeOSGraphics(BBackView *docview, XAP_App * app) 
 {
+
 	dontflush = false;
 	m_pApp = app;
 	m_pBeOSFont = NULL;
@@ -111,48 +114,12 @@ GR_BeOSGraphics::GR_BeOSGraphics(BBackView *docview, XAP_App * app)
 
 GR_BeOSGraphics::~GR_BeOSGraphics() 
 {
-#if defined(USE_BACKING_BITMAP)
-	if (!m_pShadowBitmap)
-		return;
-	if (m_pShadowBitmap->Lock())
-	{
-		m_pShadowBitmap->RemoveChild(m_pShadowView);
-		m_pShadowBitmap->Unlock();
-	}
-	delete m_pShadowBitmap;
-	delete m_pShadowView;
-#endif
-	UT_DEBUGMSG(("Called GR_BeOSGraphics::~GR_BeOSGraphics()\n"));
-	DELETEP(m_pFontGUI);
 }
 
-void GR_BeOSGraphics::ResizeBitmap(BRect r) {
-#if defined(USE_BACKING_BITMAP)
-	if (m_pShadowBitmap) {
-		if (m_pShadowBitmap->Lock())
-		{
-			m_pShadowBitmap->RemoveChild(m_pShadowView);
-			m_pShadowBitmap->Unlock();
-		}
-		//Don't really need to nuke the View, just resize
-		delete m_pShadowBitmap;	
-		delete m_pShadowView;	
-	}
-	
-	if (!(m_pShadowBitmap = new BBitmap(r, B_RGB32, true, false))) {
-		UT_ASSERT(0);
-		return;
-	}
-	if (!(m_pShadowView = new BView(r, "ShadowView", NULL, NULL))) {
-		UT_ASSERT(0);
-		return; 
-	}
-	if (m_pShadowBitmap->Lock())
-	{
-		m_pShadowBitmap->AddChild(m_pShadowView);
-		m_pShadowBitmap->Unlock();
-	}
-#endif
+void GR_BeOSGraphics::ResizeBitmap(BRect r) 
+{
+	BView * m_pShadowView = m_pFrontView->BackView();
+	m_pShadowView->ResizeTo(r.Width(), r.Height());
 }
 
 
@@ -182,8 +149,7 @@ void GR_BeOSGraphics::drawGlyph(UT_uint32 Char, UT_sint32 xoff, UT_sint32 yoff)
 }
 // Draw this string of characters on the screen in current font
 void GR_BeOSGraphics::drawChars(const UT_UCSChar* pChars, int iCharOffset,
-							    int iLength, UT_sint32 xoff, UT_sint32 yoff,
-								int * pCharWidths)
+	int iLength, UT_sint32 xoff, UT_sint32 yoff, int * pCharWidths)
 {
 	int i;
 	char buffer[2*(iLength+1)];
@@ -220,16 +186,16 @@ void GR_BeOSGraphics::drawChars(const UT_UCSChar* pChars, int iCharOffset,
 		{
 			m_pShadowView->DrawChar(buffer[iCharOffset], BPoint(idx, idy));		
 			//DPRINTF(printf("Drawing Text: %c", buffer[iCharOffset]));			
+//			for(i=iCharOffset+1; i<iLength; i++)
 			for(i=iCharOffset+1; i<iLength; i++)
 			{
-				idx+=_tduX(pCharWidths[i-iCharOffset]);
+				idx+=_tduX(pCharWidths[i-iCharOffset-1]);
 				m_pShadowView->DrawChar(buffer[i], BPoint(idx, idy));
 				//DPRINTF(printf("%c",buffer[i]));
 			}
-			//DPRINTF(printf("\n"));
 		}						  
 		// Restore the old drawing mode.
-	    	m_pShadowView->SetDrawingMode(oldMode);
+		m_pShadowView->SetDrawingMode(oldMode);
 		m_pShadowView->UnlockLooper();
 	}
 }
@@ -447,41 +413,9 @@ UT_uint32 GR_BeOSGraphics::getFontHeight(GR_Font *font)
 
 UT_sint32 GR_BeOSGraphics::measureUnRemappedChar(const UT_UCSChar c)
 {
-	//We need to convert the string from UCS-X to UTF-8 before
-	//we use the BeOS string operations on it.
-	char buffer[10];
-
-	BFont viewFont;
-	float escapementArray[1];
-	
-	char * utf8char;
-	utf8char =  UT_encodeUTF8char(c);
-	strcpy(buffer, utf8char);						
-
-	escapement_delta tempdelta;
-	tempdelta.space=0.0;
-	tempdelta.nonspace=0.0;
-	float fontsize=0.0f;
-
-	BView * m_pShadowView = m_pFrontView->BackView();
-	if (m_pShadowView->LockLooper())
-	{	
-		m_pShadowView->GetFont(&viewFont);
-		viewFont.SetSpacing(B_BITMAP_SPACING);
-//		viewFont.SetSpacing(B_CHAR_SPACING);		
-
-		m_pShadowView->SetFont(&viewFont);
-		
-		//Hope this works on UTF-8 characters buffers
-		viewFont.GetEscapements(buffer,1,&tempdelta,escapementArray);
-		fontsize=viewFont.Size();
-
-		m_pShadowView->UnlockLooper();
-
-		return static_cast<UT_sint32>(escapementArray[0] * fontsize * getResolution() / s_getDeviceResolution());
-	}
-	
-	return 1; // Shouldn't happen.
+	//Just return value from widthcahce converted to logicalunits
+	//if no width, it calls BeOSFont's measure itself
+	return tlu(getGUIFont()->getCharWidthFromCache(c));
 }
 
 void GR_BeOSGraphics::getColor(UT_RGBColor& clr)
@@ -1016,9 +950,25 @@ void GR_BeOSGraphics::setLineProperties ( double inWidth,
 //
 UT_sint32 BeOSFont::measureUnremappedCharForCache(UT_UCSChar cChar) const
 {
-	if(cChar == 0xFEFF || cChar == 0x200b || cChar == UCS_LIGATURE_PLACEHOLDER)
-		return 0;		
-	return cChar;
+	char buffer[10];
+
+	float escapementArray[1];
+	
+	char * utf8char;
+	utf8char =  UT_encodeUTF8char(cChar);
+	strcpy(buffer, utf8char);						
+
+	escapement_delta tempdelta;
+	tempdelta.space=0.0;
+	tempdelta.nonspace=0.0;
+	float fontsize=0.0f;
+	m_pBFont->SetSpacing(B_CHAR_SPACING);		
+				
+	//Hope this works on UTF-8 characters buffers
+	m_pBFont->GetEscapements(buffer,1,&tempdelta,escapementArray);
+	fontsize=m_pBFont->Size();
+	UT_sint32 retval = (UT_sint32)ceil(escapementArray[0] * fontsize);
+	return retval;
 }
 //
 void GR_BeOSGraphics::saveRectangle(UT_Rect & r, UT_uint32 iIndx)

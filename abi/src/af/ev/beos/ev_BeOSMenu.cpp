@@ -46,7 +46,8 @@
  EVENT FILTERING
  The user selected something from the menu ... invoke the right method
 */
-class MenuFilter: public BMessageFilter {
+class MenuFilter: public BMessageFilter 
+{
 	public:
 		MenuFilter(XAP_BeOSApp * pBeOSApp, XAP_Frame * pBeOSFrame, 
 				   EV_Menu *pEVMenu);
@@ -60,14 +61,17 @@ class MenuFilter: public BMessageFilter {
 MenuFilter::MenuFilter(XAP_BeOSApp * pBeOSApp, 
 		       XAP_Frame * pBeOSFrame, EV_Menu *pEVMenu)
           : BMessageFilter(B_PROGRAMMED_DELIVERY, B_LOCAL_SOURCE, 
-                           ABI_BEOS_MENU_EV, NULL) {
+                           ABI_BEOS_MENU_EV, NULL) 
+{
 	m_pBeOSApp = pBeOSApp;
 	m_pBeOSFrame = pBeOSFrame;
 	m_pEVMenu = pEVMenu;
 }					   
 
-filter_result MenuFilter::Filter(BMessage *message, BHandler **target) { 
-	if (message->what != ABI_BEOS_MENU_EV) {
+filter_result MenuFilter::Filter(BMessage *message, BHandler **target) 
+{ 
+	if (message->what != ABI_BEOS_MENU_EV) 
+	{
 		return(B_DISPATCH_MESSAGE);
 	}
 	//XAP_Menu_Id id = 0;
@@ -141,21 +145,25 @@ EV_BeOSMenu::~EV_BeOSMenu(void)
 /*
  Used for manipulating this silly menu thing
 */
-typedef struct _my_stack {
-	BMenu 				*pMenu;
-	struct _my_stack 		*next;
+typedef struct _my_stack 
+{
+	BMenu		*pMenu;
+	struct _my_stack	*next;
 } my_stack_t;
 
-void print_stack(my_stack_t *head) {
+void print_stack(my_stack_t *head) 
+{
 	my_stack_t *tmp;
 	tmp = head;
-	while (tmp) {
+	while (tmp) 
+	{
 		printf("->0x%x \n", tmp->pMenu);
 		tmp = tmp->next;
 	}
 }
 
-my_stack_t *push(my_stack_t *head, BMenu *item) {
+my_stack_t *push(my_stack_t *head, BMenu *item) 
+{
 	my_stack_t *tmp = (my_stack_t *)malloc(sizeof(my_stack_t));
 	if (!tmp) 
 		return(head);
@@ -164,7 +172,8 @@ my_stack_t *push(my_stack_t *head, BMenu *item) {
 	return(tmp);		
 }
 
-my_stack_t *pop(my_stack_t *head) {
+my_stack_t *pop(my_stack_t *head) 
+{
 	my_stack_t *tmpfree, *next;
 
 	tmpfree = head;
@@ -174,7 +183,8 @@ my_stack_t *pop(my_stack_t *head) {
 	return(next);
 }
 
-BMenu *top(my_stack_t *head) {
+BMenu *top(my_stack_t *head) 
+{
 	if (!head)
 		return(NULL);
 	return(head->pMenu);
@@ -187,16 +197,20 @@ BMenu *top(my_stack_t *head) {
  the accelerator key as an int (think unicode!), and
  places the real string to be shown in bufResult.
 */
-int _ev_convert(char * bufResult, const char * szString) {
+int _ev_convert(char * bufResult, const char * szString) 
+{
 	int	 accel = 0;
 	const char *psrc = szString;
 	char *pdst = bufResult;
 	
-	while (*psrc) {
-		if (*psrc != '&') {
+	while (*psrc) 
+	{
+		if (*psrc != '&') 
+		{
 			*(pdst++) = *psrc;
 		}
-		else {
+		else 
+		{
 			accel = *(psrc+1);
 		}
 		psrc++;
