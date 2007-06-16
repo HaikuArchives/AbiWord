@@ -23,6 +23,7 @@
 #include "ut_debugmsg.h"
 #include <stdio.h>
 #include <OS.h>
+#include <String.h>
 
 /*
  TF Note: (early 1999)
@@ -60,6 +61,11 @@ static int32 _Timer_Proc(void *p)
  */
 	while(true)
 	{
+		char buf;
+		thread_id sender;
+		if(has_data(find_thread(NULL)))
+			if(receive_data(&sender, &buf, 0)=='exit') 
+				break;
 		/*
 		 Sleep for the desired amount of time (micro seconds) 
 		 then fire off the event.
@@ -67,8 +73,6 @@ static int32 _Timer_Proc(void *p)
 		snooze(pTimer->m_iMilliseconds * 1000);
 		if(pTimer->m_bStarted)
 			pTimer->fire();
-		else
-			pTimer->cankill = true;
 		/*
 		  We need to manually reset the timer here.  This cross-platform
 		  timer was designed to emulate the semantics of Win32 timers,
@@ -87,6 +91,11 @@ UT_BeOSTimer::UT_BeOSTimer(UT_TimerCallback pCallback, void* pData)
 	m_iMilliseconds = 1000*1000;
 	thread_id idTimer = spawn_thread(_Timer_Proc, "Timer", 
 									 B_NORMAL_PRIORITY, this);
+	BString name("Timer#");
+	name<<idTimer;
+	
+	rename_thread(idTimer, name.String());
+	
 	setIdentifier(idTimer);
 	resume_thread(getIdentifier());	
 }
@@ -94,12 +103,11 @@ UT_BeOSTimer::UT_BeOSTimer(UT_TimerCallback pCallback, void* pData)
 UT_BeOSTimer::~UT_BeOSTimer()
 {
 	thread_id id;
-	UT_DEBUGMSG(("ut_BeOSTimer.cpp:  timer destructor\n"));
+	UT_DEBUGMSG(("ut_BeOSTimer.cpp: timer destructor\n"));
 	if ((id = getIdentifier()) !=0 ) 
 	{
 		stop();
-		while(m_bStarted) snooze(m_iMilliseconds * 1000);
-		kill_thread(id);		
+		send_data(id, 'exit', 0, 0);
 	}
 }
 
@@ -119,7 +127,6 @@ UT_sint32 UT_BeOSTimer::set(UT_uint32 iMilliseconds)
 	//	UT_DEBUGMSG(("Timer set\n"));
 	m_iMilliseconds = iMilliseconds;
 	m_bStarted = true;
-	cankill = false;	
 	UT_DEBUGMSG(("ut_BeOSTimer.cpp: timer #%d set to %d ms\n", getIdentifier(), iMilliseconds));
 	return 0;
 }

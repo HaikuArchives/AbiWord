@@ -42,7 +42,8 @@ TToolTip::TToolTip(tool_tip_settings *settings)
 {
 	// setup the tooltip view
 	fView = new TToolTipView(settings);
-	AddChild(fView);
+	if(fView)
+		AddChild(fView);
 	// start the message loop thread
 	Run();
 }

@@ -119,7 +119,11 @@ GR_BeOSGraphics::~GR_BeOSGraphics()
 void GR_BeOSGraphics::ResizeBitmap(BRect r) 
 {
 	BView * m_pShadowView = m_pFrontView->BackView();
-	m_pShadowView->ResizeTo(r.Width(), r.Height());
+	if(m_pShadowView->LockLooper())
+	{
+		m_pShadowView->ResizeTo(r.Width(), r.Height());
+		m_pShadowView->UnlockLooper();
+	}
 }
 
 
@@ -147,24 +151,32 @@ void GR_BeOSGraphics::drawGlyph(UT_uint32 Char, UT_sint32 xoff, UT_sint32 yoff)
 {
 	UT_ASSERT(UT_TODO);
 }
+
 // Draw this string of characters on the screen in current font
 void GR_BeOSGraphics::drawChars(const UT_UCSChar* pChars, int iCharOffset,
 	int iLength, UT_sint32 xoff, UT_sint32 yoff, int * pCharWidths)
 {
 	int i;
-	char buffer[2*(iLength+1)];
+	BString buffer("");
 	UT_sint32 idy = _tduY(yoff+getFontHeight()*0.75);
 	UT_sint32 idx = _tduX(xoff);
 	
-	buffer[0] = '\0';
-	UT_UCS4_strcpy_to_char(buffer, pChars);
-	BView * m_pShadowView = m_pFrontView->BackView();
+	for(i=0;i<iLength;i++)
+	{
+		char * utf8char;
+		utf8char =  UT_encodeUTF8char(pChars[i]);
+		buffer << *utf8char;				
+	}
+
 	
-	UT_DEBUGMSG(("drawing string %s\n", buffer));
+	UT_DEBUGMSG(("drawing string %s\n", buffer.String()));
+
+	BView * m_pShadowView = m_pFrontView->BackView();	
 	if (m_pShadowView->LockLooper()) 
 	{	
 		// If we use B_OP_OVER, our text will anti-alias correctly against
 		// e.g. the ruler and the status bar.
+		
 		drawing_mode oldMode = m_pShadowView->DrawingMode();
 		m_pShadowView->SetDrawingMode(B_OP_OVER);
 		/*DH:
@@ -179,19 +191,16 @@ void GR_BeOSGraphics::drawChars(const UT_UCSChar* pChars, int iCharOffset,
 		
 		if (!pCharWidths)
 		{
-			m_pShadowView->MovePenTo(idx/*-offset*/,idy/*offset*/);
-			m_pShadowView->DrawString(buffer, iLength);
+			m_pShadowView->MovePenTo(idx, idy);
+			m_pShadowView->DrawString(buffer.String(), iLength);
 		}
 		else
 		{
 			m_pShadowView->DrawChar(buffer[iCharOffset], BPoint(idx, idy));		
-			//DPRINTF(printf("Drawing Text: %c", buffer[iCharOffset]));			
-//			for(i=iCharOffset+1; i<iLength; i++)
 			for(i=iCharOffset+1; i<iLength; i++)
 			{
 				idx+=_tduX(pCharWidths[i-iCharOffset-1]);
-				m_pShadowView->DrawChar(buffer[i], BPoint(idx, idy));
-				//DPRINTF(printf("%c",buffer[i]));
+				m_pShadowView->DrawChar(buffer.ByteAt(i-iCharOffset), BPoint(idx, idy));
 			}
 		}						  
 		// Restore the old drawing mode.
@@ -331,7 +340,6 @@ void GR_BeOSGraphics::setFont(GR_Font* pFont)
 {
 	BeOSFont *tmpFont;
 	
-	//DPRINTF(printf("GR: Set Font\n"));
 	tmpFont = static_cast<BeOSFont*> (pFont);
 	UT_ASSERT(tmpFont);
 	
@@ -345,7 +353,6 @@ void GR_BeOSGraphics::setFont(GR_Font* pFont)
 			m_pShadowView->SetFont(m_pBeOSFont->get_font());
 		else
 			UT_DEBUGMSG(("HEY! NO FONT INFORMATION AVAILABLE!\n"));
-
 		m_pShadowView->UnlockLooper();
 	}
 }
@@ -413,9 +420,12 @@ UT_uint32 GR_BeOSGraphics::getFontHeight(GR_Font *font)
 
 UT_sint32 GR_BeOSGraphics::measureUnRemappedChar(const UT_UCSChar c)
 {
-	//Just return value from widthcahce converted to logicalunits
+	//Just return value from widthcahce converted to logical units
 	//if no width, it calls BeOSFont's measure itself
-	return tlu(getGUIFont()->getCharWidthFromCache(c));
+	BFont aFont;
+	m_pFrontView->BackView()->GetFont(&aFont);
+	float fontsize = aFont.Size();
+	return tlu(fontsize*(getGUIFont()->getCharWidthFromCache(c)/100.));
 }
 
 void GR_BeOSGraphics::getColor(UT_RGBColor& clr)
@@ -533,8 +543,8 @@ void GR_BeOSGraphics::fillRect(const UT_RGBColor& c, UT_sint32 x, UT_sint32 y,
 		UT_sint32 idy = _tduY(y);
 		UT_sint32 idw = _tduX(w);
 		UT_sint32 idh = _tduY(h);
-		DPRINTF(printf("GR: Flll Rect!! color (r:%i,g:%i,b:%i)\n", c.m_red, c.m_grn, c.m_blu));
-		DPRINTF(printf("GR: Flll Rect!! rect (%i,%i,%i,%i,%i)\n", idx, idy, idx+idw-1, idy+idh-1));	
+//		UT_DEBUGMSG(("GR: Flll Rect!! color (r:%i,g:%i,b:%i)\n", c.m_red, c.m_grn, c.m_blu));
+//		UT_DEBUGMSG(("GR: Flll Rect!! rect (%i,%i,%i,%i,%i)\n", idx, idy, idx+idw-1, idy+idh-1));	
 		BRect r(idx, idy, idx+idw-1, idy+idh-1);
 		m_pShadowView->FillRect(r);
 		m_pShadowView->SetHighColor(old_colour);
@@ -961,13 +971,10 @@ UT_sint32 BeOSFont::measureUnremappedCharForCache(UT_UCSChar cChar) const
 	escapement_delta tempdelta;
 	tempdelta.space=0.0;
 	tempdelta.nonspace=0.0;
-	float fontsize=0.0f;
 	m_pBFont->SetSpacing(B_CHAR_SPACING);		
-				
-	//Hope this works on UTF-8 characters buffers
+
 	m_pBFont->GetEscapements(buffer,1,&tempdelta,escapementArray);
-	fontsize=m_pBFont->Size();
-	UT_sint32 retval = (UT_sint32)ceil(escapementArray[0] * fontsize);
+	UT_sint32 retval = (UT_sint32)ceil(100.*escapementArray[0]);
 	return retval;
 }
 //
