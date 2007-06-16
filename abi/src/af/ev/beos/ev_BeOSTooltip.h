@@ -12,6 +12,7 @@
 #include <View.h>
 #include <Window.h>
 #include <Font.h>
+#include <String.h>
 
 enum	TOOL_TIP_MESSAGES		{eToolTipStart = 'ttGo',
 					 	 eToolTipStop = 'ttSp'};
@@ -46,7 +47,6 @@ struct tool_tip
 	tool_tip_settings		settings;
 };
 
-class BString;
 //====================================================================
 
 class TToolTip : public BWindow 

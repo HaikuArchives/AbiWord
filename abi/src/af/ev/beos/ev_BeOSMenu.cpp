@@ -366,7 +366,7 @@ bool EV_BeOSMenu::synthesize()
 
 		// get the name for the menu item
 		const char * szLabelName = NULL;
-                const char * szMnemonicName = NULL;
+		const char * szMnemonicName = NULL;
 
 		switch (pLayoutItem->getMenuLayoutFlags())
 		{
@@ -388,21 +388,23 @@ bool EV_BeOSMenu::synthesize()
 			// have no children
 			else 
 			{
-				pMenuItem = new BMenuItem(NULL, NULL, 0, 0);
-				pMenu->AddItem(pMenuItem);
+				//nothing
+				//pMenuItem = new BMenuItem("", new BMessage(), 0, 0);
+				//pMenu->AddItem(pMenuItem);
 			}			
 			break;
 		}
 		case EV_MLF_BeginSubMenu: {
 			const char **data= _ev_GetLabelName(m_pBeOSApp, m_pFrame, pAction, pLabel);
 			//char ** data = _ev_GetLabelName(m_pBeOSApp, m_pBeOSFrame, pAction, pLabel);
-            szLabelName = data[0];
-            szMnemonicName = data[1];           
+			szLabelName = data[0];
+			szMnemonicName = data[1];           
 			xxx_UT_DEBUGMSG(("START SUB MENU: L:[%s] MN:[%s] \n", 
 				(szLabelName) ? szLabelName : "NULL", 
 				(szMnemonicName) ? szMnemonicName : "NULL")); 
 
-			if (szLabelName && *szLabelName) {
+			if (szLabelName && *szLabelName) 
+			{
 				// convert label into underscored version
 				char buf[1024];
 				

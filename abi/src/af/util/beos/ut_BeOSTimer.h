@@ -35,7 +35,6 @@ public:
 	virtual void start(void);
 	UT_sint32 m_iMilliseconds;
 	bool m_bStarted;
-	bool cankill;
 };
 
 #endif /* UT_BEOSTIMER_H */
