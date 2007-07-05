@@ -76,10 +76,11 @@ GR_BeOSGraphics::GR_BeOSGraphics(BBackView *docview, XAP_App * app)
 	m_pFontGUI = NULL;
 	m_pPrintSettings = NULL;
 	m_pPrintJob = NULL;
-	m_pFrontView = docview;
  	m_bPrint = FALSE;  
-	if (!m_pFrontView)
-		return;
+	if (!docview)
+		docview = new BBackView(NULL, BRect(0,0,1,1), "", B_FOLLOW_ALL, 0);
+
+	m_pFrontView = docview;
 
 	m_cs = GR_Graphics::GR_COLORSPACE_COLOR;
 	
@@ -176,9 +177,11 @@ void GR_BeOSGraphics::drawChars(const UT_UCSChar* pChars, int iCharOffset,
 	{	
 		// If we use B_OP_OVER, our text will anti-alias correctly against
 		// e.g. the ruler and the status bar.
+		// scale to Zoom div 100
 		
 		drawing_mode oldMode = m_pShadowView->DrawingMode();
 		m_pShadowView->SetDrawingMode(B_OP_OVER);
+//		m_pShadowView->SetScale(getZoomPercentage()/100.);
 		/*DH:
 		 * I just had a brainstorm on how to fix the jitter problem.
 		 * Let's measure the string, and draw using the charwidths Abi thinks
@@ -203,7 +206,8 @@ void GR_BeOSGraphics::drawChars(const UT_UCSChar* pChars, int iCharOffset,
 				m_pShadowView->DrawChar(buffer.ByteAt(i-iCharOffset), BPoint(idx, idy));
 			}
 		}						  
-		// Restore the old drawing mode.
+		// Restore the old drawing mode & scale
+//		m_pShadowView->SetScale(1.0);
 		m_pShadowView->SetDrawingMode(oldMode);
 		m_pShadowView->UnlockLooper();
 	}
@@ -948,7 +952,7 @@ void GR_BeOSGraphics::setLineProperties ( double inWidth,
 										  GR_Graphics::LineStyle inLineStyle )
 {
 	DPRINTF(printf("Set line properties\n"));
-	BView * m_pShadowView = m_pFrontView->BackView();	
+	BView * m_pShadowView = m_pFrontView->BackView();
 	if (m_pShadowView->LockLooper())
 	{
 		m_pShadowView->SetPenSize(tduD(inWidth));

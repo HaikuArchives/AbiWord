@@ -61,16 +61,16 @@ static int32 _Timer_Proc(void *p)
  */
 	while(true)
 	{
-		char buf;
-		thread_id sender;
-		if(has_data(find_thread(NULL)))
-			if(receive_data(&sender, &buf, 0)=='exit') 
-				break;
 		/*
 		 Sleep for the desired amount of time (micro seconds) 
 		 then fire off the event.
 		*/
 		snooze(pTimer->m_iMilliseconds * 1000);
+		char buf;
+		thread_id sender;
+		if(has_data(find_thread(NULL)))
+			if(receive_data(&sender, &buf, 0)=='exit') 
+				break;		
 		if(pTimer->m_bStarted)
 			pTimer->fire();
 		/*
