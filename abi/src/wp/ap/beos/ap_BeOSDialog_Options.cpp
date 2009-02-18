@@ -506,6 +506,9 @@ void AP_BeOSDialog_Options::_controlEnable( tControl id, bool value )
 		FIND_CONTROL(control,"SmartQuotes")
 		control->SetValue(value);
 		break;
+	default:
+#warning handle other enumeration values
+		break;	
 	}
 	
 	newwin->Unlock();

@@ -22,6 +22,7 @@
 #define AP_BEOSDIALOG_FORMATFOOTNOTES_H
 
 #include "ap_Dialog_Stub.h"
+#include "ap_Dialog_FormatFootnotes.h"
 
 /*****************************************************************/
 

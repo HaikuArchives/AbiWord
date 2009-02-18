@@ -35,7 +35,7 @@ man1dir = ${prefix}/man/man1
 top_builddir = .
 
 
-INSTALL = /bin/ginstall -c
+INSTALL = /bin/install -c
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_DATA = ${INSTALL} -m 644
 mkinstalldirs = $(SHELL) $(top_srcdir)/conftools/mkinstalldirs

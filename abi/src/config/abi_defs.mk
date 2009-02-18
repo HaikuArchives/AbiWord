@@ -432,6 +432,10 @@ ifeq ($(OS_NAME), BeOS)
 include $(ABI_ROOT)/src/config/platforms/beos.mk
 endif
 
+ifeq ($(OS_NAME), Haiku)
+include $(ABI_ROOT)/src/config/platforms/beos.mk
+endif
+
 ifeq ($(OS_NAME), procnto)
 include $(ABI_ROOT)/src/config/platforms/nto.mk
 endif

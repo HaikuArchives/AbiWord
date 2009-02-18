@@ -14,7 +14,7 @@ if [ ${?} -ne "0" ]; then
   exit 1
 fi
 
-prefix=/usr/local
+prefix=/boot/home/config/
 exec_prefix=
 datadir=
 t_dir=.
@@ -54,7 +54,7 @@ while test $# -gt 0; do
       cat << EOF
 Usage: $wv_script_name [OPTIONS] <input-file> <output-file>
 Options:
-      --prefix=<DIR>        Set prefix (default is /usr/local)
+      --prefix=<DIR>        Set prefix (default is /boot/home/config/)
       --exec-prefix=<DIR>   Set exec_prefix (default is ${prefix})
       --datadir=<DIR>       Set datadir (default is ${prefix}/share)
       --targetdir=<DIR>     Target directory (target is <DIR>/<output-file>)

@@ -10,7 +10,7 @@ srcdir=.
 
 HAVE_GLIB = 1
 
-CFLAGS = -I.. -I$(srcdir) -I$(srcdir)/..  -g -O2 -DHAVE_CONFIG_H -I/boot/home/config/include/glib-1.2 -I/boot/home/config/lib/glib/include
+CFLAGS = -I.. -I$(srcdir) -I$(srcdir)/..  -g -O2 -DHAVE_CONFIG_H  -I/boot/gnu/include/glib-2.0 -I/boot/gnu/lib/glib-2.0/include  
 ifneq ($(HAVE_GLIB), 1)
 CFLAGS += -I$(srcdir)/../glib-wv
 endif

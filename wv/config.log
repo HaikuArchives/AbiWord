@@ -31,59 +31,15 @@ configure:1639: checking for pngconf.h
 configure:1667: checking for png_free in -lpng
 configure:2218: checking for pkg-config
 configure:2303: checking for glib-2.0 >= 2.0
-configure:2352: checking for glib12-config
-configure:2426: checking for glib-config
+configure:2310: checking GLIB_CFLAGS
+configure:2315: checking GLIB_LIBS
 configure:2534: checking for gnome-config
 configure:2892: checking for iconv
-configure:2920: gcc -o conftest -g -O2   conftest.c  1>&5
-/tmp/ccYVIxEt.o(.text+0x14): In function `main':
-/files/abiword-2.2.8/wv/configure:2914: undefined reference to `iconv'
-collect2: ld returned 1 exit status
-configure: failed program was:
-#line 2897 "configure"
-#include "confdefs.h"
-/* System header to define __stub macros and hopefully few prototypes,
-    which can conflict with char iconv(); below.  */
-#include <assert.h>
-/* Override any gcc2 internal prototype to avoid an error.  */
-/* We use char because int might match the return type of a gcc2
-    builtin and then its argument prototype would still apply.  */
-char iconv();
-
-int main() {
-
-/* The GNU C library defines this for functions which it implements
-    to always fail with ENOSYS.  Some functions are actually named
-    something starting with __ and the normal name is an alias.  */
-#if defined (__stub_iconv) || defined (__stub___iconv)
-choke me
-#else
-iconv();
-#endif
-
-; return 0; }
 configure:3036: checking for iconv.h
 configure:3064: checking for iconv_open in -liconv
 configure:3104: checking for libiconv_open in -liconv
 configure:3172: checking need for const in iconv
 configure:3190: g++ -c   conftest.C 1>&5
-/files/abiword-2.2.8/wv/configure:3176: iconv.h: No such file or directory
-configure: failed program was:
-#line 3174 "configure"
-#include "confdefs.h"
-
-#include <iconv.h>
-
-int main() {
-
-	iconv_t handle;
-	size_t ib;
-	size_t ob;
-	const char* in = 0;
-	char* out = 0;
-	iconv (handle,const_cast<char **>(&in),&ib,&out,&ob);
-
-; return 0; }
 configure:3224: checking size of char
 configure:3264: checking size of short
 configure:3304: checking size of int

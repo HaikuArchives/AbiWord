@@ -136,7 +136,7 @@ extern int UT_Win32ThrowAssert(const char * pCondition, const char * pFile, int 
 				 0)))
 #	endif
 
-#elif defined(__BEOS__)
+#elif defined(__BEOS__) || defined(__HAIKU__)
 	// A BeOS variant.
 #	ifdef NDEBUG
 		// When NDEBUG is defined, assert() does nothing.

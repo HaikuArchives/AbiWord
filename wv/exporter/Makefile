@@ -19,7 +19,7 @@ endif
 
 DEFS = -DHAVE_CONFIG_H
 
-CPPFLAGS =  -I/boot/home/config/include/glib-1.2 -I/boot/home/config/lib/glib/include
+CPPFLAGS =   -I/boot/gnu/include/glib-2.0 -I/boot/gnu/lib/glib-2.0/include  
 
 ifeq ($(EPATH_DYLIB),1)
 WVPICFLAGS = -fno-common -DPIC

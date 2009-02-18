@@ -50,13 +50,13 @@ XAP_Dialog *	AP_BeOSDialog_FormatFootnotes::static_constructor(XAP_DialogFactory
 }
 
 
-AP_BeOSDialog_FormatFootnotes::AP_BeOSDialog_FormatFootnotesr(XAP_DialogFactory * pDlgFactory, XAP_Dialog_Id id)
+AP_BeOSDialog_FormatFootnotes::AP_BeOSDialog_FormatFootnotes(XAP_DialogFactory * pDlgFactory, XAP_Dialog_Id id)
        :AP_Dialog_FormatFootnotes(pDlgFactory,id)
  {
  }
 
 
-AP_BeOSDialog_FormatFootnotes::~AP_BeOSDialog_FormatFootnotesr(void)
+AP_BeOSDialog_FormatFootnotes::~AP_BeOSDialog_FormatFootnotes(void)
 {
 }
 
