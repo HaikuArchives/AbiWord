@@ -4212,6 +4212,10 @@ case "$OS_NAME" in
 		PLATFORM="beos"
 		ABISUITE_HOME="\$(pkgdatadir)"
 		;;
+	Haiku)
+		PLATFORM="beos"
+		ABISUITE_HOME="\$(pkgdatadir)"
+		;;		
 	*)
 	       PLATFORM="unix"
 		ABISUITE_HOME="\$(pkgdatadir)"

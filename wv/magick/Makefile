@@ -6,7 +6,7 @@ SHELL=/bin/sh
 
 
 
-prefix=/usr/local
+prefix=/boot/home/config/
 exec_prefix=${prefix}
 srcdir=.
 bindir=${exec_prefix}/bin

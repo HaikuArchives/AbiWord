@@ -156,7 +156,7 @@ void XAP_BeOSApp::_setAbiSuiteLibDir(void) {
 
 	// if not, see if ABISUITE_HOME was set in the environment
 
-	const char * sz = getenv("ABISUITE_HOME");
+	const char * sz = ABISUITE_HOME;
 	if (sz && *sz)
 	{
 		strcpy(buf,sz);

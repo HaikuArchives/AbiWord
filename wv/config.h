@@ -85,7 +85,7 @@
 /* #undef HasPNG */
 
 /* Define this if the second argument of iconv requires a const */
-#define ICONV_REQUIRES_CONST 1
+/* #undef ICONV_REQUIRES_CONST */
 
 /* Define if sizeof({char,short,int}) != {1,2,4} */
 #define MATCHED_TYPE 1

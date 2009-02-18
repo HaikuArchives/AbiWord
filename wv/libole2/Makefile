@@ -7,7 +7,7 @@ SHELL=/bin/sh
 
 
 
-prefix=/usr/local
+prefix=/boot/home/config/
 srcdir=.
 datadir=${prefix}/share
 
@@ -20,7 +20,7 @@ else
 WVPICFLAGS = 
 endif
 
-CFLAGS = -I.. -I$(srcdir) -I$(srcdir)/..  -g -O2 -DHAVE_CONFIG_H -I/boot/home/config/include/glib-1.2 -I/boot/home/config/lib/glib/include $(WVPICFLAGS)
+CFLAGS = -I.. -I$(srcdir) -I$(srcdir)/..  -g -O2 -DHAVE_CONFIG_H  -I/boot/gnu/include/glib-2.0 -I/boot/gnu/lib/glib-2.0/include   $(WVPICFLAGS)
 ifneq ($(HAVE_GLIB), 1)
 CFLAGS += -I$(srcdir)/../glib-wv
 endif

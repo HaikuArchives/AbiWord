@@ -44,13 +44,13 @@ available_tags=" CXX"
 
 # ### BEGIN LIBTOOL CONFIG
 
-# Libtool was configured on host samsung:
+# Libtool was configured on host unknown:
 
 # Shell to use when invoking shell scripts.
 SHELL="/bin/sh"
 
 # Whether or not to build shared libraries.
-build_libtool_libs=yes
+build_libtool_libs=no
 
 # Whether or not to build static libraries.
 build_old_libs=yes
@@ -66,13 +66,13 @@ fast_install=yes
 
 # The host system.
 host_alias=
-host=i586-pc-beos
-host_os=beos
+host=i386-pc-none
+host_os=none
 
 # The build system.
-build_alias=
-build=i586-pc-beos
-build_os=beos
+build_alias=i386
+build=i386-pc-none
+build_os=none
 
 # An echo program that does not interpret backslashes.
 echo="echo"
@@ -97,13 +97,13 @@ with_gcc=yes
 EGREP="grep -E"
 
 # The linker used to build libraries.
-LD="/boot/develop/bin/ld"
+LD="/boot/develop/tools/gnupro/i586-pc-haiku/bin/ld"
 
 # Whether we need hard or soft links.
 LN_S="ln -s"
 
 # A BSD-compatible nm program.
-NM="/boot/develop/bin/nm -B"
+NM="/boot/develop/tools/gnupro/bin/nm -B"
 
 # A symbol stripping program
 STRIP="strip"
@@ -143,11 +143,11 @@ shrext_cmds='.so'
 exeext=""
 
 # Additional compiler flags for building library objects.
-pic_flag=" -DPIC"
+pic_flag=" -fPIC -DPIC"
 pic_mode=default
 
 # What is the maximum length of a command?
-max_cmd_len=262144
+max_cmd_len=32768
 
 # Does compiler simultaneously support -c and -o options?
 compiler_c_o="yes"
@@ -193,7 +193,7 @@ libname_spec="lib\$name"
 
 # List of archive names.  First name is the real one, the rest are links.
 # The last name is the one that the linker finds with -lNAME.
-library_names_spec="\${libname}\${shared_ext}"
+library_names_spec=""
 
 # The coded name of the library, if different from the real name.
 soname_spec=""
@@ -211,8 +211,8 @@ old_archive_from_new_cmds=""
 old_archive_from_expsyms_cmds=""
 
 # Commands used to build and install a shared archive.
-archive_cmds="\$CC -nostart \$libobjs \$deplibs \$compiler_flags \${wl}-soname \$wl\$soname -o \$lib"
-archive_expsym_cmds=""
+archive_cmds="\$CC -shared \$libobjs \$deplibs \$compiler_flags \${wl}-soname \$wl\$soname -o \$lib"
+archive_expsym_cmds="\$CC -shared \$libobjs \$deplibs \$compiler_flags \${wl}-soname \$wl\$soname \${wl}-retain-symbols-file \$wl\$export_symbols -o \$lib"
 postinstall_cmds=""
 postuninstall_cmds=""
 
@@ -245,13 +245,13 @@ postdeps=""
 compiler_lib_search_path=""
 
 # Method to check whether dependent libraries are shared objects.
-deplibs_check_method="pass_all"
+deplibs_check_method="unknown"
 
 # Command to use when deplibs_check_method == file_magic.
 file_magic_cmd="\$MAGIC_CMD"
 
 # Flag that allows shared libraries with undefined symbols to be built.
-allow_undefined_flag="unsupported"
+allow_undefined_flag=""
 
 # Flag that forces no undefined symbols.
 no_undefined_flag=""
@@ -275,7 +275,7 @@ global_symbol_to_c_name_address="sed -n -e 's/^: \\([^ ]*\\) \$/  {\\\"\\1\\\", 
 runpath_var=LD_RUN_PATH
 
 # This is the shared library path variable.
-shlibpath_var=LIBRARY_PATH
+shlibpath_var=
 
 # Is shlibpath searched before the hard-coded library search path?
 shlibpath_overrides_runpath=unknown
@@ -316,13 +316,13 @@ hardcode_automatic=no
 
 # Variables whose values should be saved in libtool wrapper scripts and
 # restored at relink time.
-variables_saved_for_relink="PATH LIBRARY_PATH LD_RUN_PATH GCC_EXEC_PREFIX COMPILER_PATH LIBRARY_PATH"
+variables_saved_for_relink="PATH  LD_RUN_PATH GCC_EXEC_PREFIX COMPILER_PATH LIBRARY_PATH"
 
 # Whether libtool must link a program against all its dependency libraries.
 link_all_deplibs=unknown
 
 # Compile-time system search path for libraries
-sys_lib_search_path_spec=" /boot/develop/bin/../lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/ /boot/develop/bin/../lib/gcc-lib/ /boot/develop/lib/x86/i586-pc-beos5/2.9-beos-000224/ /boot/develop/lib/x86/ /boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/ /usr/lib/gcc/i586-pc-beos5/2.9-beos-000224/ /boot/develop/bin/../lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../../i586-pc-beos5/lib/i586-pc-beos5/2.9-beos-000224/ /boot/develop/bin/../lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../../i586-pc-beos5/lib/ /boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../../i586-pc-beos5/lib/i586-pc-beos5/2.9-beos-000224/ /boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../../i586-pc-beos5/lib/ /usr/ccs/bin/i586-pc-beos5/2.9-beos-000224/ /usr/ccs/bin/ /usr/ccs/lib/i586-pc-beos5/2.9-beos-000224/ /usr/ccs/lib/ /boot/develop/bin/../lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../i586-pc-beos5/2.9-beos-000224/ /boot/develop/bin/../lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../ /boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../i586-pc-beos5/2.9-beos-000224/ /boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../ /lib/i586-pc-beos5/2.9-beos-000224/ /lib/ /usr/lib/i586-pc-beos5/2.9-beos-000224/ /usr/lib/"
+sys_lib_search_path_spec=" /boot/common/lib/i586-pc-haiku/2.95.3-haiku-081024/ /boot/common/lib/ /boot/develop/lib/x86/i586-pc-haiku/2.95.3-haiku-081024/ /boot/develop/lib/x86/ /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-haiku/2.95.3-haiku-081024/ /boot/develop/tools/gnupro/i586-pc-haiku/lib/i586-pc-haiku/2.95.3-haiku-081024/ /boot/develop/tools/gnupro/i586-pc-haiku/lib/ /boot/develop/tools/gnupro/lib/i586-pc-haiku/2.95.3-haiku-081024/ /boot/develop/tools/gnupro/lib/"
 
 # Run-time system search path for libraries
 sys_lib_dlsearch_path_spec="/lib /usr/lib"
@@ -7212,13 +7212,13 @@ disable_libs=static
 # End:
 # ### BEGIN LIBTOOL TAG CONFIG: CXX
 
-# Libtool was configured on host samsung:
+# Libtool was configured on host unknown:
 
 # Shell to use when invoking shell scripts.
 SHELL="/bin/sh"
 
 # Whether or not to build shared libraries.
-build_libtool_libs=yes
+build_libtool_libs=no
 
 # Whether or not to build static libraries.
 build_old_libs=yes
@@ -7230,17 +7230,17 @@ build_libtool_need_lc=no
 allow_libtool_libs_with_static_runtimes=no
 
 # Whether or not to optimize for fast installation.
-fast_install=yes
+fast_install=needless
 
 # The host system.
 host_alias=
-host=i586-pc-beos
-host_os=beos
+host=i386-pc-none
+host_os=none
 
 # The build system.
-build_alias=
-build=i586-pc-beos
-build_os=beos
+build_alias=i386
+build=i386-pc-none
+build_os=none
 
 # An echo program that does not interpret backslashes.
 echo="echo"
@@ -7265,13 +7265,13 @@ with_gcc=yes
 EGREP="grep -E"
 
 # The linker used to build libraries.
-LD="/boot/develop/bin/ld"
+LD="/boot/develop/tools/gnupro/i586-pc-haiku/bin/ld"
 
 # Whether we need hard or soft links.
 LN_S="ln -s"
 
 # A BSD-compatible nm program.
-NM="/boot/develop/bin/nm -B"
+NM="/boot/develop/tools/gnupro/bin/nm -B"
 
 # A symbol stripping program
 STRIP="strip"
@@ -7311,11 +7311,11 @@ shrext_cmds='.so'
 exeext=""
 
 # Additional compiler flags for building library objects.
-pic_flag=" -DPIC"
+pic_flag=" -fPIC -DPIC"
 pic_mode=default
 
 # What is the maximum length of a command?
-max_cmd_len=262144
+max_cmd_len=32768
 
 # Does compiler simultaneously support -c and -o options?
 compiler_c_o="yes"
@@ -7361,7 +7361,7 @@ libname_spec="lib\$name"
 
 # List of archive names.  First name is the real one, the rest are links.
 # The last name is the one that the linker finds with -lNAME.
-library_names_spec="\${libname}\${shared_ext}"
+library_names_spec=""
 
 # The coded name of the library, if different from the real name.
 soname_spec=""
@@ -7379,7 +7379,7 @@ old_archive_from_new_cmds=""
 old_archive_from_expsyms_cmds=""
 
 # Commands used to build and install a shared archive.
-archive_cmds="\$CC -nostart \$libobjs \$deplibs \$compiler_flags \${wl}-soname \$wl\$soname -o \$lib"
+archive_cmds="\$CC -shared -nostdlib \$predep_objects \$libobjs \$deplibs \$postdep_objects \$compiler_flags \${wl}-soname \$wl\$soname -o \$lib"
 archive_expsym_cmds="\$CC -shared -nostdlib \$predep_objects \$libobjs \$deplibs \$postdep_objects \$compiler_flags \${wl}-soname \$wl\$soname \${wl}-retain-symbols-file \$wl\$export_symbols -o \$lib"
 postinstall_cmds=""
 postuninstall_cmds=""
@@ -7394,11 +7394,11 @@ striplib="strip --strip-unneeded"
 
 # Dependencies to place before the objects being linked to create a
 # shared library.
-predep_objects="/boot/develop/lib/x86/crti.o /boot/develop/lib/x86/crtbegin.o /boot/develop/lib/x86/start_dyn.o /boot/develop/lib/x86/init_term_dyn.o"
+predep_objects="/boot/develop/lib/x86/crti.o /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-haiku/2.95.3-haiku-081024/crtbegin.o /boot/develop/lib/x86/init_term_dyn.o"
 
 # Dependencies to place after the objects being linked to create a
 # shared library.
-postdep_objects="/boot/develop/lib/x86/crtend.o /boot/develop/lib/x86/crtn.o"
+postdep_objects="/boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-haiku/2.95.3-haiku-081024/crtend.o /boot/develop/lib/x86/crtn.o"
 
 # Dependencies to place before the objects being linked to create a
 # shared library.
@@ -7410,16 +7410,16 @@ postdeps="-lstdc++.r4 -lroot"
 
 # The library search path used internally by the compiler when linking
 # a shared library.
-compiler_lib_search_path="-L/boot/develop/lib/x86 -L/boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224 -L/boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../../i586-pc-beos5/lib -L/boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../.."
+compiler_lib_search_path="-L/boot/common/lib -L/boot/develop/lib/x86 -L/boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-haiku/2.95.3-haiku-081024 -L/boot/develop/tools/gnupro/i586-pc-haiku/lib -L/boot/develop/tools/gnupro/lib"
 
 # Method to check whether dependent libraries are shared objects.
-deplibs_check_method="pass_all"
+deplibs_check_method="unknown"
 
 # Command to use when deplibs_check_method == file_magic.
 file_magic_cmd="\$MAGIC_CMD"
 
 # Flag that allows shared libraries with undefined symbols to be built.
-allow_undefined_flag="unsupported"
+allow_undefined_flag=""
 
 # Flag that forces no undefined symbols.
 no_undefined_flag=""
@@ -7443,7 +7443,7 @@ global_symbol_to_c_name_address="sed -n -e 's/^: \\([^ ]*\\) \$/  {\\\"\\1\\\", 
 runpath_var=LD_RUN_PATH
 
 # This is the shared library path variable.
-shlibpath_var=LIBRARY_PATH
+shlibpath_var=
 
 # Is shlibpath searched before the hard-coded library search path?
 shlibpath_overrides_runpath=unknown
@@ -7484,13 +7484,13 @@ hardcode_automatic=no
 
 # Variables whose values should be saved in libtool wrapper scripts and
 # restored at relink time.
-variables_saved_for_relink="PATH LIBRARY_PATH LD_RUN_PATH GCC_EXEC_PREFIX COMPILER_PATH LIBRARY_PATH"
+variables_saved_for_relink="PATH  LD_RUN_PATH GCC_EXEC_PREFIX COMPILER_PATH LIBRARY_PATH"
 
 # Whether libtool must link a program against all its dependency libraries.
 link_all_deplibs=unknown
 
 # Compile-time system search path for libraries
-sys_lib_search_path_spec=" /boot/develop/bin/../lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/ /boot/develop/bin/../lib/gcc-lib/ /boot/develop/lib/x86/i586-pc-beos5/2.9-beos-000224/ /boot/develop/lib/x86/ /boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/ /usr/lib/gcc/i586-pc-beos5/2.9-beos-000224/ /boot/develop/bin/../lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../../i586-pc-beos5/lib/i586-pc-beos5/2.9-beos-000224/ /boot/develop/bin/../lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../../i586-pc-beos5/lib/ /boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../../i586-pc-beos5/lib/i586-pc-beos5/2.9-beos-000224/ /boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../../i586-pc-beos5/lib/ /usr/ccs/bin/i586-pc-beos5/2.9-beos-000224/ /usr/ccs/bin/ /usr/ccs/lib/i586-pc-beos5/2.9-beos-000224/ /usr/ccs/lib/ /boot/develop/bin/../lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../i586-pc-beos5/2.9-beos-000224/ /boot/develop/bin/../lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../ /boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../i586-pc-beos5/2.9-beos-000224/ /boot/develop/tools/sdk/release/H-i586-pc-beos5/T-i586-pc-beos5/lib/gcc-lib/i586-pc-beos5/2.9-beos-000224/../../../ /lib/i586-pc-beos5/2.9-beos-000224/ /lib/ /usr/lib/i586-pc-beos5/2.9-beos-000224/ /usr/lib/"
+sys_lib_search_path_spec=" /boot/common/lib/i586-pc-haiku/2.95.3-haiku-081024/ /boot/common/lib/ /boot/develop/lib/x86/i586-pc-haiku/2.95.3-haiku-081024/ /boot/develop/lib/x86/ /boot/develop/tools/gnupro/lib/gcc-lib/i586-pc-haiku/2.95.3-haiku-081024/ /boot/develop/tools/gnupro/i586-pc-haiku/lib/i586-pc-haiku/2.95.3-haiku-081024/ /boot/develop/tools/gnupro/i586-pc-haiku/lib/ /boot/develop/tools/gnupro/lib/i586-pc-haiku/2.95.3-haiku-081024/ /boot/develop/tools/gnupro/lib/"
 
 # Run-time system search path for libraries
 sys_lib_dlsearch_path_spec="/lib /usr/lib"

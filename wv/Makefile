@@ -5,10 +5,10 @@ EXEEXT =
 OBJEXT = o
 LDFLAGS = 
 
-LIBS =   -lz  -liconv  -L/boot/home/config/lib -lglib -lm
+LIBS =   -lz  -liconv   -L/boot/gnu/lib -lglib-2.0 -lintl -liconv   -lm
 
 GETOPT = 
-EXPORTER=BEXPORTER
+EXPORTER=
 ICONV = 
 INCLUDED_EXPAT = 1
 HAVE_LIBXML2 = 0
@@ -65,7 +65,7 @@ INSTALL_DATA = ${INSTALL} -m 644
 
 
 
-prefix=/usr/local
+prefix=/boot/home/config/
 exec_prefix=${prefix}
 srcdir=.
 bindir=${exec_prefix}/bin
@@ -81,7 +81,7 @@ src_mandir=$(srcdir)/help/man
 
 DEFS = -DHAVE_CONFIG_H -DVERSION=\"1.0.3\" -DXMLCONFIG=\"$(datadir)/wv/wvConfig.xml\" -DHTMLCONFIG=\"$(datadir)/wv/wvHtml.xml\" -DWVDATADIR=\"$(datadir)/wv\"
 
-CPPFLAGS =     -I/boot/home/config/include/glib-1.2 -I/boot/home/config/lib/glib/include  
+CPPFLAGS =      -I/boot/gnu/include/glib-2.0 -I/boot/gnu/lib/glib-2.0/include    
 
 ifeq ($(EPATH_DYLIB),1)
 WVPICFLAGS = -fno-common -DPIC
