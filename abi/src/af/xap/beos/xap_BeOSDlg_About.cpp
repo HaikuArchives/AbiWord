@@ -46,18 +46,49 @@ extern unsigned long g_pngSidebar_sizeof;       // see ap_wp_sidebar.cp
 class AboutWin:public BWindow
 {
 public:
-	AboutWin(BMessage *data, XAP_Frame * pFrame);
+	AboutWin(XAP_Frame * pFrame);
 	virtual void DispatchMessage(BMessage *msg, BHandler *handler);
+	void init();
 	void initDialogFields(void);
 
 private:
 	XAP_Frame *m_pFrame;
 };                                                    
 
-AboutWin::AboutWin(BMessage *data, XAP_Frame * pFrame)
-	: BWindow(data)
+AboutWin::AboutWin(XAP_Frame * pFrame)
+	: BWindow(BRect(58.0, 62.0, 574.0, 439.0), "About", B_FLOATING_WINDOW_LOOK, B_MODAL_APP_WINDOW_FEEL, B_NOT_RESIZABLE | B_NOT_MINIMIZABLE)
 {
 	m_pFrame = pFrame;
+	init();
+}
+
+void AboutWin::init()
+{	
+#warning TODO replace with constants
+	BView * view = new BView(BRect(0, 0, 755, 555), "", B_FOLLOW_ALL, 536870912);
+	view->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
+	AddChild(view);
+	
+	BBox * box = new BBox(BRect(3.0, 3.0, 512.0, 369.0), "", B_FOLLOW_ALL, 738197504);
+	view->AddChild(box);
+	
+	view = new BView(BRect(7.0, 6.0, 227.0, 356.0), "sideView", 4626, 536870912);
+	box->AddChild(view);
+	
+	BStringView * strview = new BStringView(BRect(313.0, 61.0, 468.0, 78.0 ), "strVersion", "Version:", 4626, 536870912);
+	box->AddChild(strview);
+	
+	BButton * btn = new BButton(BRect(297.0, 333.0, 411.0, 357.0), "", "www.abisource.com", new BMessage('gurl'), 4626, 570425344);
+	box->AddChild(btn);
+	
+	btn = new BButton(BRect(418.0, 330.0, 499.0, 360.0), "", "OK", new BMessage('_QRQ'), 4626, 570425344);
+	box->AddChild(btn);
+	
+	strview = new BStringView(BRect(235.0, 86.0, 501.0, 107.0), "strCopyright", "strCopyright", 4626, 536870912);
+	box->AddChild(strview);
+	
+	BTextView * textview = new BTextView(BRect(236.0, 111.0, 498.0, 329.0), "strBodyText", BRect(1.0, 1.0, 261.0, 14.0), 4626, 910163968);
+	box->AddChild(textview);
 }
 
 void AboutWin::initDialogFields(void)
@@ -136,15 +167,11 @@ void XAP_BeOSDialog_About::runModal(XAP_Frame * pFrame)
 	//char buf[2048];
 	//sprintf(buf, XAP_ABOUT_TITLE, pApp->getApplicationName());
 	//sprintf(buf, XAP_ABOUT_DESCRIPTION, pApp->getApplicationName());
-	BMessage *msg = new BMessage();
-	if (RehydrateWindow("AboutWindow", msg))
+	AboutWin *nwin = new AboutWin(pFrame);
+	if (nwin)
 	{
-		AboutWin *nwin = new AboutWin(msg, pFrame);
-		if (nwin)
-		{
-			nwin->initDialogFields();
-			nwin->Show();
-		}
-	}	
+		nwin->initDialogFields();
+		nwin->Show();
+	}
 }
 
