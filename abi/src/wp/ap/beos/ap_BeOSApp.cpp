@@ -96,21 +96,25 @@ void signalWrapper(int sig_num);
 extern unsigned char g_pngSplash[];             // see ap_wp_Splash.cpp
 extern unsigned long g_pngSplash_sizeof;        // see ap_wp_Splash.cpp
        
-class SplashWin:public BWindow {
-        public:
-                SplashWin(BMessage *data);
-                virtual void DispatchMessage(BMessage *msg, BHandler *handler);
-        private:
-		int ignore;
+class SplashWin:public BWindow 
+{
+public:
+	SplashWin();
+	virtual void DispatchMessage(BMessage *msg, BHandler *handler);
+private:
+	int ignore;
 };
 
-SplashWin::SplashWin(BMessage *data)
-          :BWindow(data) {
+SplashWin::SplashWin()
+	: BWindow(BRect(75.0, 50.0, 375.0, 406.0), "AbiWord Splash", B_BORDERED_WINDOW_LOOK, B_FLOATING_APP_WINDOW_FEEL, B_NOT_RESIZABLE | B_WILL_ACCEPT_FIRST_CLICK)
+{
 	BScreen* screen;
 	screen = new BScreen(B_MAIN_SCREEN_ID);
-
-	BView *view = FindView("splashView");
-	if (view) {
+	
+	BView *view = new BView(BRect(-1.0, -2.0, 301.0, 357.0 ), "splashView", B_FOLLOW_ALL, 268435456);
+	AddChild(view);
+	if (view) 
+	{
 		BMemoryIO memio(g_pngSplash, g_pngSplash_sizeof);
 		BBitmap *bitmap = BTranslationUtils::GetBitmap(&memio);
 		if (bitmap)
@@ -119,10 +123,11 @@ SplashWin::SplashWin(BMessage *data)
 			UT_DEBUGMSG(("Could not interpret splash image...\n"));
 
 		view->Sync();
-        }
-     BRect wrect, srect;
-     srect = screen->Frame();
-     wrect = Bounds();
+    }
+	
+	BRect wrect, srect;
+	srect = screen->Frame();
+	wrect = Bounds();
 	MoveTo((srect.right - (wrect.right - wrect.left)) / 2, (srect.bottom - (wrect.bottom - wrect.top)) / 2);
 	Show();
 	ignore = SPLASH_UP_TIME;			// keep on screen n seconds
@@ -136,6 +141,7 @@ void SplashWin::DispatchMessage(BMessage *msg, BHandler *handler) {
 			break;
 //knorr!! to make screenshot
 	case B_KEY_DOWN:
+			break;
 //knorr!!
 	case B_MOUSE_DOWN:
 		BWindow::DispatchMessage(msg, handler);
@@ -179,14 +185,14 @@ void _showSplash(XAP_Args * pArgs, const char * /*szAppName*/) {
 		}
 	}                                   
 
-	if (bShowSplash == false)
+	if (!bShowSplash)
 		return;
 
-	BMessage *msg = new BMessage();
-        if (RehydrateWindow("SplashWindow", msg)) {
+//	BMessage *msg = new BMessage();
+//        if (RehydrateWindow("SplashWindow", msg)) {
 				//Automatically shows and hides itself
-                SplashWin *nwin = new SplashWin(msg);
-        }                                        	
+   SplashWin *nwin = new SplashWin();
+//        }                                        	
 }                                             
 /*****************************************************************/
 

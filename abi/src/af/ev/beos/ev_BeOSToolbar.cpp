@@ -619,17 +619,18 @@ void ToolbarView::Draw(BRect clip) {
 	int 	i;
 	
 	Window()->DisableUpdates();
-	drawing_mode oldmode = DrawingMode();
 	Window()->Lock();
+	drawing_mode oldmode = DrawingMode();	
 	SetDrawingMode(B_OP_ALPHA);
 	Window()->Unlock();
 	for (i=0; i<item_count; i++) {
 		r = items[i].rect;
-		if (items[i].bitmap && r.Intersects(clip)) {
+		if (items[i].bitmap && r.Intersects(clip)) 
+		{
 			Window()->Lock();
 				
 			// We're dawing with alpha, so we need to overdraw the old bitmap
-			// with the toolbar's colour, or they 'ovelay' each other.
+			// with the toolbar's colour, or they 'overlay' each other.
 			SetHighColor(216,216,216);
 			FillRect(r);
 			
