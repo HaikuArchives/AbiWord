@@ -43,20 +43,39 @@
 
 /*****************************************************************/
 
+class SzCheckBox : public BCheckBox
+{
+public:
+	SzCheckBox(BRect frame, const char* name, const char* label, BMessage* message);
+	virtual void AttachedToWindow();	
+};
 
+SzCheckBox::SzCheckBox(BRect frame, const char* name, const char* label, BMessage* message) : 
+	BCheckBox(frame, name, label, message)
+{
+}
 
-class OptionsWin:public BWindow {
-	public:
-		OptionsWin(BMessage *data);
-		void SetDlg(AP_BeOSDialog_Options *dlg);
-		virtual void DispatchMessage(BMessage *msg, BHandler *handler);
-		virtual bool QuitRequested(void);
+void SzCheckBox::AttachedToWindow()
+{
+	BCheckBox::AttachedToWindow();
+	float width = StringWidth(Label())+20;
+	ResizeTo(width, Frame().Height());
+}
+
+class OptionsWin : public BWindow 
+{
+public:
+	OptionsWin();
+	void SetDlg(AP_BeOSDialog_Options *dlg);
+	void Init();
+	virtual void DispatchMessage(BMessage *msg, BHandler *handler);
+	virtual bool QuitRequested(void);
 		
-	private:
-		AP_BeOSDialog_Options 	*m_DlgOptions;
-				
-		sem_id modalSem;
-		status_t WaitForDelete(sem_id blocker);
+private:
+	AP_BeOSDialog_Options 	*m_DlgOptions;
+			
+	sem_id modalSem;
+	status_t WaitForDelete(sem_id blocker);
 };
 
 status_t OptionsWin::WaitForDelete(sem_id blocker)
@@ -90,12 +109,180 @@ status_t OptionsWin::WaitForDelete(sem_id blocker)
 	return result;
 }
 
-OptionsWin::OptionsWin(BMessage *data) 
-	  :BWindow(data)
+OptionsWin::OptionsWin() :
+	BWindow(BRect(58.0, 32.0, 392.0, 373.0), "Options", B_FLOATING_WINDOW_LOOK, B_MODAL_APP_WINDOW_FEEL, B_NOT_RESIZABLE | B_NOT_ZOOMABLE)
 {
-
+	Init();
 } 
 
+void OptionsWin::Init()
+{
+	BView * view = new BView(BRect(-1.0, -1.0, 335.0, 343.0), "", B_FOLLOW_ALL_SIDES, B_WILL_DRAW | B_NAVIGABLE);
+	view->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));	
+	AddChild(view);
+
+	BButton * btn = new BButton(BRect(5.0, 311.0, 71.0, 335.0), "", "Save", new BMessage('save'), B_FOLLOW_BOTTOM | B_FOLLOW_RIGHT);
+	view->AddChild(btn);
+	
+	btn = new BButton(BRect(89.0, 312.0, 155.0, 336.0), "", "Apply", new BMessage('appl'), B_FOLLOW_BOTTOM | B_FOLLOW_RIGHT);
+	view->AddChild(btn);	
+
+	btn = new BButton(BRect(178.0, 312.0, 244.0, 336.0), "", "Defaults", new BMessage('dbut'), B_FOLLOW_BOTTOM | B_FOLLOW_RIGHT);
+	view->AddChild(btn);	
+
+	btn = new BButton(BRect(261.0, 309.0, 333.0, 339.0), "", "OK", new BMessage('obut'), B_FOLLOW_BOTTOM | B_FOLLOW_RIGHT);
+	view->AddChild(btn);	
+	
+	BTabView * tabview = new BTabView(BRect(5.0, 10.0, 330.0, 305.0), "TabView", B_WIDTH_FROM_LABEL);
+	view->AddChild(tabview);
+	
+	view = new BView(BRect(1.0, 22.0, 324.0, 294.0), "view container", B_FOLLOW_ALL_SIDES, B_WILL_DRAW);
+	view->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));			
+	tabview->AddChild(view);
+
+//Spelling tab	
+
+	view = new BView(BRect(0.0, 0.0, 322.0, 271.0), "Spelling", B_FOLLOW_ALL_SIDES, B_WILL_DRAW);	
+
+	BCheckBox * chkbox = new SzCheckBox(BRect(10.0, 10.0, 157.0, 28.0), "SpellCheckAsType", 
+		"Check spelling as you type", new BMessage('cbsp'));
+	view->AddChild(chkbox);
+
+	chkbox = new SzCheckBox(BRect(10.0, 32.0, 199.0, 50.0), "SpellHideErrors", 
+		"Hide spelling errors in the document", new BMessage('chhe'));
+	chkbox->SetEnabled(false);
+	view->AddChild(chkbox);
+	
+	chkbox = new SzCheckBox(BRect(10.0, 54.0, 163.0, 72.0), "SpellSuggest", 
+		"Always suggest corrections", new BMessage('chsc'));
+	chkbox->SetEnabled(false);
+	view->AddChild(chkbox);
+
+	chkbox = new SzCheckBox(BRect(10.0, 78.0, 191.0, 96.0), "SpellMainOnly", 
+		"Suggest from main dictionary only", new BMessage('chmd'));
+	chkbox->SetEnabled(false);
+	view->AddChild(chkbox);
+
+	chkbox = new SzCheckBox(BRect(10.0, 101.0, 156.0, 119.0), "SpellUppercase", 
+		"Ignore words in uppercase", new BMessage('cbup'));
+	view->AddChild(chkbox);
+
+	chkbox = new SzCheckBox(BRect(10.0, 122.0, 157.0, 140.0), "SpellNumbers", 
+		"Ignore words with numbers", new BMessage('chnu'));
+	view->AddChild(chkbox);
+
+	chkbox = new SzCheckBox(BRect(10.0, 143.0, 189.0, 161.0), "SpellInternet", 
+		"Ignore internet and file addresses", new BMessage('chia'));
+	chkbox->SetEnabled(false);
+	view->AddChild(chkbox);
+
+	BPopUpMenu * menu = new BPopUpMenu("Select");
+	BMenuItem * item = new BMenuItem(menu);
+	item->SetEnabled(false);
+	item = new BMenuItem(menu);
+	item->SetEnabled(false);	
+	
+	BMenuField * fld = new BMenuField(BRect(10.0, 170.0, 224.0, 192.0), "mnufieldCustDict", 
+		"Custom Dictionary:", menu);		
+	fld->SetEnabled(false);
+	fld->SetDivider(96.0);
+	view->AddChild(fld);
+
+	btn = new BButton(BRect(234.0, 169.0, 317.0, 193.0), "butDictionary", "Dictionary ...", NULL);
+	btn->SetEnabled(false);
+	view->AddChild(btn);
+
+	btn = new BButton(BRect(105.0, 203.0, 185.0, 225.0), "butResetIgnoreWords", "Reset", NULL);
+	btn->SetEnabled(false);
+	view->AddChild(btn);
+
+	btn = new BButton(BRect(235.0, 202.0, 316.0, 225.0), "butEditIgnoreWords", "Edit", NULL);
+	btn->SetEnabled(false);
+	view->AddChild(btn);
+
+	BStringView * strview = new BStringView(BRect(13.0, 207.0, 88.0, 221.0), "", "Ignored Words:");
+	view->AddChild(strview);
+	
+	tabview->AddTab(view);
+//Preferences tab
+	view = new BView(BRect(0.0, 0.0, 322.0, 271.0), "Preferences", B_FOLLOW_ALL_SIDES, B_WILL_DRAW);
+
+	chkbox = new SzCheckBox(BRect(11.0, 13.0, 184.0, 31.0), "AutoSavePrefs", 
+		"Automatically save preferences", new BMessage('chas'));
+	view->AddChild(chkbox);
+	
+	menu = new BPopUpMenu("Select");
+	fld = new BMenuField(BRect(10.0, 38.0, 201.0, 60.0), "Current Preference Scheme", 
+		"Custom Dictionary:", menu);	
+	fld->SetDivider(139.0);	
+	view->AddChild(fld);
+	
+	tabview->AddTab(view);
+	
+//View tab	
+	view = new BView(BRect( 0.0, 0.0, 371.0, 280.0), "View", B_FOLLOW_ALL_SIDES, B_WILL_DRAW);	
+
+	BBox * box = new BBox(BRect(6.0, 6.0, 317.0, 89.0), "ShowBox", B_FOLLOW_TOP | B_FOLLOW_LEFT_RIGHT, B_WILL_DRAW | B_NAVIGABLE_JUMP | B_FRAME_EVENTS);
+	box->SetLabel("Show (Enable)");
+	view->AddChild(box);
+
+	chkbox = new SzCheckBox(BRect(12.0, 20.0, 57.0, 38.0), "RulerEnable", 
+		"Ruler", new BMessage('cbru'));
+	box->AddChild(chkbox);
+
+	chkbox = new SzCheckBox(BRect(12.0, 42.0, 88.0, 60.0), "chkCursorBlinkEnable", 
+		"Cursor Blink", new BMessage('cbcb'));
+	box->AddChild(chkbox);
+
+	chkbox = new SzCheckBox(BRect(12.0, 61.0, 99.0, 79.0), "SmartQuotes", 
+		"Smart Quotes", new BMessage('cbsq'));
+	box->AddChild(chkbox);
+
+	menu = new BPopUpMenu("Select");
+	fld = new BMenuField(BRect(195.0, 23.0, 278.0, 45.0), "Units", 
+		"Units:", menu);	
+	fld->SetDivider(33.0);
+	view->AddChild(fld);
+	
+	box = new BBox(BRect(6.0, 180.0, 317.0, 267.0), "ViewBox", B_FOLLOW_TOP | B_FOLLOW_LEFT_RIGHT, B_WILL_DRAW | B_NAVIGABLE_JUMP | B_FRAME_EVENTS);
+	box->SetLabel("View");
+	view->AddChild(box);	
+
+	chkbox = new SzCheckBox(BRect(13.0, 14.0, 46.0, 32.0), "chkViewAll", 
+		"All", new BMessage('cbal'));
+	box->AddChild(chkbox);
+
+	chkbox = new SzCheckBox(BRect(13.0, 30.0, 92.0, 48.0), "chkViewHiddenText", 
+		"Hidden Text", new BMessage('cbht'));
+	box->AddChild(chkbox);	
+
+	chkbox = new SzCheckBox(BRect(13.0, 46.0, 143.0, 64.0), "chkViewUnprintable", 
+		"Unprintable characters", new BMessage('cbuc'));
+	box->AddChild(chkbox);	
+
+	chkbox = new SzCheckBox(BRect(13.0, 63.0, 84.0, 81.0), "chkStatusEnable", 
+		"Status Bar", new BMessage('stat'));
+	box->AddChild(chkbox);	
+
+	box = new BBox(BRect(6.0, 93.0, 317.0, 178.0 ), "", B_FOLLOW_TOP | B_FOLLOW_LEFT_RIGHT, B_WILL_DRAW | B_NAVIGABLE_JUMP | B_FRAME_EVENTS);
+	box->SetLabel("Toolbars (Enable)");
+	view->AddChild(box);	
+
+	chkbox = new SzCheckBox(BRect(15.0, 17.0, 102.0, 35.0), "chkExtraBarEnable", 
+		"Extra Toolbar", new BMessage('cbet'));
+	box->AddChild(chkbox);	
+
+	chkbox = new SzCheckBox(BRect(15.0, 37.0, 110.0, 55.0), "chkFormatBarEnable", 
+		"Format Toolbar", new BMessage('cbft'));
+	box->AddChild(chkbox);	
+
+	chkbox = new SzCheckBox(BRect(15.0, 56.0, 119.0, 74.0), "chkStandardBarEnable", 
+		"Standard Toolbar", new BMessage('cbst'));
+	box->AddChild(chkbox);		
+	
+	tabview->AddTab(view);
+	tabview->Select(2);	
+}
 
 struct {
 	UT_Dimension  dim;
@@ -126,9 +313,8 @@ void OptionsWin::SetDlg(AP_BeOSDialog_Options *dlg)
 	if(pView)
 		pField = (BMenuField *)pView->TabAt(2)->View()->FindView("Units");
 	
-	
 	for( int n1 = 0; n1 < SIZE_aAlignUnit; n1++ ) 
-		pField->Menu()->AddItem(new BMenuItem((char *)pSS->getValue(s_aAlignUnit[n1].id), NULL) );//SendMessage(hwndAlign, CB_ADDSTRING, 0, (LPARAM)pSS->getValue(s_aAlignUnit[n1].id));
+		pField->Menu()->AddItem(new BMenuItem((char *)pSS->getValue(s_aAlignUnit[n1].id), NULL) );
 
 
 	m_DlgOptions->_populateWindowData();
@@ -164,6 +350,7 @@ void OptionsWin::DispatchMessage(BMessage *msg, BHandler *handler)
 {	
 	BCheckBox* pSource;
 	BCheckBox* pOther;
+	BMenuField * pFld;
 	
 	switch(msg->what) 
 	{
@@ -174,12 +361,12 @@ void OptionsWin::DispatchMessage(BMessage *msg, BHandler *handler)
 	
 	case 'obut': 
 		// OK pressed.
-		printf("Setting answer\n");
+		UT_DEBUGMSG(("Setting answer\n"));
 	
 		m_DlgOptions->m_answer = AP_Dialog_Options::a_OK;
-		printf("Storing data\n");
+		UT_DEBUGMSG(("Storing data\n"));
 		m_DlgOptions->_storeWindowData();						// remember current settings
-		printf("Quitting\n");
+		UT_DEBUGMSG(("Quitting\n"));
 		PostMessage(B_QUIT_REQUESTED);
 
 		break;
@@ -188,14 +375,19 @@ void OptionsWin::DispatchMessage(BMessage *msg, BHandler *handler)
 		// Save pressed.
 		m_DlgOptions->m_answer = AP_Dialog_Options::a_SAVE;
 		m_DlgOptions->_storeWindowData();
-//		UT_DEBUGMSG(("OptionsWin::Save todo\n"));
 		break;
 	
 	case 'appl':
 		m_DlgOptions->m_answer = AP_Dialog_Options::a_APPLY;
 		m_DlgOptions->_storeWindowData();
 		break;
-		
+	case 'cbru':
+		m_DlgOptions->_enableDisableLogic(m_DlgOptions->id_CHECK_VIEW_SHOW_RULER);
+		pSource = (BCheckBox *)FindView("RulerEnable");
+		pFld = (BMenuField *)FindView("Units");
+		pFld->SetEnabled(pSource->Value()==B_CONTROL_ON);
+		break;
+	
 	TOGGLE_BASED_ON_MESSAGE('cbsp' , m_DlgOptions->id_CHECK_SPELL_CHECK_AS_TYPE)
 	TOGGLE_BASED_ON_MESSAGE('chhe' , m_DlgOptions->id_CHECK_SPELL_HIDE_ERRORS)
 	TOGGLE_BASED_ON_MESSAGE('chsc' , m_DlgOptions->id_CHECK_SPELL_SUGGEST)
@@ -204,8 +396,8 @@ void OptionsWin::DispatchMessage(BMessage *msg, BHandler *handler)
 	TOGGLE_BASED_ON_MESSAGE('chnu' , m_DlgOptions->id_CHECK_SPELL_NUMBERS)
 //	TOGGLE_BASED_ON_MESSAGE('chia' , m_DlgOptions->id_CHECK_SPELL_INTERNET)
 	TOGGLE_BASED_ON_MESSAGE('chas' , m_DlgOptions->id_CHECK_PREFS_AUTO_SAVE)
-	TOGGLE_BASED_ON_MESSAGE('cbru' , m_DlgOptions->id_CHECK_VIEW_SHOW_RULER)
-	  //TOGGLE_BASED_ON_MESSAGE('chtb' , m_DlgOptions->id_CHECK_VIEW_SHOW_TOOLBARS)
+//	TOGGLE_BASED_ON_MESSAGE('cbru' , m_DlgOptions->id_CHECK_VIEW_SHOW_RULER)
+//	TOGGLE_BASED_ON_MESSAGE('chtb' , m_DlgOptions->id_CHECK_VIEW_SHOW_TOOLBARS)
 	TOGGLE_BASED_ON_MESSAGE('cbcb' , m_DlgOptions->id_CHECK_VIEW_CURSOR_BLINK)
 	TOGGLE_BASED_ON_MESSAGE('cbsq' , m_DlgOptions->id_CHECK_SMART_QUOTES_ENABLE)
 	TOGGLE_BASED_ON_MESSAGE('cbal' , m_DlgOptions->id_CHECK_VIEW_ALL)
@@ -215,7 +407,7 @@ void OptionsWin::DispatchMessage(BMessage *msg, BHandler *handler)
 //        TOGGLE_BASED_ON_MESSAGE('cbet' , m_DlgOptions->id_CHECK_VIEW_SHOW_EXTRA_TOOLBAR) 
 //        TOGGLE_BASED_ON_MESSAGE('cbft' , m_DlgOptions->id_CHECK_VIEW_SHOW_FORMAT_TOOLBAR) 
 //        TOGGLE_BASED_ON_MESSAGE('cbst' , m_DlgOptions->id_CHECK_VIEW_SHOW_STANDARD_TOOLBAR) 
-        TOGGLE_BASED_ON_MESSAGE('stat' , m_DlgOptions->id_CHECK_VIEW_SHOW_STATUS_BAR) 
+    TOGGLE_BASED_ON_MESSAGE('stat' , m_DlgOptions->id_CHECK_VIEW_SHOW_STATUS_BAR) 
 #if 0
 	case 'ctog':
 		// Any checkbox toggled.
@@ -388,15 +580,8 @@ void s_checkbutton_toggle( GtkWidget *w, AP_BeOSDialog_Options *dlg )
 void AP_BeOSDialog_Options::runModal(XAP_Frame * pFrame)
 {
 	m_pFrame = pFrame;
-	BMessage msg;
-
-        if (RehydrateWindow("OptionsWindow", &msg)) {
-                newwin = new OptionsWin(&msg);
-                newwin->SetDlg(this);
-                //Take the information here ...
-//                newwin->Lock();
-  //              newwin->Close(); 
-        }                
+	newwin = new OptionsWin();
+	newwin->SetDlg(this);
 }
 		
 void AP_BeOSDialog_Options::_controlEnable( tControl id, bool value )
@@ -553,35 +738,30 @@ bool     AP_BeOSDialog_Options::_gather##button(void) \
 	pBox = (BCheckBox *)pView->TabAt(0)->View()->FindView(chartitle); \
 	if(pBox) \
 		return (pBox->Value() == B_CONTROL_ON);\
-\
 	pBox = (BCheckBox *)pView->TabAt(1)->View()->FindView(chartitle);\
 	if(pBox) \
 		return (pBox->Value() == B_CONTROL_ON);\
-\
 	pBox = (BCheckBox *)pView->TabAt(2)->View()->FindView(chartitle);\
 	if(pBox) \
 		return (pBox->Value() == B_CONTROL_ON);\
-	\
 	return false;\
 } \
 void        AP_BeOSDialog_Options::_set##button(bool b) \
 { \
 	BCheckBox* pBox;\
-	BTabView* pView = (BTabView *)newwin->FindView("TabView"); \
 	pBox = (BCheckBox *)newwin->FindView(chartitle); \
 	if(pBox) \
-		return pBox->SetValue( (b == true )); \
+		return pBox->SetValue(b); \
+	BTabView* pView = (BTabView *)newwin->FindView("TabView"); \
 	pBox = (BCheckBox *)pView->TabAt(0)->View()->FindView(chartitle); \
 	if(pBox) \
-		return pBox->SetValue( (b == true )); \
-\
+		return pBox->SetValue(b); \
 	pBox = (BCheckBox *)pView->TabAt(1)->View()->FindView(chartitle);\
 	if(pBox) \
-		return pBox->SetValue( (b == true )); \
-\
+		return pBox->SetValue(b); \
 	pBox = (BCheckBox *)pView->TabAt(2)->View()->FindView(chartitle);\
 	if(pBox) \
-		return pBox->SetValue( (b == true )); \
+		return pBox->SetValue(b); \
 } 
 
 DEFINE_GET_SET_BOOL(SpellCheckAsType , "SpellCheckAsType");
@@ -592,7 +772,7 @@ DEFINE_GET_SET_BOOL(SpellUppercase , "SpellUppercase");
 DEFINE_GET_SET_BOOL(SpellNumbers , "SpellNumbers");
 DEFINE_GET_SET_BOOL(SpellInternet , "SpellInternet");
 DEFINE_GET_SET_BOOL(PrefsAutoSave , "AutoSavePrefs");
-DEFINE_GET_SET_BOOL	(ViewShowRuler , "RulerEnable");
+DEFINE_GET_SET_BOOL(ViewShowRuler , "RulerEnable");
 
 //TF: Deprecated with specific toolbar toggling
 //DEFINE_GET_SET_BOOL	(ViewShowToolbars , "chkToolbarsEnable");
