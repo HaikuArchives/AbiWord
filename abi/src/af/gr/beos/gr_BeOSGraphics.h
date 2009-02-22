@@ -24,6 +24,10 @@
 #include <GraphicsDefs.h>
 #include <Point.h>
 #include <View.h>
+#ifdef __HAIKU__
+#include <GridLayoutBuilder.h>
+#include <GroupLayoutBuilder.h>
+#endif
 #include "gr_Graphics.h"
 #include "ut_assert.h"
 
