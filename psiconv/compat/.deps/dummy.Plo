@@ -1,4 +1,0 @@
-dummy.lo : \
- dummy.c
-dummy.o :
-dummy.c :

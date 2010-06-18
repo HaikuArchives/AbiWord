@@ -1,2 +1,0 @@
-   if test -d "$dir"; then
-	$sh
