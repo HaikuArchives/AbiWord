@@ -40,8 +40,8 @@ X86_ARCH_FLAGS		=
 PPC_ARCH_FLAGS		=
 
 # Define tools
-CC		= $$BE_C_COMPILER $$BE_DEFAULT_C_FLAGS
-CCC		= $$BE_C_COMPILER $$BE_DEFAULT_C_FLAGS
+CC		= gcc
+CCC		= g++
 RANLIB		= ranlib
 
 # Suffixes
@@ -87,6 +87,8 @@ MKSHLIB			= $(LD) $(DSO_LDOPTS) -soname $(@:$(OBJDIR)/%.so=%.so)
 
 ABI_NATIVE	= beos
 ABI_FE		= BeOS
+
+LIBXML_CONFIG		= xml2-config
 
 ##################################################################
 ## ABIPKGDIR defines the directory containing the Makefile to use to

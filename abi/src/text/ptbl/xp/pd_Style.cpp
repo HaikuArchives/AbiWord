@@ -251,7 +251,7 @@ bool PD_Style::isList(void)
 		return UT_stricmp(szListStyle, "None") != NULL;
 	}
 	else {
-		return FALSE;
+		return false;
 	}
 }
 

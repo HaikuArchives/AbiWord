@@ -339,7 +339,7 @@ size_t UT_iconv( UT_iconv_t cd, const char **inbuf,
 #ifdef UT_ICONV_USING_GLIB
   return g_iconv((GIConv)cd, (char **)inbuf, inbytesleft, outbuf, outbytesleft);
 #else
-  return iconv( (iconv_t)cd, (ICONV_CONST char **)inbuf, inbytesleft, outbuf, outbytesleft );
+  return iconv( (iconv_t)cd, (char **)inbuf, inbytesleft, outbuf, outbytesleft );
 #endif
 }
 

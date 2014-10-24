@@ -155,6 +155,9 @@ void XAP_BeOSApp::_setAbiSuiteLibDir(void) {
 		}
 
 	// if not, see if ABISUITE_HOME was set in the environment
+#ifndef ABISUITE_HOME
+#define ABISUITE_HOME "/boot/system/apps/Abiword"
+#endif
 
 	const char * sz = ABISUITE_HOME;
 	if (sz && *sz)

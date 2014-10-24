@@ -43,23 +43,31 @@ _LIBWV_:
 		$(MAKE) -f Makefile.abi -C $(ABI_ROOT)/../wv;  	\
 	else							\
 		echo wv not found;				\
-		echo TODO provide a nicer error message;	\
-		echo TODO with instructions for obtaining it;	\
+		echo wv must be installed as a peer to the abi/ directory;	\
+		echo Instructions for obtaining it can be found at;		\
+		echo http://www.abisource.com/dev_download.phtml		\
 		exit 1;						\
 	fi
 
 _LIBICONV_:
-	@if [ -d $(ABI_ROOT)/../libiconv ]; then                        \
-		echo Found libiconv in peer directory;                  \
-		if [ ! -r $(ABI_ROOT)/../libiconv/lib/config.h ]; then  \
-			cd $(ABI_ROOT)/../libiconv;                     \
-			./configure; 					\
-		fi;                                             	\
-		$(MAKE) -f Makefile.abi -C $(ABI_ROOT)/../libiconv;     \
-	else                                                            \
-		echo libiconv not found;                                \
-		echo TODO provide a nicer error message;                \
-		echo TODO with instructions for obtaining it;           \
-		exit 1;                                                 \
+	@if [ ! -r /system/develop/headers/iconv.h ]; then	\
+		if [ -d $(ABI_ROOT)/../libiconv ]; then                        \
+			echo Found libiconv in peer directory;                  \
+			if [ ! -r $(ABI_ROOT)/../libiconv/lib/config.h ]; then  \
+				cd $(ABI_ROOT)/../libiconv;                     \
+			.	/configure; 					\
+			fi;                                             	\
+			$(MAKE) -f Makefile.abi -C $(ABI_ROOT)/../libiconv;     \
+		else                                                            \
+			echo libiconv not found;                                \
+			echo TODO provide a nicer error message;                \
+			echo TODO with instructions for obtaining it;           \
+			exit 1;                                                 \
+		fi \
+	else \
+		echo ;								\
+		echo "*** Found iconv functions in system locations.  I'm going to trust that these";	\
+		echo "*** are the versions of the libraries we should link against.";			\
+		echo ;								\
 	fi
 
