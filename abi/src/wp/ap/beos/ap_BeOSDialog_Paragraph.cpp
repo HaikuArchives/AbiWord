@@ -100,14 +100,14 @@ void RedrawTabView::Select(int32 tab)
 class UpdatingPreview : public BBackView
 {
 public:
-	UpdatingPreview(BRect frameRect);
+	UpdatingPreview();
 	virtual ~UpdatingPreview();
 	
 	virtual void Draw(BRect udr);
 };
 
-UpdatingPreview::UpdatingPreview(BRect frameRect) :
-	BBackView(NULL, frameRect , "previewview" , B_FOLLOW_ALL_SIDES , B_WILL_DRAW | B_FULL_UPDATE_ON_RESIZE)
+UpdatingPreview::UpdatingPreview() :
+	BBackView(NULL, "previewview" , B_WILL_DRAW | B_FULL_UPDATE_ON_RESIZE)
 {
 }
 
@@ -265,7 +265,7 @@ void ParagraphWin::SetDlg(AP_BeOSDialog_Paragraph *brk)
 
 	// Now we need to bring the preview window to the top
 	BBackView *preview=(BBackView*)FindView("previewview");	
-	BBackView *previewnew = new UpdatingPreview(preview->Frame());
+	BBackView *previewnew = new UpdatingPreview();
 
 	// Clean up the place holder.
 	preview->RemoveSelf();

@@ -38,7 +38,7 @@ class LeftRulerDrawView: public BBackView
 {
 public:
 	LeftRulerDrawView(AP_BeOSLeftRuler *pRuler, AV_View *pView, 
-		BRect frame, const char *name, uint32 resizeMask, uint32 flags);
+		const char *name, uint32 flags);
 		
 	virtual void FrameResized(float new_width, float new_height);
 	AP_BeOSLeftRuler *m_pAPRuler;
@@ -129,9 +129,8 @@ filter_result LeftRulerFilter::Filter(BMessage *msg, BHandler **target)
 }                                             
 
 LeftRulerDrawView::LeftRulerDrawView(AP_BeOSLeftRuler *pRuler, AV_View *pView, 
-	BRect frame, const char *name,
-	uint32 resizeMask, uint32 flags) :
-		BBackView(pView, frame, name, resizeMask, flags) 
+	const char *name, uint32 flags) :
+		BBackView(pView, name, flags) 
 {
 	m_pAPRuler = pRuler;
 	AddFilter(new LeftRulerFilter(this));
@@ -161,15 +160,15 @@ AP_BeOSLeftRuler::~AP_BeOSLeftRuler(void)
 {
 }
 
-void  AP_BeOSLeftRuler::createWidget(BRect r)
+BView* AP_BeOSLeftRuler::createWidget()
 {
-	m_wLeftRuler = new LeftRulerDrawView(this, NULL, r, "LeftRuler",
-		B_FOLLOW_TOP_BOTTOM | B_FOLLOW_LEFT, B_WILL_DRAW);
-	//Attach the widget to the window ...
-	BWindow *pBWin = (BWindow*)((XAP_BeOSFrameImpl *)(m_pFrame->getFrameImpl()))->getTopLevelWindow();
-	pBWin->AddChild(m_wLeftRuler);
-	setHeight(r.Height()+1);
-	setWidth(r.Width()+1);
+	m_wLeftRuler = new LeftRulerDrawView(this, NULL, "LeftRuler",
+		B_WILL_DRAW);
+	m_wLeftRuler->SetExplicitMaxSize(BSize(32, B_SIZE_UNSET));
+	setHeight(1);
+	setWidth(32);
+
+	return m_wLeftRuler;
 }
 
 void AP_BeOSLeftRuler::setView(AV_View * pView) 

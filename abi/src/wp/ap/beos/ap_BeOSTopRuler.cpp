@@ -41,9 +41,7 @@
 class TopRulerDrawView: public BBackView 
 {
 public:
- 	TopRulerDrawView(AP_BeOSTopRuler *pRuler, AV_View *pView, 
-		BRect frame, const char *name,
-		uint32 resizeMask, uint32 flags);
+ 	TopRulerDrawView(AP_BeOSTopRuler *pRuler, AV_View*, const char *name, uint32 flags);
 	virtual void FrameResized(float new_width, float new_height);
 //	virtual void Draw(BRect invalid);
 	AP_BeOSTopRuler *m_pAPRuler;
@@ -123,11 +121,12 @@ filter_result RulerFilter::Filter(BMessage *msg, BHandler **target) {
 }                                             
 
 TopRulerDrawView::TopRulerDrawView(AP_BeOSTopRuler *pRuler, AV_View *pView, 
-	BRect frame, const char *name, uint32 resizeMask, uint32 flags) 
-		: BBackView(pView, frame, name, resizeMask, flags) 
+	const char *name, uint32 flags) 
+		: BBackView(pView, name, flags)
 {
 	m_pAPRuler = pRuler;
 	AddFilter(new RulerFilter(this));
+	SetExplicitMaxSize(BSize(B_SIZE_UNSET, 32));
 }
 
 void TopRulerDrawView::FrameResized(float new_width, float new_height) 
@@ -154,16 +153,16 @@ AP_BeOSTopRuler::~AP_BeOSTopRuler(void)
 {
 }
 
-void AP_BeOSTopRuler::createWidget(BRect r)
+void AP_BeOSTopRuler::createWidget()
 {
-	m_wTopRuler = new TopRulerDrawView(this, NULL, r, "TopRuler", 
-		B_FOLLOW_TOP | B_FOLLOW_LEFT_RIGHT, B_WILL_DRAW | B_FRAME_EVENTS );
+	m_wTopRuler = new TopRulerDrawView(this, NULL, "TopRuler", 
+		B_WILL_DRAW | B_FRAME_EVENTS );
 	
 	//Attach the widget to the window ...
 	BWindow *pBWin = (BWindow *)((XAP_BeOSFrameImpl *)m_pFrame->getFrameImpl())->getTopLevelWindow();
 	pBWin->AddChild(m_wTopRuler);
- 	setHeight(r.Height()+1);
-	setWidth(r.Width()+1);
+ 	setHeight(32);
+	setWidth(1);
 }
 
 void AP_BeOSTopRuler::setView(AV_View * pView) 

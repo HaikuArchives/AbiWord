@@ -40,6 +40,8 @@
 #include "xav_View.h"
 #include "ev_BeOSTooltip.h"
 
+#include <GroupLayout.h>
+
 #define DPRINTF(x)
 							 	 
 EV_BeOSToolbar::EV_BeOSToolbar(XAP_BeOSApp * pBeOSApp, 
@@ -74,14 +76,9 @@ bool EV_BeOSToolbar::synthesize(void)
 	pBWin = (be_Window *)m_pBeOSFrame->getTopLevelWindow();
 	UT_ASSERT(pBWin);
 	
-	BRect r = pBWin->m_winRectAvailable;
-	r.bottom = r.top + ITEM_HEIGHT + 2*ITEM_SEPERATE + 1;
-	
-	pBWin->m_winRectAvailable.top = r.bottom + 1;
-	
-	ToolbarView *tb = new ToolbarView(this, r, "Toolbar", 
-		 			  B_FOLLOW_LEFT_RIGHT | B_FOLLOW_TOP, 
+	ToolbarView *tb = new ToolbarView(this, "Toolbar", 
 		 			  B_WILL_DRAW | B_FRAME_EVENTS); 
+	tb->SetExplicitMaxSize(BSize(B_SIZE_UNSET, 32));
 	m_pTBView = tb;
 	pBWin->AddChild(tb);
 	
@@ -455,9 +452,8 @@ void EV_BeOSToolbar::hide() {
 	}
 }
 
-ToolbarView::ToolbarView(EV_BeOSToolbar *tb, BRect frame, const char *name, 
-			 uint32 resizeMask, uint32 flags) 
-			: BView (frame, name, resizeMask, flags) {
+ToolbarView::ToolbarView(EV_BeOSToolbar *tb, const char *name, uint32 flags) 
+			: BView (name, flags) {
 	int i;
 	
 	for (i=0; i<ITEM_MAX; i++) {
@@ -470,8 +466,8 @@ ToolbarView::ToolbarView(EV_BeOSToolbar *tb, BRect frame, const char *name,
 	m_pBeOSToolbar = tb;
 		
 	SetViewColor(216, 216, 216);
-	m_fOldWidth=frame.Width()+1;
-	m_fOldHeight=frame.Height()+1;
+	m_fOldWidth=1;
+	m_fOldHeight=1;
 	
 	m_bDisplayTooltip = false;
 	fToolTip = new TToolTip();
@@ -548,13 +544,7 @@ bool ToolbarView::AddItem(BPopUpMenu *popupmenu, int iWidth, XAP_Toolbar_Id id) 
 								   items[item_count].rect.left; 
 	items[item_count].rect.bottom = ITEM_SEPERATE + ITEM_HEIGHT - 1;
 
-	items[item_count].menu = new BMenuField(items[item_count].rect, 
-										   "", 
-										   "", 
-									   		popupmenu,
-									   		true,
-									   		B_FOLLOW_LEFT | B_FOLLOW_TOP, 
-									   		B_WILL_DRAW); 
+	items[item_count].menu = new BMenuField(items[item_count].rect, "", "", popupmenu, true);
 
 	items[item_count].menu->SetDivider(0); 
 	AddChild(items[item_count].menu);

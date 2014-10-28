@@ -63,8 +63,7 @@ class EV_BeOSToolbar;
 
 class ToolbarView: public BView {
 public:
-	ToolbarView(EV_BeOSToolbar *tb, BRect frame, const char *name, 
-				 uint32 resizeMask, uint32 flags);
+	ToolbarView(EV_BeOSToolbar *tb, const char *name, uint32 flags);
 	~ToolbarView();
 			
 	bool AddSeperator();

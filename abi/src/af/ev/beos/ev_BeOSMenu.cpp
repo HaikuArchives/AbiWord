@@ -313,6 +313,9 @@ bool EV_BeOSMenu::synthesizeMenuBar()
 	pMenuBar = new BMenuBar(all, "Menubar");
 	UT_ASSERT(pMenuBar);
 	
+	pBWin->AddChild(pMenuBar);
+	pBWin->AddFilter(new MenuFilter(m_pBeOSApp, m_pFrame, this));	
+
 	return true;
 }
 
@@ -320,11 +323,10 @@ bool EV_BeOSMenu::synthesize()
  {		
 //	AV_View* pView = static_cast<XAP_BeOSFrameImpl *>(m_pFrame->getFrameImpl())->getCurrentView();
 		
-	// Save off the rect we were created with and recreate the whole thing
-	BRect frameRect = pMenuBar->Frame();
-	pMenuBar->RemoveSelf();
-	delete pMenuBar;
-	pMenuBar = new BMenuBar(frameRect , "Menubar");
+	// Trash the existing items and rebuild everything...
+	for (int i = pMenuBar->CountItems(); --i >= 0;) {
+		delete pMenuBar->RemoveItem(i);
+	}
 	
 // 	bool bCheck = false;
 	BMenu 		*pMenu = NULL;
@@ -473,8 +475,6 @@ bool EV_BeOSMenu::synthesize()
 			break;
 		}
 	}
-	pBWin->AddChild(pMenuBar);
-	pBWin->AddFilter(new MenuFilter(m_pBeOSApp, m_pFrame, this));	
 		
 	return true;
 }

@@ -44,7 +44,7 @@ public:
 
 	virtual void	show(void);
 	virtual void	hide(void);
-	virtual void	createWidget(BRect r);
+	virtual BView*	createWidget();
 	virtual void	setView(AV_View * pView);
 	virtual void 	getCoverage(UT_NumberVector& coverage){UT_ASSERT(UT_NOT_IMPLEMENTED);};
 protected:

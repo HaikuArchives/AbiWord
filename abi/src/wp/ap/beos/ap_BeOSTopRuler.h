@@ -43,7 +43,7 @@ public:
 	virtual ~AP_BeOSTopRuler(void);
 
 	virtual void	setView(AV_View * pView);
-	virtual void	createWidget(BRect r);
+	virtual void	createWidget();
 	
 protected:
 	BBackView *		m_wTopRuler;

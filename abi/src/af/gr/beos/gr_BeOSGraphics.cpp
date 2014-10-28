@@ -78,7 +78,7 @@ GR_BeOSGraphics::GR_BeOSGraphics(BBackView *docview, XAP_App * app)
 	m_pPrintJob = NULL;
  	m_bPrint = FALSE;  
 	if (!docview)
-		docview = new BBackView(NULL, BRect(0,0,1,1), "", B_FOLLOW_ALL, 0);
+		docview = new BBackView(NULL, "", 0);
 
 	m_pFrontView = docview;
 

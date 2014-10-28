@@ -418,16 +418,9 @@ void AP_BeOSFrame::toggleBar(UT_uint32 iBarNb, bool bBarOn)
 	UT_ASSERT(pToolbar);
 
 	if (bBarOn)
-	{
-		printf("tool bar showww\n");	
 		pToolbar->show();
-	}
-/*	else	// turning toolbar off
-	{
-		printf("tool bar hide\n");	
+	else	// turning toolbar off
 		pToolbar->hide();
-		//TODO Adjust the View..........
-	}*/
 }
 
 void AP_BeOSFrame::toggleStatusBar(bool bStatusBarOn)

@@ -3,8 +3,8 @@
 #include "be_BackView.h"
 #include "ut_debugmsg.h"
 
-BBackView::BBackView(AV_View * pView, BRect frame, const char* name, uint32 resizingMode, uint32 flags) :
-	BView(frame, name, resizingMode, flags | B_WILL_DRAW),
+BBackView::BBackView(AV_View * pView, const char* name, uint32 flags) :
+	BView(name, flags | B_WILL_DRAW),
 	backBmp(NULL),
 	backView(NULL),
 	m_pView(pView)

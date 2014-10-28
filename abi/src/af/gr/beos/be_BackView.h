@@ -8,7 +8,7 @@ class AV_View;
 class BBackView : public BView 
 {
 public:
-	BBackView(AV_View * pView, BRect frame, const char* name, uint32 resizingMode, uint32 flags);
+	BBackView(AV_View * pView, const char* name, uint32 flags);
 	virtual void AttachedToWindow();
 	virtual void FrameResized(float width, float height);
 	virtual void SetView(AV_View *pView);	

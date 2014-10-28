@@ -50,7 +50,7 @@ class XAP_BeOSFrameImpl;
 
 class TFScrollBar: public BScrollBar {
 	public:
-		TFScrollBar(XAP_BeOSFrameImpl *pFrame, BRect frame, const char *name,
+		TFScrollBar(XAP_BeOSFrameImpl *pFrame, const char *name,
 					BView *target, float min, float max, 
 					orientation direction);
 		 virtual void ValueChanged(float newValue);
@@ -60,8 +60,7 @@ class TFScrollBar: public BScrollBar {
 
 class be_DocView: public BBackView {
 	public: 
-		be_DocView(AV_View * pView, BRect frame, const char *name, 
-			   uint32 resizeMask, uint32 flags);
+		be_DocView(AV_View * pView, const char *name, uint32 flags);
 //		virtual	void Draw(BRect updateRect);
 		virtual void SetPrintPicture(BPicture *pic) { m_pBPicture = pic; };
 		virtual	void FrameResized(float new_width, float new_height);

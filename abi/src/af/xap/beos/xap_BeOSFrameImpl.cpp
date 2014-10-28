@@ -45,10 +45,10 @@
 #define ENSUREP(p)		do { UT_ASSERT(p); if (!p) goto Cleanup; } while (0)
 
 /*********************************************************/
-TFScrollBar::TFScrollBar(XAP_BeOSFrameImpl *pFrame, BRect frame, const char *name,
+TFScrollBar::TFScrollBar(XAP_BeOSFrameImpl *pFrame, const char *name,
                          BView *target, float min, float max, 
 			 orientation direction)
-                        :BScrollBar(frame, name, NULL, min, max, direction) {
+                        :BScrollBar(name, NULL, min, max, direction) {
         m_pBeOSFrame = pFrame;
 }
 
@@ -175,18 +175,13 @@ XAP_DialogFactory * XAP_BeOSFrameImpl::_getDialogFactory(void)
 void XAP_BeOSFrameImpl::createTopLevelWindow(void)
 {
 	// create a top-level window for us.
-	BScreen * scr = new BScreen();
-	display_mode mode;
-	scr->GetMode(&mode);
 	m_pBeWin = new be_Window(m_pBeOSApp, this, 
-			      	BRect(20, 20, mode.virtual_width-20, mode.virtual_height-20),
+			      	BRect(20, 20, 720, 740),
 			      	"Alpha-AbiWord", 
 			      	B_DOCUMENT_WINDOW_LOOK,
 			      	B_NORMAL_WINDOW_FEEL, 0);
 	UT_ASSERT(m_pBeWin);
-	printf("Window creation\n");
 	m_pBeWin->_createWindow(m_szMenuLayoutName, m_szMenuLabelSetName);
-	printf("// we let our caller decide when to show m_wTopLevelWindow.\n");	
 	return;
 }
 
@@ -359,7 +354,9 @@ void be_Window::MessageReceived(BMessage *pMsg)
 bool be_Window::_createWindow(const char *szMenuLayoutName,
 			   const char *szMenuLabelSetName) 
 {
-	//BRect r;
+	BGroupLayout* layout = new BGroupLayout(B_VERTICAL);
+	layout->SetSpacing(0);
+	SetLayout(layout);
 
 	m_winRectAvailable = Bounds();
 	
@@ -391,8 +388,8 @@ bool be_Window::_createWindow(const char *szMenuLayoutName,
 }
 
 
-be_DocView::be_DocView(AV_View * pView, BRect frame, const char *name, uint32 resizeMask, uint32 flags)
-	:BBackView(pView, frame, name, resizeMask, flags | B_FRAME_EVENTS) 
+be_DocView::be_DocView(AV_View * pView, const char *name, uint32 flags)
+	:BBackView(pView, name, flags | B_FRAME_EVENTS) 
 {
 	m_pBPicture = NULL;
 }
@@ -419,19 +416,18 @@ void be_DocView::FrameResized(float new_width, float new_height)
 	//Only do this after we have resize the Graphics
 	AV_View *pView = pBWin->m_pBeOSFrame->getFrame()->getCurrentView();
 	if (pView) {
-		pView->setWindowSize(rect.Width()+1, rect.Height()+1);	
+		pView->setWindowSize(rect.Width(), rect.Height());	
 		UT_Rect rClip;
 		rClip.left = pG->tlu(rect.left);
 		rClip.top = pG->tlu(rect.top);
-		rClip.width = pG->tlu(rect.Width())+1;
-		rClip.height = pG->tlu(rect.Height())+1;
+		rClip.width = pG->tlu(rect.Width());
+		rClip.height = pG->tlu(rect.Height());
 		pView->draw(&rClip); //TODO do we need this???
 		pG->flush();				
  		/* Methinks it can handle itself*/
 	}
 	pBWin->EnableUpdates();
-//	pBWin->Sync(); //Maybe Sync? We'll see
-// Dynamic Zoom Implimentation
+	// Dynamic Zoom Implimentation
 	pBWin->m_pBeOSFrame->getFrame()->updateZoom();
 }
 
