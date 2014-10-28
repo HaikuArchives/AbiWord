@@ -83,11 +83,12 @@ void signalWrapper(int sig_num);
  Splash Window Related Stuff
 */
 #include "ut_Rehydrate.h"
-#include <TranslationUtils.h>
+#include <Bitmap.h>
 #include <DataIO.h>
-#include <Window.h>
-#include <View.h>
 #include <Screen.h>
+#include <TranslationUtils.h>
+#include <View.h>
+#include <Window.h>
 
 //knorr!!
 #define SPLASH_UP_TIME	5				// seconds
@@ -95,62 +96,62 @@ void signalWrapper(int sig_num);
 
 extern unsigned char g_pngSplash[];             // see ap_wp_Splash.cpp
 extern unsigned long g_pngSplash_sizeof;        // see ap_wp_Splash.cpp
-       
+
+
 class SplashWin:public BWindow 
 {
 public:
 	SplashWin();
-	virtual void DispatchMessage(BMessage *msg, BHandler *handler);
+	virtual void DispatchMessage(BMessage *msg, BHandler* hnd);
 private:
 	int ignore;
 };
 
+
 SplashWin::SplashWin()
-	: BWindow(BRect(75.0, 50.0, 375.0, 406.0), "AbiWord Splash", B_BORDERED_WINDOW_LOOK, B_FLOATING_APP_WINDOW_FEEL, B_NOT_RESIZABLE | B_WILL_ACCEPT_FIRST_CLICK)
+	: BWindow(BRect(0, 0, 500.0, 300.0), "AbiWord Splash",
+		B_BORDERED_WINDOW_LOOK, B_FLOATING_APP_WINDOW_FEEL,
+		B_NOT_RESIZABLE | B_WILL_ACCEPT_FIRST_CLICK)
 {
 	BScreen* screen;
 	screen = new BScreen(B_MAIN_SCREEN_ID);
 	
-	BView *view = new BView(BRect(-1.0, -2.0, 301.0, 357.0 ), "splashView", B_FOLLOW_ALL, 268435456);
+	BView *view = new BView(BRect(0, 0, 500.0, 300.0 ), "splashView",
+		B_FOLLOW_ALL, B_WILL_DRAW | B_PULSE_NEEDED);
 	AddChild(view);
 	if (view) 
 	{
 		BMemoryIO memio(g_pngSplash, g_pngSplash_sizeof);
 		BBitmap *bitmap = BTranslationUtils::GetBitmap(&memio);
-		if (bitmap)
+		if (bitmap) {
 			view->SetViewBitmap(bitmap, B_FOLLOW_ALL, 0);
+			ResizeTo(bitmap->Bounds().Width(), bitmap->Bounds().Height());
+		}
 		else
 			UT_DEBUGMSG(("Could not interpret splash image...\n"));
-
-		view->Sync();
     }
 	
-	BRect wrect, srect;
-	srect = screen->Frame();
-	wrect = Bounds();
-	MoveTo((srect.right - (wrect.right - wrect.left)) / 2, (srect.bottom - (wrect.bottom - wrect.top)) / 2);
+	CenterOnScreen();
 	Show();
 	ignore = SPLASH_UP_TIME;			// keep on screen n seconds
 	SetPulseRate(1000000);				// a 1 second pulse
 }
 
-void SplashWin::DispatchMessage(BMessage *msg, BHandler *handler) {
+
+void SplashWin::DispatchMessage(BMessage *msg, BHandler* hnd) {
 	switch (msg->what) {
 	case B_PULSE:
 		if (ignore-- > 0)
 			break;
-//knorr!! to make screenshot
-	case B_KEY_DOWN:
-			break;
-//knorr!!
 	case B_MOUSE_DOWN:
-		BWindow::DispatchMessage(msg, handler);
+		BWindow::DispatchMessage(msg, hnd);
 		this->Close();
 		break;
 	default:
-		BWindow::DispatchMessage(msg, handler);
+		BWindow::DispatchMessage(msg, hnd);
 	}
 } 
+
 
 void _showSplash(XAP_Args * pArgs, const char * /*szAppName*/) {
 	// Unix does put the program name in argv[0], 
@@ -183,17 +184,14 @@ void _showSplash(XAP_Args * pArgs, const char * /*szAppName*/) {
 			if (UT_stricmp(pArgs->m_argv[k],"-nosplash") == 0)
 				bShowSplash = false;
 		}
-	}                                   
+	}
 
 	if (!bShowSplash)
 		return;
 
-//	BMessage *msg = new BMessage();
-//        if (RehydrateWindow("SplashWindow", msg)) {
-				//Automatically shows and hides itself
    SplashWin *nwin = new SplashWin();
-//        }                                        	
-}                                             
+}
+
 /*****************************************************************/
 
 AP_BeOSApp::AP_BeOSApp(XAP_Args * pArgs, const char * szAppName)
