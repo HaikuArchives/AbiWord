@@ -37,8 +37,10 @@ public:
 	
 	//This should be fixed to be placed on the view ...
 	bool synthesize(XAP_BeOSApp * pBeOSApp, XAP_BeOSFrameImpl * pBeOSFrame);
-	bool keyPressEvent(AV_View* pView, BMessage *msg);
+	bool keyPressEvent(BMessage *msg);
 
+private:
+	XAP_BeOSFrameImpl* frame;
 };
 
 #endif // EV_BEOSKEYBOARD_H

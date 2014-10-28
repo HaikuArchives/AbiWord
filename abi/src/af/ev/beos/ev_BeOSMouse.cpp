@@ -28,52 +28,8 @@
 #include "ev_EditBinding.h"
 #include "ev_EditEventMapper.h"
 #include "xav_View.h"
+#include "xap_BeOSFrameImpl.h"
 #include "xap_Frame.h"
-
-#include <MessageFilter.h>
-
-class MouseFilter: public BMessageFilter {
-	public:
-		MouseFilter(XAP_BeOSApp * pBeOSApp, XAP_BeOSFrameImpl * pBeOSFrame, 
-				    EV_Mouse *pEVMouse);
-		filter_result Filter(BMessage *message, BHandler **target);
-	private:
-		XAP_BeOSApp 	*m_pBeOSApp;
-		XAP_BeOSFrameImpl 	*m_pBeOSFrame;
-		EV_Mouse	*m_pEVMouse;
-};
-		
-MouseFilter::MouseFilter(XAP_BeOSApp * pBeOSApp, XAP_BeOSFrameImpl * pBeOSFrame, 
-				       EV_Mouse *pEVMouse)
-          : BMessageFilter(B_PROGRAMMED_DELIVERY, B_LOCAL_SOURCE) {
-	m_pBeOSApp = pBeOSApp;
-	m_pBeOSFrame = pBeOSFrame;
-	m_pEVMouse = pEVMouse;
-}					   
-
-filter_result MouseFilter::Filter(BMessage *message, BHandler **target)
-{ 
-	if (message->what != B_KEY_DOWN && message->what != B_KEY_UP)
-	{
-		switch(message->what)
-		{
-			case B_MOUSE_DOWN:
-			((ev_BeOSMouse*)m_pEVMouse)->mouseClick(m_pBeOSFrame->getFrame()->getCurrentView(), message);
-			break;
-		case B_MOUSE_UP:
-			((ev_BeOSMouse*)m_pEVMouse)->mouseUp(m_pBeOSFrame->getFrame()->getCurrentView(), message);
-			break;
-		case B_MOUSE_MOVED:
-			((ev_BeOSMouse*)m_pEVMouse)->mouseMotion(m_pBeOSFrame->getFrame()->getCurrentView(), message);
-			break;
-		default:
-			return(B_DISPATCH_MESSAGE);
-		}
-	}
-	//pView->draw();
-	return(B_SKIP_MESSAGE);			
-}
-/**************************************************************/
 
 
 ev_BeOSMouse::ev_BeOSMouse(EV_EditEventMapper * pEEM) : EV_Mouse(pEEM)
@@ -85,20 +41,19 @@ ev_BeOSMouse::ev_BeOSMouse(EV_EditEventMapper * pEEM) : EV_Mouse(pEEM)
 bool ev_BeOSMouse::synthesize(XAP_BeOSApp * pBeOSApp, 
 				 XAP_BeOSFrameImpl * pBeOSFrame) {
 	UT_ASSERT(pBeOSFrame); 
+	m_pBeOSFrame = pBeOSFrame;
 
 	be_Window *pBWin = (be_Window *)pBeOSFrame->getTopLevelWindow();
 	UT_ASSERT(pBWin);
 
-	pBWin->Lock();
-	pBWin->m_pbe_DocView->AddFilter(new MouseFilter(pBeOSApp, pBeOSFrame, this));
-	pBWin->Unlock();
+	pBWin->m_pbe_DocView->SetMouseHandler(this);
 	return true;
 }
 
 
-void ev_BeOSMouse::mouseUp(AV_View* pView, BMessage *msg)
+void ev_BeOSMouse::mouseUp(BMessage *msg)
 {
-	return;
+	AV_View* pView = m_pBeOSFrame->getFrame()->getCurrentView();
 
 	EV_EditMethod * pEM;
 	EV_EditModifierState ems = 0;
@@ -123,18 +78,21 @@ void ev_BeOSMouse::mouseUp(AV_View* pView, BMessage *msg)
 	if (mod & B_OPTION_KEY)
 		ems |= EV_EMS_ALT;
 
+
 	if (buttons & B_PRIMARY_MOUSE_BUTTON)
 		emb = EV_EMB_BUTTON1;
 	else if (buttons & B_SECONDARY_MOUSE_BUTTON)
-		emb = EV_EMB_BUTTON2;
-	else if (buttons & B_TERTIARY_MOUSE_BUTTON)
 		emb = EV_EMB_BUTTON3;
+	else if (buttons & B_TERTIARY_MOUSE_BUTTON)
+		emb = EV_EMB_BUTTON2;
 	
 	//This seems to only crash when I do this detection ...
+#if 0
 	mop = EV_EMO_RELEASE;
-        if (m_clickState == EV_EMO_DOUBLECLICK)
-                mop = EV_EMO_DOUBLERELEASE;
+    if (m_clickState == EV_EMO_DOUBLECLICK)
+        mop = EV_EMO_DOUBLERELEASE;
 	m_clickState = 0;
+#endif
 	emc = m_contextState;
 
 	// report movements under the mouse button that we did the capture on
@@ -161,8 +119,9 @@ void ev_BeOSMouse::mouseUp(AV_View* pView, BMessage *msg)
 	}
 }
 
-void ev_BeOSMouse::mouseClick(AV_View* pView, BMessage *msg)
+void ev_BeOSMouse::mouseClick(BMessage *msg)
 {
+	AV_View* pView = m_pBeOSFrame->getFrame()->getCurrentView();
 	EV_EditMethod * pEM;
 	EV_EditModifierState state = 0;
 	EV_EditEventMapperResult result;
@@ -183,9 +142,9 @@ void ev_BeOSMouse::mouseClick(AV_View* pView, BMessage *msg)
 	if (buttons & B_PRIMARY_MOUSE_BUTTON)
 		emb = EV_EMB_BUTTON1;
 	else if (buttons & B_SECONDARY_MOUSE_BUTTON)
-		emb = EV_EMB_BUTTON2;
-	else if (buttons & B_TERTIARY_MOUSE_BUTTON)
 		emb = EV_EMB_BUTTON3;
+	else if (buttons & B_TERTIARY_MOUSE_BUTTON)
+		emb = EV_EMB_BUTTON2;
 
 	if (mod & B_SHIFT_KEY)
 		state |= EV_EMS_SHIFT;
@@ -237,8 +196,9 @@ void ev_BeOSMouse::mouseClick(AV_View* pView, BMessage *msg)
 	}
 }
 
-void ev_BeOSMouse::mouseMotion(AV_View* pView, BMessage *msg)
+void ev_BeOSMouse::mouseMotion(BMessage *msg)
 {
+	AV_View* pView = m_pBeOSFrame->getFrame()->getCurrentView();
 	EV_EditMethod * pEM;
 	EV_EditModifierState ems = 0;
 	EV_EditEventMapperResult result;

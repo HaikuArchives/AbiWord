@@ -122,7 +122,7 @@ void XAP_BeOSFrameImpl::_initialize()
 {
 	// get a handle to our keyboard binding mechanism
 	// and to our mouse binding mechanism.
-	EV_EditEventMapper * pEEM = XAP_App::getApp()->getEditEventMapper();;
+	EV_EditEventMapper * pEEM = XAP_App::getApp()->getEditEventMapper();
 	UT_ASSERT(pEEM);
 
 	//These are actually "attached" in the ap_Frame code
@@ -367,7 +367,7 @@ bool be_Window::_createWindow(const char *szMenuLayoutName,
 				      szMenuLayoutName, szMenuLabelSetName);
 	
 	m_pBeOSMenu->synthesizeMenuBar();
-	m_pBeOSMenu->synthesize();		
+	m_pBeOSMenu->synthesize();
 	
 	//Add the toolbars
 	UT_ASSERT(m_pBeOSFrame);
@@ -505,6 +505,8 @@ void be_DocView::WindowActivated(bool activated)
 		pView->focusChange(activated ? AV_FOCUS_HERE : AV_FOCUS_NONE);
 		pG->setCursor(GR_Graphics::GR_CURSOR_WAIT);
 	}
+
+	MakeFocus(true);
 	printf("activation is over\n");
 }
 

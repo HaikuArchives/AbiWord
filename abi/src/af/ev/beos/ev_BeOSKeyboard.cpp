@@ -42,49 +42,6 @@ UT_UCSChar s_getUCSChar(int keyval, int modifiers,
 						int charval, const char *bytes);
 
 /**************************************************************/
-/*
- EVENT FILTERING
- The user hit some key ... do the right thing
-*/
-class KeybdFilter: public BMessageFilter {
-	public:
-		KeybdFilter(XAP_BeOSApp * pBeOSApp, XAP_BeOSFrameImpl * pBeOSFrame, 
-			    EV_Keyboard *pEVKeyboard);
-		filter_result Filter(BMessage *message, BHandler **target);
-	private:
-		XAP_BeOSApp 	*m_pBeOSApp;
-		XAP_BeOSFrameImpl *m_pBeOSFrame;
-		EV_Keyboard	*m_pEVKeyboard;
-};
-		
-KeybdFilter::KeybdFilter(XAP_BeOSApp * pBeOSApp, XAP_BeOSFrameImpl * pBeOSFrame, 
-			 EV_Keyboard *pEVKeyboard)
-          : BMessageFilter(B_PROGRAMMED_DELIVERY, B_LOCAL_SOURCE) {
-	m_pBeOSApp = pBeOSApp;
-	m_pBeOSFrame = pBeOSFrame;
-	m_pEVKeyboard = pEVKeyboard;
-}					   
-
-filter_result KeybdFilter::Filter(BMessage *message, BHandler **target)
-{ 
-	//if (message->what != B_KEY_DOWN && message->what != B_KEY_UP) {
-	if (message->what != B_KEY_DOWN)
-	{
-		return(B_DISPATCH_MESSAGE);
-	}
-	
-	m_pBeOSFrame->getTopLevelWindow()->Lock();
-//	printf("key pressed frm top lvl window\n");
-	bool result = ((ev_BeOSKeyboard*)m_pEVKeyboard)->keyPressEvent(m_pBeOSFrame->getFrame()->getCurrentView(), message);
-	m_pBeOSFrame->getTopLevelWindow()->Unlock();
-		
-	if( result == true)
-		return(B_SKIP_MESSAGE);			
-	
-	return(B_DISPATCH_MESSAGE);			
-}
-
-/**************************************************************/
 
 ev_BeOSKeyboard::ev_BeOSKeyboard(EV_EditEventMapper* pEEM) : EV_Keyboard(pEEM)
 {
@@ -97,22 +54,20 @@ ev_BeOSKeyboard::~ev_BeOSKeyboard(void)
 bool ev_BeOSKeyboard::synthesize(XAP_BeOSApp * pBeOSApp, 
 				    XAP_BeOSFrameImpl * pBeOSFrame) {
 	UT_ASSERT(pBeOSFrame); 
+	frame = pBeOSFrame;
 	
 	be_Window *pBeWin;
 	pBeWin = (be_Window*)pBeOSFrame->getTopLevelWindow();
 	UT_ASSERT(pBeWin);
 
-	pBeWin->Lock();
-	pBeWin->m_pbe_DocView->AddFilter(new KeybdFilter(pBeOSApp, 
-					  	         pBeOSFrame, 
-						         this));
-	pBeWin->Unlock();
+	pBeWin->m_pbe_DocView->SetKeyboardHandler(this);
 	return true;
 }
 
 //Handle mapping
-bool ev_BeOSKeyboard::keyPressEvent(AV_View* pView, BMessage *msg)
+bool ev_BeOSKeyboard::keyPressEvent(BMessage *msg)
 {
+	AV_View* pView = frame->getFrame()->getCurrentView();
 	EV_EditBits state = 0;
 	EV_EditEventMapperResult result;
 	EV_EditMethod * pEM;

@@ -27,7 +27,8 @@
 #include "ev_EditBits.h"
 
 #include "xap_BeOSApp.h"
-#include "xap_BeOSFrameImpl.h"
+
+class XAP_BeOSFrameImpl;
 
 class BMessage;
 
@@ -37,13 +38,14 @@ class ev_BeOSMouse : public EV_Mouse
 {
 public:
 	ev_BeOSMouse(EV_EditEventMapper * pEEM);
-	void mouseUp(AV_View* pView, BMessage *msg);
-	void mouseClick(AV_View* pView, BMessage *msg);
-	void mouseMotion(AV_View* pView, BMessage *msg);
+	void mouseUp(BMessage *msg);
+	void mouseClick(BMessage *msg);
+	void mouseMotion(BMessage *msg);
 	bool synthesize(XAP_BeOSApp * pBeOSApp, XAP_BeOSFrameImpl * pBeOSFrame);
 private:
 	UT_uint32		m_clickState;   /* {NoClick,SingleClick,DoubleClick} */
-        EV_EditMouseContext	m_contextState; /* mouse context of click */ 
+    EV_EditMouseContext	m_contextState; /* mouse context of click */ 
+	XAP_BeOSFrameImpl*	m_pBeOSFrame;
 };
 
 #endif // EV_BEOSMOUSE_H

@@ -29,9 +29,10 @@
 #include "xap_BeOSDialogFactory.h"
 #include "be_BackView.h"
 
+#include "ev_BeOSKeyboard.h"
+#include "ev_BeOSMouse.h"
+
 class XAP_BeOSApp;
-class ev_BeOSKeyboard;
-class ev_BeOSMouse;
 class EV_BeOSMenu;
 class EV_BeOSMenuPopup;
 class EV_Toolbar;
@@ -65,10 +66,42 @@ class be_DocView: public BBackView {
 		virtual void SetPrintPicture(BPicture *pic) { m_pBPicture = pic; };
 		virtual	void FrameResized(float new_width, float new_height);
 		virtual void WindowActivated(bool activated);
-		
+
+		virtual void MouseDown(BPoint p) {
+			MakeFocus(true);
+			fMouseHandler->mouseClick(Looper()->CurrentMessage());
+		}
+
+		virtual void MouseUp(BPoint p) {
+			MakeFocus(true);
+			fMouseHandler->mouseUp(Looper()->CurrentMessage());
+		}
+
+		virtual void MouseMoved(BPoint p) {
+			MakeFocus(true);
+			fMouseHandler->mouseUp(Looper()->CurrentMessage());
+		}
+
+		virtual void KeyDown(const char* bytes, int32 numBytes) {
+			if (!fKeyHandler->keyPressEvent(Looper()->CurrentMessage()))
+				BBackView::KeyDown(bytes, numBytes);
+		}
+
+		void SetMouseHandler(ev_BeOSMouse* handler) {
+			fMouseHandler = handler;
+		}
+
+		void SetKeyboardHandler(ev_BeOSKeyboard* handler) {
+			fKeyHandler = handler;
+		}
+
+
 	BPicture *	m_pBPicture;
-                           
+
 	private:
+		ev_BeOSKeyboard* fKeyHandler;
+		ev_BeOSMouse* fMouseHandler;
+
 		float		m_fOldWidth;
 		float		m_fOldHeight;
 		
