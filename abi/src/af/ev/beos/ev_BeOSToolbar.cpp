@@ -269,12 +269,11 @@ bool EV_BeOSToolbar::refreshToolbar(AV_View * pView, AV_ChangeMask mask) {
 						oldstate = item->state;
 						item->state = (bGrayed) ? 0 : ENABLED_MASK;
 						perform_update |= (oldstate == item->state) ? 0 : 1; 
-					if(perform_update)
-					{
-						//m_pTBView->Window()->Lock();
-						m_pTBView->Draw(item->rect);
-						//	m_pTBView->Window()->Unlock();
-					}
+						if(perform_update) {
+							m_pTBView->LockLooper();
+							m_pTBView->Invalidate(item->rect);
+							m_pTBView->UnlockLooper();
+						}
 					}
 				}
 				break;
@@ -300,7 +299,9 @@ bool EV_BeOSToolbar::refreshToolbar(AV_View * pView, AV_ChangeMask mask) {
 						perform_update |= (oldstate == item->state) ? 0 : 1; 
 						if(perform_update)
 	        			{
-		 					 m_pTBView->Draw(item->rect);
+							m_pTBView->LockLooper();
+							m_pTBView->Invalidate(item->rect);
+							m_pTBView->UnlockLooper();
 						}	
 																															                                    
 					}				
@@ -613,22 +614,15 @@ UT_UTF8String ucsText;
 }
 
 void ToolbarView::Draw(BRect clip) {
-	if(!Window()->NeedsUpdate())
-		return;
 	BRect 	r;
 	int 	i;
 	
-	Window()->DisableUpdates();
-	Window()->Lock();
 	drawing_mode oldmode = DrawingMode();	
 	SetDrawingMode(B_OP_ALPHA);
-	Window()->Unlock();
 	for (i=0; i<item_count; i++) {
 		r = items[i].rect;
 		if (items[i].bitmap && r.Intersects(clip)) 
 		{
-			Window()->Lock();
-				
 			// We're dawing with alpha, so we need to overdraw the old bitmap
 			// with the toolbar's colour, or they 'overlay' each other.
 			SetHighColor(216,216,216);
@@ -665,8 +659,6 @@ void ToolbarView::Draw(BRect clip) {
 			if (items[i].state & PRESSED_MASK) {
 				HighLightItem(i, 2);
 			}
-			
-			Window()->Unlock();
 		}
 		else if (items[i].type == SEPERATOR) {
 			HighLightItem(i, 1);
@@ -674,7 +666,6 @@ void ToolbarView::Draw(BRect clip) {
 	}
 	
 	// Draw a nice BeOSey border around the toolbar.
-	Window()->Lock();
 	r = Bounds();
 	
 	rgb_color dark={154,154,154};
@@ -692,10 +683,6 @@ void ToolbarView::Draw(BRect clip) {
 	EndLineArray();
 	
 	SetDrawingMode(oldmode);
-	
-	Window()->EnableUpdates();
-	Sync();
-	Window()->Unlock();
 }
 
 void ToolbarView::HighLightItem(int index, int state) {
