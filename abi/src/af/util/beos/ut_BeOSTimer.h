@@ -24,7 +24,13 @@
 
 #include "ut_timer.h"
 
-class UT_BeOSTimer : public UT_Timer
+#include <Handler.h>
+
+
+class BMessageRunner;
+
+
+class UT_BeOSTimer : public UT_Timer, public BHandler
 {
 public:
 	UT_BeOSTimer(UT_TimerCallback pCallback, void* pData);
@@ -33,8 +39,11 @@ public:
 	virtual UT_sint32 set(UT_uint32 iMilliseconds);
 	virtual void stop(void);
 	virtual void start(void);
-	UT_sint32 m_iMilliseconds;
-	bool m_bStarted;
+
+	void		MessageReceived(BMessage* message);
+
+private:
+	BMessageRunner* fRunner;
 };
 
 #endif /* UT_BEOSTIMER_H */

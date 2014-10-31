@@ -19,97 +19,44 @@
  
 
 #include "ut_BeOSTimer.h"
-#include "ut_assert.h"
-#include "ut_debugmsg.h"
-#include <stdio.h>
-#include <OS.h>
-#include <String.h>
 
-/*
- TF Note: (early 1999)
-  I'm not sure that this class actually behaves the
-  way that it is intended.  I'm trying to reduce the
-  amount of extra calls, and that seems to happen
-  when I kill the thread in the stop() call, which
-  seems right since the start() call will actually
-  create a new thread.
-*/
-/* 
- DB Note (written way after TF Note): (03/11/1999)
- This class now should behave the way it's intended.
- I modified the thing to start a new timer only if we 
- change the timeout value using set, or we haven't 
- started one yet. Otherwise, we can just suspend/resume. 
- */
-/*****************************************************************/
-	
-UT_Timer* UT_Timer::static_constructor(UT_TimerCallback pCallback, void* pData, GR_Graphics * /*pG*/)
+#include <Application.h>
+#include <MessageRunner.h>
+
+
+static const int kTimerFired = 'fire';
+
+
+UT_Timer* UT_Timer::static_constructor(UT_TimerCallback pCallback, void* pData,
+	GR_Graphics * /*pG*/)
 {
 	UT_ASSERT(pCallback);
 	UT_BeOSTimer * p = new UT_BeOSTimer(pCallback, pData);
 	return p;
 }
 
-/*****************************************************************/
-
-static int32 _Timer_Proc(void *p)
-{
-	UT_BeOSTimer* pTimer = (UT_BeOSTimer*) p;
-	UT_ASSERT(pTimer);
-/* 
- *
- */
-	while(true)
-	{
-		/*
-		 Sleep for the desired amount of time (micro seconds) 
-		 then fire off the event.
-		*/
-		snooze(pTimer->m_iMilliseconds * 1000);
-		char buf;
-		thread_id sender;
-		if(has_data(find_thread(NULL)))
-			if(receive_data(&sender, &buf, 0)=='exit') 
-				break;		
-		if(pTimer->m_bStarted)
-			pTimer->fire();
-		/*
-		  We need to manually reset the timer here.  This cross-platform
-		  timer was designed to emulate the semantics of Win32 timers,
-		  which continually fire until they are killed.
-		*/
-	}
-}
 
 UT_BeOSTimer::UT_BeOSTimer(UT_TimerCallback pCallback, void* pData)
+	: fRunner(NULL)
 {
 	setCallback(pCallback);
 	setInstanceData(pData);
-	setIdentifier(0);  
-	m_bStarted = false;
+	setIdentifier((int32)this);
 
-	m_iMilliseconds = 1000*1000;
-	thread_id idTimer = spawn_thread(_Timer_Proc, "Timer", 
-									 B_NORMAL_PRIORITY, this);
-	BString name("Timer#");
-	name<<idTimer;
-	
-	rename_thread(idTimer, name.String());
-	
-	setIdentifier(idTimer);
-	resume_thread(getIdentifier());	
+	if (be_app->LockLooper()) {
+		be_app->AddHandler(this);
+		be_app->UnlockLooper();
+	}
 }
+
 
 UT_BeOSTimer::~UT_BeOSTimer()
 {
-	thread_id id;
-	UT_DEBUGMSG(("ut_BeOSTimer.cpp: timer destructor\n"));
-	if ((id = getIdentifier()) !=0 ) 
-	{
-		stop();
-		send_data(id, 'exit', 0, 0);
-	}
+	stop();
+	be_app->RemoveHandler(this);
+	delete fRunner;
 }
+
 
 UT_sint32 UT_BeOSTimer::set(UT_uint32 iMilliseconds)
 {
@@ -123,26 +70,35 @@ UT_sint32 UT_BeOSTimer::set(UT_uint32 iMilliseconds)
 	  of how it's done on Windows.  We're hoping that something similar 
 	  will work for other platforms.
 	*/
-	m_bStarted = false;
-	//	UT_DEBUGMSG(("Timer set\n"));
-	m_iMilliseconds = iMilliseconds;
-	m_bStarted = true;
-	UT_DEBUGMSG(("ut_BeOSTimer.cpp: timer #%d set to %d ms\n", getIdentifier(), iMilliseconds));
-	return 0;
+	if (fRunner)
+		delete fRunner;
+	fRunner = new BMessageRunner(BMessenger(this), new BMessage(kTimerFired),
+		iMilliseconds * 1000);
 }
+
 
 void UT_BeOSTimer::stop(void)
 {
 	// stop the delivery of timer events.
 	// stop the OS timer from firing, but do not delete the class.
-	if(!m_bStarted) return;
-	UT_DEBUGMSG(("ut_BeOSTimer.cpp: timer #%d stopped\n", getIdentifier()));
-	m_bStarted = false;
+	fRunner->SetCount(0);
 }
+
 
 void UT_BeOSTimer::start(void)
 {
 	// resume the delivery of events.
-	UT_ASSERT(m_iMilliseconds > 0);
-	set(m_iMilliseconds);
+	fRunner->SetCount(-1);
+}
+
+
+void UT_BeOSTimer::MessageReceived(BMessage* message)
+{
+	switch(message->what) {
+		case kTimerFired:
+			fire();
+			break;
+		default:
+			BHandler::MessageReceived(message);
+	}
 }
