@@ -91,10 +91,6 @@ public:
 	float		m_fOldWidth;
 	float		m_fOldHeight;
 		
-	bool m_bDisplayTooltip;
-	class 	TToolTip *fToolTip;
-	long lastToolTipIndex;
-
 private:
 	int mouseDownItemNo;
 	bool mouseDown;

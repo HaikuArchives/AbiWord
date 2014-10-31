@@ -38,7 +38,6 @@
 #include "xap_BeOSToolbar_Icons.h"
 #include "ev_BeOSToolbar_ViewListener.h"
 #include "xav_View.h"
-#include "ev_BeOSTooltip.h"
 
 #include <GroupLayout.h>
 
@@ -469,9 +468,6 @@ ToolbarView::ToolbarView(EV_BeOSToolbar *tb, const char *name, uint32 flags)
 	m_fOldWidth=1;
 	m_fOldHeight=1;
 	
-	m_bDisplayTooltip = false;
-	fToolTip = new TToolTip();
-	lastToolTipIndex = -1;
 	mouseDownItemNo = -1;
 }
 
@@ -591,13 +587,8 @@ UT_UTF8String ucsText;
 		ucsText = mnuitem->Label();
 		m_pBeOSToolbar->toolbarEvent(id, ucsText.ucs4_str().ucs4_str(), ucsText.ucs4_str().length());
 		break;
-		
-	case eToolTipStart:	
-	case eToolTipStop:
-			fToolTip->PostMessage(msg);
-		break;
-		
 	}
+		
 	default:		
 		BView::MessageReceived(msg);
 	}
@@ -758,6 +749,7 @@ void ToolbarView::MouseMoved(BPoint where, uint32 code,	const BMessage *msg)
 	
 	if (i >= item_count)
 	{
+		SetToolTip((char*)NULL);
 		if (last_highlight >= 0)
 		{
 			if (items[last_highlight].state & PRESSED_MASK)
@@ -779,33 +771,9 @@ void ToolbarView::MouseMoved(BPoint where, uint32 code,	const BMessage *msg)
 	// wasn't in, send a message to start the ToolTip
 	if (items[i].popupString && (items[i].rect.Contains(where)) && (Window()->IsActive())) 
 	{
-		if (!m_bDisplayTooltip) 
-		{
-			BMessage	msg(eToolTipStart);
-
-			msg.AddPoint("start", ConvertToScreen(where));
-			msg.AddRect("bounds", ConvertToScreen(items[i].rect));
-			msg.AddString("string", items[i].popupString);
-			MessageReceived(&msg);
-
-			m_bDisplayTooltip = true;
-			lastToolTipIndex = i;
-		}
-		else if(lastToolTipIndex != -1 && i != lastToolTipIndex)
-		{
-			BMessage msg(eToolTipStop);
-			MessageReceived(&msg);
-			m_bDisplayTooltip = false;
-			lastToolTipIndex = -1;
-		}
-	}
-	// otherwise stop the message
-	else if (m_bDisplayTooltip)
-	{
-		BMessage msg(eToolTipStop);
-		MessageReceived(&msg);
-		m_bDisplayTooltip = false;
-		lastToolTipIndex = -1;
+		SetToolTip(items[i].popupString);
+	} else {
+		SetToolTip((char*)NULL);
 	}
 }
 
