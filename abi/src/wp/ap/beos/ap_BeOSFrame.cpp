@@ -154,7 +154,7 @@ AP_BeOSFrame::~AP_BeOSFrame()
 	killFrameData();
 }
 
-bool AP_BeOSFrame::initialize(XAP_FrameMode frameMode=XAP_NormalFrame)
+bool AP_BeOSFrame::initialize(XAP_FrameMode frameMode)
 {
 	if (!initFrameData())
 		return false;

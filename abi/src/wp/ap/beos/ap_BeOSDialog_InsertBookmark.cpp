@@ -153,7 +153,7 @@ BookmarkWin::BookmarkWin(BRect &frame, const XAP_StringSet * pSS) :
 	panel->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	AddChild(panel);
 
-	BRect frame(10,Bounds().bottom-30, 80, 0);
+	frame = BRect(10,Bounds().bottom-30, 80, 0);
 	panel->AddChild(new BButton(frame, "cancelbutton", pSS->getValue(XAP_STRING_ID_DLG_Cancel),
 				new BMessage(_eventCancel), B_FOLLOW_LEFT | B_FOLLOW_BOTTOM));
 	frame.OffsetBy(frame.Width() + 10, 0);

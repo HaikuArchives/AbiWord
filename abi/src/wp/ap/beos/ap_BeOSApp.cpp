@@ -490,7 +490,7 @@ void AP_BeOSApp::copyToClipboard(PD_DocumentRange * pDocRange, bool bUseClipboar
 	}
 }
 
-void AP_BeOSApp::pasteFromClipboard(PD_DocumentRange * pDocRange, bool, bool bHonorFormatting = true)
+void AP_BeOSApp::pasteFromClipboard(PD_DocumentRange * pDocRange, bool, bool bHonorFormatting)
 {
 	// paste from the system clipboard using the best-for-us format
 	// that is present.

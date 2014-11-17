@@ -32,6 +32,7 @@
 #include "ut_assert.h"
 
 class BBackView;
+class BPrintJob;
 
 class BeOSFont : public GR_Font 
 {

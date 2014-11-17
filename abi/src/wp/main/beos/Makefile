@@ -28,14 +28,12 @@ PROGRAM=		$(BINDIR)/AbiWord
 LoadOrder=              AbiGr AbiFmt AbiPTbl AbiImpExp AbiXAp AbiWPAp \
 			AbiEv AbiUtil AbiWordVer AbiSpell Abi_libwv
 
-## TODO verify that we still need stdc++ for BeOS since we got rid of c++ iostreams
-
 ABI_APPLIBS=		$(LoadOrder)
 ABI_LIBS=		translation be tracker png z textencoding popt xml2 fribidi 
 
 ifeq ($(OS_ARCH), x86)
 ABI_APPLIBS+=		$(LoadOrder) $(LoadOrder)
-ABI_LIBS+=		stdc++.r4
+ABI_LIBS+=
 else		#OS_ARCH ppc or BeBox
 ABI_LIBS+=
 LDFLAGS += 		-msg nodup

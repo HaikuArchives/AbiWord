@@ -26,11 +26,9 @@ OBJS=			$(OBJDIR)/cdump.$(OBJ_SUFFIX)
 
 PROGRAM=		$(BINDIR)/cdump$(EXE_SUFFIX)
 
-## TODO verify that we still need stdc++ for BeOS since we got rid of c++ iostreams
-
 ifeq ($(OS_ARCH), x86)
 ABI_APPLIBS=		
-ABI_LIBS=		stdc++.r4 translation be tracker
+ABI_LIBS=		translation be tracker
 else				#OS_ARCH ppc or BeBox
 ABI_APPLIBS=		
 ABI_LIBS=	 	be translation tracker

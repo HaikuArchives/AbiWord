@@ -127,7 +127,7 @@ bool UT_Xpm2Bitmap(const char ** pIconData,
 			//printf("Looking for character %s \n", bufPixel);
 			const void * pEntry = hash.pick(bufPixel);
 			
-			rgb_index = ((UT_Byte)(pEntry)) -1;
+			rgb_index = ((unsigned int)(pEntry)) -1;
 			//printf("Returned hash index %d \n", rgb_index); 
 
 			*(bits + kRow*pBBitmap->BytesPerRow() + kCol*4) 
