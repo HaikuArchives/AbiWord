@@ -53,7 +53,10 @@ UT_BeOSTimer::UT_BeOSTimer(UT_TimerCallback pCallback, void* pData)
 UT_BeOSTimer::~UT_BeOSTimer()
 {
 	stop();
-	be_app->RemoveHandler(this);
+	if (be_app->LockLooper()) {
+		be_app->RemoveHandler(this);
+		be_app->UnlockLooper();
+	}	
 	delete fRunner;
 }
 
